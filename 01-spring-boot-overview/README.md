@@ -2327,38 +2327,163 @@ Also, we'll set the property here for `management.info.env.enabled=true`.
 And once we set these two items up, then this will expose the `/info` endpoint.
 Now I just want to go ahead and test this out by just simply running my application here.
 
+```html
+2024-05-19T10:06:09.345+03:00  INFO 37144 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-05-19T10:06:09.377+03:00  INFO 37144 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-19T10:06:09.377+03:00  INFO 37144 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-19T10:06:10.313+03:00  INFO 37144 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-19T10:06:10.321+03:00  INFO 37144 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-19T10:06:10.322+03:00  INFO 37144 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-19T10:06:10.354+03:00  INFO 37144 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-19T10:06:10.355+03:00  INFO 37144 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 976 ms
+2024-05-19T10:06:10.939+03:00  INFO 37144 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-19T10:06:10.947+03:00  INFO 37144 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2024-05-19T10:06:11.000+03:00  INFO 37144 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-19T10:06:11.010+03:00  INFO 37144 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : Started MycoolappApplication in 1.915 seconds (process running for 2.2)
+```
 
-
-So I'm just gonna run it as a Java application.
-And if I expand the window here
+So I'm just going to run it as a Java application.
+And if I expand the window here,
 I can kind of investigate just a little bit.
-So if I move to the bottom
-and kind of scroll over to the right-hand side,
-we'll see this entry that was created here
-or this log entry.
-It says exposing two endpoints beneath base /actuator.
-So those are the new endpoints that's given to us for free,
-thanks to adding a Spring Boot Actuator.
-And remember, all of the actuator endpoints
-are prefixed with /actuator.
-So let's go ahead and move to step two
-of viewing the actuator endpoints
-for /health and also /info.
-So I'll just swing over here to my web browser
-and I'll open up localhost:8080/actuator/health.
-And this gives us the status of UP.
+So if I move to the bottom and kind of scroll over to the right-hand side,
+we'll see this entry created here or this log entry.
+It says exposing two endpoints beneath base `/actuator`.
+So those are the new endpoints that are given to us for free,
+thanks to adding a **Spring Boot Actuator**.
+And remember, all the actuator endpoints are prefixed with `/actuator`.
+So let's go ahead and move to step two of viewing the actuator endpoints
+for `/health` and also `/info`.
+So I'll just swing over here to my web browser,
+and I'll open up `localhost:8080/actuator/health`.
+And this gives us the `{"status" : "UP"}`.
 So this can be used by external monitoring apps
 to see if our application is up or down.
 And remember, we can always customize this logic
 for specific business cases for our given application.
-Now let's also access /actuator/info
+Now let's also access `/actuator/info`
 to give us information about our application.
-And remember, by default it's empty,
-but let's go ahead and fix that.
-Let's go ahead and make the update
-so we can get some customized information
-for our application.
+And remember, by default, it's empty, but let's go ahead and fix that.
+Let's go ahead and make the update, 
+so we can get some customized information for our application.
 
+```properties
+management.endpoints.web.exposure.include=health,info
+management.info.env.enabled=true
+
+info.app.name=My Super Cool App
+info.app.description=A crazy fun app, yoohoo!
+info.app.version=1.0.0
+```
+
+So, I'll say `info.app.name=My Super Cool App`.
+I'll do `info.app.description`
+just give a little nice description for our application.
+And then I'll also give a version, so `info.app.version=1.0.0`.
+And you can give any property names as long as they start with `info.`,
+and this will actually be used by the `/info` endpoint when we access it.
+Alright, so I just make those changes, save it.
+Spring Boot will automatically reload our application
+thanks to **DevTools** since that's in place.
+Now I can swing back over to my web browser.
+It'd simply do a reload on this actuator `/info` and voilà.
+
+```html
+{"app":{"name":"My Super Cool App","description":"A crazy fun app, yoohoo!","version":"1.0.0"}}
+```
+
+There we go.
+So now it's reading information from our `application.properties`.
+So it uses any of the properties that start with `info.`.
+And I'll return that as a **JSON** object.
+
+Now, I'd like to do is add JSON pretty print plugin to the Chrome browser
+just so we can see this in a nice pretty fashion.
+Because right now it's all one big line or whatever.
+If you're using Firefox, this already has it built in.
+So in Firefox, choose the Raw Data and then choose Pretty Print.
+So Firefox has it built in.
+I'll just go through some additional steps here
+to kind of get Chrome up and running with this plugin.
+So I'll simply go [here](www.love2code.com/chrome-json-formatter).
+This will redirect us to the plugin that we can use for Chrome.
+Alright, so we'll see this **JSON Formatter** here.
+We just choose the option over on the right, `Add to Chrome`,
+accept the prompt here to add the extension
+and any follow-on prompts that you may have.
+And now if I go back to my webpage and just reload this page,
+I should see the plugin show up here for Chrome.
+So what you see on the top right,
+that's the **Pretty Print plugin** for Chrome.
+So right now it's showing it is pared.
+You can see **Raw**, just the **JSON** without any formatting or **Pretty Printing**.
+And **Parsed** is for **Pretty Printing**.
+So just to kind of make it easier for a human to read for this given setup.
+So we have the JSON data coming back for our `/info` endpoint.
+All right, so let's go ahead and move forward here.
+And let's expose more actuator endpoints.
+
+```properties
+# Use wildcard "*" to expose all endpoints
+# Can also expose individual endpoints with a comma-delimited list
+management.endpoints.web.exposure.include=*
+management.info.env.enabled=true
+
+info.app.name=My Super Cool App
+info.app.description=A crazy fun app, yoohoo!
+info.app.version=1.0.0
+```
+
+So we can use the wildcard * to expose all endpoints,
+or we can expose individual endpoints with a comma-delimited list.
+And I'll add the entry here to expose all the endpoints.
+So I give the entry here `management.endpoints.web.exposure.include=*`.
+So that's the wildcards.
+Expose all the given endpoints for our given application.
+Alright, so let's go ahead and save this here.
+Our app's going to restart.
+
+```html
+2024-05-19T10:22:28.349+03:00  INFO 37144 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-05-19T10:22:28.489+03:00  INFO 37144 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-19T10:22:28.489+03:00  INFO 37144 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-19T10:22:28.489+03:00  INFO 37144 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-19T10:22:28.505+03:00  INFO 37144 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-19T10:22:28.505+03:00  INFO 37144 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 155 ms
+2024-05-19T10:22:28.618+03:00  INFO 37144 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-19T10:22:28.620+03:00  INFO 37144 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 13 endpoint(s) beneath base path '/actuator'
+2024-05-19T10:22:28.633+03:00  INFO 37144 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-19T10:22:28.636+03:00  INFO 37144 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : Started MycoolappApplication in 0.298 seconds (process running for 979.827)
+2024-05-19T10:22:28.641+03:00  INFO 37144 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+```
+
+And then one thing to notice here in the console,
+we have more endpoints that we can take a look at and play around with, cool.
+So swinging back to our web browser, let's test this out.
+
+![image38]()
+
+So I'll go to `/actuator/beans` and good.
+So this is a list of all the Spring beans that are registered with our application.
+This also includes internal beans and so on.
+And also any beans that you've created with `@Component`.
+So this is good for debugging your given application 
+to see if a given beans been created or if it's being used in your app.
+
+![image39]()
+
+Also, let's take a look at another endpoint here `/actuator/threaddump`.
+So this will give us a list of all threads that are running in our application.
+And this is perfect for analyzing and profiling your application's performance
+if you're looking for any bottlenecks or anything.
+
+![image40]()
+
+And then another endpoint we can take a look at is `/actuator/mappings`.
+So this will give us a list of all the request mappings for your given application.
+So if you want to say, _hey, what endpoints are being exposed_,
+_what request mappings are available that endpoint can really help you out in that regard_.
+So we've exposed the **Spring Boot actuator** endpoints 
+and went through and tested out a couple of them.
 </div>
 
 
