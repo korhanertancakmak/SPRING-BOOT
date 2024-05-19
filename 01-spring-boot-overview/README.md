@@ -51,7 +51,7 @@ and we'll cover all of that during this course.
 Now Spring Boot provides the **Spring initializer**.
 So this is a website for quickly creating a starter spring project.
 
-![image01]()
+![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true)
 
 Basically, you go to this website at [start.spring.io](https://start.spring.io/).
 You select your dependencies, 
@@ -104,7 +104,7 @@ So you can deploy a WAR file to an external server like Tomcat, JBoss,
 or WebSphere, and it can work just like you would use it in the past.
 All right, so here we have this Tomcat server.
 
-![image02]()
+![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image02.png?raw=true)
 
 Let's say it's deployed somewhere on your corporate network.
 Then you could take your Spring Boot app, and then 
@@ -209,7 +209,7 @@ and then we'll actually unzip that file.
 And then finally, we'll import that Maven project into our IDE.
 All right, so let's go ahead and dive in and let's get started.
 
-![image03]()
+![image03](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image03.png?raw=true)
 
 Okay, so let's go ahead and open up a web browser.
 And so, the first step is configuring a project
@@ -223,14 +223,14 @@ And then also, as far as the Spring Boot version.
 I'll choose the most recent version that they have here.
 Avoid the snapshot versions because they are an alpha or beta versions.
 
-![image04]()
+![image04](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image04.png?raw=true)
 
 We can move into our project metadata where we can set up our coordinates here.
 So I'll set up the group ID, `com.luv2code.springboot.demo`.
 And as far as the artifact ID, this is the actual name of my application,
 so I'll just call it `mycoolapp`.
 
-![image05]()
+![image05](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image05.png?raw=true)
 
 And for dependencies here, this is where we go through 
 and basically just choose the Spring Boot starters that we want
@@ -245,7 +245,7 @@ and it appears here as far as the selected dependency.
 And then from there, go down to the bottom and download the zip file 
 by clicking on generate project.
 
-![image06]()
+![image06](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image06.png?raw=true)
 
 So in the bottom corner there of your browser, 
 you'll see that the file was downloaded.
@@ -264,7 +264,7 @@ Again, this could be any location on your file system.
 Inside here, we have this `Pom` file and some other files and source and so on.
 And we'll talk more about this in a bit.
 
-![image07]()
+![image07](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image07.png?raw=true)
 
 Okay, so let's go ahead and swing over to your favorite IDE.
 So I'll just import this Maven project.
@@ -280,7 +280,7 @@ So Maven is finished downloading the internet.
 And so now I have this `mycoolapp` as my Maven project here,
 and there are a number of files that are in this project.
 
-![image08]()
+![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image08.png?raw=true)
 
 So we have the Palm xml, that's the Maven file.
 We have some MavenW files.
@@ -491,7 +491,7 @@ All right, let me kind of take a look at my console real quickly.
 All right, so everything is started, up and running, that's great.
 I'll swing over to my web browser. And open a page `localhost:8080`.
 
-![image09]()
+![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image09.png?raw=true)
 
 This is awesome.
 Our REST controller is up and running.
@@ -525,7 +525,7 @@ of helper classes to make it easier,
 and again to minimize all the boilerplate code.
 And, we'll see some examples of that a little later in the course.
 
-![image10]()
+![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image10.png?raw=true)
 
 Now, this is kind of the big picture here of the **Spring framework**.
 And, this is kinda like the **core** framework.
@@ -559,7 +559,7 @@ And, we'll see the examples of this primarily
 when we get into some transaction work,
 but some other areas, too, we'll play around with it a bit.
 
-![image11]()
+![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image11.png?raw=true)
 
 So then moving forward here,
 let's take a look at the data access section or integration.
@@ -591,7 +591,7 @@ and pretty much anything you want, it's very flexible.
 And a lot of other projects in the world or on the web
 make use of the **Spring transaction manager**.
 
-![image12]()
+![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image12.png?raw=true)
 
 This is basically the home for the **Spring MVC framework**.
 All right, so you can build web applications using the **Spring Core**,
@@ -611,7 +611,7 @@ Think of it as like a way of doing like remote procedure calls,
 or RPC or also doing distributed computing.
 So that's available also in this web module.
 
-![image13]()
+![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image13.png?raw=true)
 
 Also, there's this other item here, instrumentation.
 So basically Spring has a lot of sophisticated fancy technology behind the scenes,
@@ -628,7 +628,7 @@ to know that behind the scenes it's making use of some really cool technology,
 such as **AOP** code weaving by code manipulation, and so on.
 So that's what you get in the instrumentation model.
 
-![image14]()
+![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image14.png?raw=true)
 
 Spring has support for **TDD** (test-driven development),
 so the framework includes mock objects 
@@ -719,7 +719,7 @@ you may need additional JAR files like **Spring** JAR files,
 And one approach is to simply download those JAR files from each project website,
 and then you'll manually add those JAR files to your build path or your class path.
   
-![image15]()
+![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image15.png?raw=true)
 
 So here's how my project would work without **Maven**.
 So I have my super cool app, 
@@ -748,7 +748,7 @@ they'll go out on town, purchase everything for you,
 and bring it back for you to make use of,
 which is really cool, I think. 
 
-![image16]()
+![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image16.png?raw=true)
 
 So here's how our project would work with **Maven**.
 So there's a **Maven Central Repository** that's remote, it's on the internet.
@@ -768,7 +768,7 @@ and then I can continue on coding
 once **Maven**'s pulled everything down for me.
 So let's go ahead and dive in.
 
-![image17]()
+![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image17.png?raw=true)
 
 So this is how Maven works behind the scenes.
 Using **Maven**, you have a project configuration file that **Maven** will read.
@@ -817,7 +817,7 @@ So Maven solves this problem by providing a standard directory structure
 that you can use on your project.
 So here's the directory structure.
 
-![image18]()
+![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image18.png?raw=true)
 
 So **my-super-cool-app**, at the root of the directory
 I'll have this `pom.xml` file that's the **Maven** configuration file, your shopping list.
@@ -838,7 +838,7 @@ And finally, there's a **target** directory.
 So this is the actual destination directory for your compiled code,
 and also any artifacts that **Maven** will generate.
 
-![image19]()
+![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image19.png?raw=true)
 
 Alright, so let's go ahead and kind of look at an example 
 using some of our coding from before.
@@ -849,7 +849,7 @@ Under `src/main/java`.
 You have your package structure and then your `.java` source code.
 So that's where that code will show up in your **Maven** project structure.
 
-![image20]()
+![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image20.png?raw=true)
 
 And if you're working on a web project,
 then you'll actually place your web assets
@@ -862,7 +862,7 @@ Alright, now, what are the benefits of the standard directory structure?
 Well, for new developers joining a project,
 they can easily find code, properties files, unit tests, web files, and so on.
 
-![image20]()
+![image21](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image21.png?raw=true)
 
 This is crucial, especially on a real world, or real-time projects.
 You can quickly join a project and know where files are located.
@@ -906,9 +906,9 @@ And you can definitely use it for your enterprise projects.
 In this section, we're going to cover some **Maven Key Concepts**.
 So we'll start with a discussion of the **POM File**,
 and then we'll also take a look at **Project Coordinates**
-and how we can use it in our **POM File**.
+and how we can use it in our **pom File**.
 
-![image22]()
+![image22](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image22.png?raw=true)
 
 Alright, so starting here with the **POM File**.
 The **POM File** is your **Project Object Model** file.
@@ -919,7 +919,7 @@ This is where you tell **Maven**,
 go out and find those for us._"
 And this **POM File** is always located in the root of your **Maven** project.
 
-![image23]()
+![image23](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image23.png?raw=true)
 
 Now, let's look at the **POM File Structure**.
 So basically, you'll have the project metadata,
@@ -936,7 +936,7 @@ And then also, you'll have a list of plugins.
 So these are like additional custom tasks to run.
 So you can use this for generating like JUnit test reports and so on.
 
-![image24]()
+![image24](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image24.png?raw=true)
 
 Alright, so let's go ahead and look at a simple POM File.
 So here's the file that starts with project, modelVersion.
@@ -1166,7 +1166,7 @@ And then under `src/test/java`,
 that's where you can place your unit testing code.
 So **Spring Boot** makes use of the **Maven** standard directory structure.
 
-![image25]()
+![image25](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image25.png?raw=true)
 
 Now, there were some other files here that were a bit interesting here.
 You may have seen these `mvnw` files, and you probably wondered, 
@@ -1460,7 +1460,7 @@ And so also, no more need for searching or hunting for the right dependency.
 Simply use a starter and you're ready to go.
 So, you know, let's look at an example with **Spring MVC**.
 
-![image26]()
+![image26](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image26.png?raw=true)
 
 So right, so building a traditional **Spring MVC** app,
 you normally would need to add 
@@ -1578,7 +1578,7 @@ So most IDEs have a dependency management
 or view feature and this is much easier to navigate.
 I'll actually show you how to do this with Eclipse and IntelliJ.
 
-![image27]()
+![image27](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image27.png?raw=true)
 
 Okay, so for Eclipse users, basically you open up the `pom.xml` file,
 and then you select the tab for **dependency hierarchy** at the bottom, 
@@ -1591,7 +1591,7 @@ So that's kind of the basic approach that you can use
 to kind of explore the starters to see what's in there,
 to see what's available.
 
-![image28]()
+![image28](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image28.png?raw=true)
 
 For the IntelliJ users you simply use the menu option,
 `view > tool windows > Maven projects > expand dependencies`.
@@ -1761,13 +1761,13 @@ Now, as I mentioned with IntelliJ Community Edition,
 it does not support **DevTools** by default.
 We have to make some additional configurations.
 
-![image29]()
+![image29](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image29.png?raw=true)
 
 What we'll do is we'll select the menu of 
 `Preferences > Build, Execution, Deployment > Compiler`,
 and then we'll check the box to `Build Project Automatically`.
 
-![image30]()
+![image30](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image30.png?raw=true)
 
 We need to do one additional setting here.
 We'll select the menu item `Preferences > Advanced Settings`,
@@ -1828,7 +1828,7 @@ And now, it'll start opening up.
 It'll synchronize, resolve Maven dependencies, and all that good stuff.
 So at this point, we have our **02-dev-tools** project open.
 
-![image31]()
+![image31](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image31.png?raw=true)
 
 Now, let's go ahead and move over to our IntelliJ **preferences** here,
 and we'll set up those IntelliJ configurations.
@@ -1839,7 +1839,7 @@ And then we'll select this check box here,
 Alright, so that looks pretty good.
 Let's go ahead and click on the Apply button.
 
-![image32]()
+![image32](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image32.png?raw=true)
 
 And now, let's go and select the **Advanced Settings** item.
 And then, in the **Compiler** section,
@@ -1979,7 +1979,7 @@ So this is great.
 So now, I should be able to swing over to my browser here,
 and I should be able to access this new endpoint.
 
-![image33]()
+![image33](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image33.png?raw=true)
 
 So I'll just go to `localhost:8080/workout`.
 That's the new one that we just added.
@@ -2086,7 +2086,7 @@ So, the health endpoint, or `/health`, checks the status of your application.
 This is normally used by monitoring apps to see if your application is up or down.
 So, here's a little screenshot of our given application, `/actuator/health`.
 
-![image34]()
+![image34](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image34.png?raw=true)
 
 Right now the status is up.
 Now, this health status is customizable,
@@ -2112,7 +2112,7 @@ Now, let's take a look at the info endpoint.
 So, `/info` gives you information about your application.
 So, the default is that it's actually empty.
 
-![image35]()
+![image35](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image35.png?raw=true)
 
 So, if you access this endpoint, you'll get this empty **JSON** object, which is nothing.
 You're like, huh, that's not too useful.
@@ -2131,7 +2131,7 @@ And that's our actual info for our given `/info` endpoint.
 Now, anything starting with `info.` as for the property name, 
 then that'll be used by this `/info` endpoint.
 
-![image36]()
+![image36](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image36.png?raw=true)
 
 So, here's a little screenshot here, so I have `actuator/info`, 
 and it'll send back a **JSON** object that has the information 
@@ -2183,7 +2183,7 @@ Now, once we have that set up to get a list of beans for a given application,
 then we can go to `localhost/actuator/beans`, and it'll give us an actual dump, 
 or a JSON, of all the beans that are registered with this **Spring Application** context.
 
-![image37]()
+![image37](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image37.png?raw=true)
 
 So this is pretty cool, but, and hold on here,
 you're probably wondering; what about security?
@@ -2205,6 +2205,159 @@ And remember, we get all those endpoints for free.
 and customize the `/info` endpoint, 
 so we can give specific information, or custom information, for our given application.
 
+Let's go ahead and move into our IDE.
+And if your **Spring Boot** app is already running now, please stop it.
+And let's do some housekeeping work.
+So what we'll do is we'll actually close our IDE,
+we'll copy some project folders, just to keep our projects organized.
+Now, this is an optional step.
+It's not required, but I'll like to do it
+just so I can keep my projects organized and I can easily go back
+to a previous version of the application.
+Again, that's my personal preference.
+There are other developers who prefer to simply work
+with one project the entire course.
+So it's totally up to you.
+But I'll do this housekeeping task here.
+If you don't want to do it, feel free to skip past it.
+Alright, I'll go through and close all my tabs here, and I'll close this window.
+And now I should have just a basic IntelliJ window.
+I'll go ahead and open up my file system here,
+and I'll move into the dev-spring-boot folder,
+and I'll move into the `01-spring-boot-overview` folder,
+and I'll copy this project, `02-dev-tools-demo`.
+And then I'll just paste it right here in the same directory.
+And then I'll just rename it, and I'll call it `03-actuator-demo`.
+Now go ahead and open up this `03-actuator-demo` in IntelliJ.
+And one cool trick here is that you can simply drag 
+and drop your project folder over to IntelliJ, 
+and it'll automatically open it for you.
+So you can see up at the top `03-actuator-demo`,
+so that's our project that we have open right now,
+and that's the one that we'll use in this video.
+And with step one, we'll actually edit the **Maven** `pom.xml` file,
+and we'll add the **spring-boot-starter-actuator**.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.luv2code.springboot.demo</groupId>
+    <artifactId>mycoolapp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>mycoolapp</name>
+    <description>Demo project for Spring Boot</description>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        
+        <!-- ADD SUPPORT FOR SPRING BOOT ACTUATOR-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+So I'll open the file here, zoom out and expand the window.
+I'll just go ahead and copy the dependency from above.
+And then I'll just kind of move down here, and I'll just paste it, 
+and I'll just move in here, and just update the entry for the _artifactId_,
+so this will be `spring-boot-starter-actuator`.
+And just to kind of keep myself on track,
+I should have entered this earlier, but I forgot,
+but I'll just add the comment right now.
+So this is for adding support for **Spring Boot Actuators**.
+So this will give us those additional **REST** endpoints for free.
+No real need for us to write any code.
+And this is all for the management and metrics of our given application.
+Remember to press CTRL+S and load **Maven** changes.
+
+```properties
+management.endpoints.web.exposure.include=health,info
+management.info.env.enabled=true
+```
+
+Now, by default only `/health` is exposed.
+The `/info` endpoint can provide more information about your application.
+You can actually customize it.
+Now to expose `/info`, you need to make an update in the `application.properties` file.
+For this property here, `management.endpoints.web.exposure.include=health,info`.
+We're simply giving a comma delimited list of endpoints to expose.
+Also, we'll set the property here for `management.info.env.enabled=true`.
+And once we set these two items up, then this will expose the `/info` endpoint.
+Now I just want to go ahead and test this out by just simply running my application here.
+
+
+
+So I'm just gonna run it as a Java application.
+And if I expand the window here
+I can kind of investigate just a little bit.
+So if I move to the bottom
+and kind of scroll over to the right-hand side,
+we'll see this entry that was created here
+or this log entry.
+It says exposing two endpoints beneath base /actuator.
+So those are the new endpoints that's given to us for free,
+thanks to adding a Spring Boot Actuator.
+And remember, all of the actuator endpoints
+are prefixed with /actuator.
+So let's go ahead and move to step two
+of viewing the actuator endpoints
+for /health and also /info.
+So I'll just swing over here to my web browser
+and I'll open up localhost:8080/actuator/health.
+And this gives us the status of UP.
+So this can be used by external monitoring apps
+to see if our application is up or down.
+And remember, we can always customize this logic
+for specific business cases for our given application.
+Now let's also access /actuator/info
+to give us information about our application.
+And remember, by default it's empty,
+but let's go ahead and fix that.
+Let's go ahead and make the update
+so we can get some customized information
+for our application.
 
 </div>
 
