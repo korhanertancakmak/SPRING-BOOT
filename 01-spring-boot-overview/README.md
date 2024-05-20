@@ -2679,59 +2679,75 @@ that's included right here, `d1e359d2-dfed-40e3-b18f-5ac912225ec4`, in the logs.
 And remember, you can always customize this,
 using regular spring security techniques by adding in databases or encrypted passwords.
 But for now we'll just kind of make use of the default security password here.
-Okay, so let's go ahead and verify the security on the actuator endpoints for `/mappings`.
+Okay, so let's go ahead and verify the security on the actuator endpoints 
+for `localhost:8080/actuator/mappings`.
 
-![image41]()
+![image41](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image41.png?raw=true)
 
 Oh yeah, this is good.
 So we have security, so we try to access mappings,
-but it prompted us to log in,
-so we know the default user ideas user.
-And then for the password,
-we need to use that generated password.
+but it prompted us to log in, so we know the default userId as **user**.
+And then for the password, we need to use that generated password.
 So and it's a big long password.
-So let me swing over here
-and just kind of do a little copy paste exercise on this.
+So let me swing over the terminal,
+and kind of do a little copy-paste exercise on this.
 So I'll just kind of copy that information from the console,
-swing over here to the dialogue
-and then just kind of paste it in here.
-And now just go ahead and log in.
+swing over here to the dialogue and then just kind of paste it on the login page.
+And now go ahead and log in.
+
+![image42](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image42.png?raw=true)
+
 Oh yeah, so this is great.
-So now the system's actually prompting us,
-for user ID and password.
-We give that information
-and then they can give us all the different details here,
+So now the system's actually prompting us for userId and password.
+We give that information, and then they can give us all the different details here,
 for those actuator endpoints.
-So this is good.
 So we have security in place,
-so a random person can't just come through
-and actually log in, you know, and access those mappings.
-So this is all secured, good job.
-And if I try to access this actuator slash info,
+so a random person can't just come through and actually log in, 
+you know, and access those mappings.
+So this is all secured now.
+And if I try to access this `actuator/info`,
 remember earlier I said that's still available,
 even if you have security enabled,
 that's already available by default.
-So what we can do here is actually disable those endpoints.
-So we're gonna disable the endpoints for slash health
-and also disable the endpoints for slash info.
-So I can disable that in my application properties file.
+So what we can do here is actually disabling those endpoints.
+So we're going to disable the endpoints for /health
+and also disable the endpoints for /info.
+
+Step 3: Disable endpoints for `/health` and `/info`.
+
+```properties
+# Use wildcard "*" to expose all endpoints
+# Can also expose individual endpoints with a comma-delimited list
+management.endpoints.web.exposure.include=*
+management.info.env.enabled=true
+
+# Exclude individual endpoints with a comma-delimited list
+management.endpoints.web.exposure.exclude=health,info
+
+info.app.name=My Super Cool App
+info.app.description=A crazy fun app, yoohoo!
+info.app.version=1.0.0
+```
+
+So I can disable that in my `application.properties` file.
 So on application properties,
-I'm gonna do an exclude on a comma,
-delimited list of endpoints here.
-So I'll just kind of copy paste the line from above
-and I'll just paste it and I'll make one important update.
-So instead of include, I'm gonna say exclude.
-And now I give the list of the endpoints,
-that I want to exclude.
-So here I want to exclude health and info.
-All right, so now these two new endpoints,
+I'm going to do an excluding on a comma-delimited list of endpoints here.
+So I'll just kind of copy-paste the line from above,
+and I'll just paste it, and I'll make one important update.
+So instead of **include**, I'm going to say **exclude**.
+And now I give the list of the endpoints that I want to exclude.
+So here I want to exclude **health** and **info**.
+All right, so now these two new endpoints, 
 they're excluded, they won't be available.
-So I just save and then if I move back to my browser,
+So I just save and then, if I move back to my browser,
 I should get 404 on those given endpoints,
 because now we've excluded them.
 They're not even available anywhere.
-So just kinda move over here to slash health.
+So move over here to `localhost:8080/actuator/health`.
 Just do a reload on this page.
+
+![image43](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image43.png?raw=true)
+
 And we get a 404, the white label error.
 And that's good because we actually disabled,
 the slash health endpoint or excluded that given endpoint.
