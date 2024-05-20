@@ -2460,7 +2460,7 @@ And then one thing to notice here in the console,
 we have more endpoints that we can take a look at and play around with, cool.
 So swinging back to our web browser, let's test this out.
 
-![image38]()
+![image38](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image38.png?raw=true)
 
 So I'll go to `/actuator/beans` and good.
 So this is a list of all the Spring beans that are registered with our application.
@@ -2469,21 +2469,292 @@ And also any beans that you've created with `@Component`.
 So this is good for debugging your given application 
 to see if a given beans been created or if it's being used in your app.
 
-![image39]()
+![image39](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image39.png?raw=true)
 
 Also, let's take a look at another endpoint here `/actuator/threaddump`.
 So this will give us a list of all threads that are running in our application.
 And this is perfect for analyzing and profiling your application's performance
 if you're looking for any bottlenecks or anything.
 
-![image40]()
+![image40](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image40.png?raw=true)
 
 And then another endpoint we can take a look at is `/actuator/mappings`.
 So this will give us a list of all the request mappings for your given application.
-So if you want to say, _hey, what endpoints are being exposed_,
-_what request mappings are available that endpoint can really help you out in that regard_.
+So if you want to say, "_hey, what endpoints are being exposed_,
+_what request mappings are available that endpoint can really help you out in that regard_".
 So we've exposed the **Spring Boot actuator** endpoints 
 and went through and tested out a couple of them.
+
+Now, let's look at **Spring Boot Actuator - Security**.
+So previously I showed you how to expose 
+all the different **Spring Boot Actuator** endpoints, and you're probably, 
+"_Well, what about security? 
+We may **NOT** want to expose all of this information to just anyone on the web._"
+So what we'd like to do is add **Spring Security** to our project and secure our endpoints.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+So we can do that very easily by simply adding the **spring-boot-starter-security** 
+dependency to our **Maven** project and secure our endpoints with one small caveat.
+So the `/health` will still be available,
+but I'll show you how we can actually disable those.
+
+So once we add this **Spring Boot starter security** dependency,
+then when we access `/actuator/beans`,
+**Spring Security**'s gonna actually prompt for a login
+and the user will have to give their username and password
+to log in to or access those given endpoints.
+Now, the default username is **user** and then also as for the password,
+you have to look at the actual console to figure out what the default password is.
+So you'll see this entry and the console logs.
+It'll say, "_Hey, using generated-security password
+will give you this big-long password._"
+So that's one approach by using the default username of user 
+and using the generated password.
+
+```properties
+spring.security.user.name=scott
+spring.security.user.password=tiger
+```
+
+What if you actually wanted to override those defaults and give your own username and password?
+Well, in the `application.properties` file 
+you can say `spring.security.user.name=scott` and then `spring.security.user.password=tiger`
+or whatever password you want to give.
+So those are the actual usernames and passwords 
+that **Spring Security** will use 
+when they're actually authenticating a given user for accessing those **Actuator** endpoints.
+Now you may wonder, "_Okay, well, I want to do something more than just that properties file._"
+Well, no worries.
+You can customize **Spring Security** for the **Spring Boot Actuator**, 
+so you can use a database for roles, encrypted passwords and so on.
+We'll cover the details of **Spring Security** later in the course.
+
+```properties
+# Exclude individual endpoints with a comma-delimited list
+management.endpoints.web.exposure.exclude=health,info
+```
+
+We can also exclude endpoints.
+So to exclude `/health` and `/info`,
+we simply add an entry here in `application.properties`.
+We say `management.endpoints.web.exposure.exclude`
+and then we give a comma-delimited list,
+so **health, info** and that way no one can access those given endpoints.
+
+Alright, now if you'd like to get more details on **Spring Boot Actuator** and so on,
+simply go to the link [here](www.luv2code.com/actuator-docs).
+It'll redirect you to the official page, 
+and you can get all the glory details here on **Spring Boot Actuator**.
+Now let's take a look at the actual **Development Process** here.
+
+1. The first thing we do is edit the `pom.xml` file,
+and we'll add `spring-boot-starter-security` to help us secure those endpoints.
+2. Then we'll actually verify security on those endpoints
+by going to `/beans` and so on.
+3. And then we'll also go through and disable endpoints for `/health` and `/info`.
+
+Okay, let's move back into our application here.
+And you know right now we currently have all these endpoints exposed.
+And like I said earlier, we may not want to expose all this information.
+We need to secure this.
+We need to kinda lock it down with some spring security.
+Alright, so let's go ahead and move into our IDE.
+And if your **Spring Boot App** is already running now, please stop it.
+Let's do some Housekeeping work.
+For the Housekeeping work, I'll be quiet over here,
+and you can just follow along with my steps.
+I'll create a new project folder by copying and pasting `03-actuator-demo`,
+and rename it `04-actuator-security-demo`.
+Step-1: Edit `pom.xml` and add **spring-boot-starter-security**.
+After opening that project:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.luv2code.springboot.demo</groupId>
+    <artifactId>mycoolapp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>mycoolapp</name>
+    <description>Demo project for Spring Boot</description>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
+        <!-- ADD SUPPORT FOR SPRING BOOT ACTUATOR-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- ADD SUPPORT FOR SPRING SECURITY-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+Alright, so I'm in my `pom.xml` file here.
+I'll add a quick comment here.
+So we're going to add support for spring security.
+And I'll just kind of copy this section from up top,
+and just do a little copy-paste exercise
+and then just move down,
+and I'll just do a paste, 
+and then I'll just go through and do a quick update here and an _artifactId_.
+So spring boots starter security.
+And by adding this dependency, we automatically have security on our **REST** endpoints.
+Okay, so we have the support here for spring security in our given **Maven** `pom` file.
+Please remember to load **Maven** changes.
+And I'll just swing over here and just run the application one more time.
+
+```html
+2024-05-20T11:41:09.868+03:00  INFO 5568 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-05-20T11:41:09.911+03:00  INFO 5568 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-20T11:41:09.911+03:00  INFO 5568 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-20T11:41:11.071+03:00  INFO 5568 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-20T11:41:11.085+03:00  INFO 5568 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-20T11:41:11.086+03:00  INFO 5568 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-20T11:41:11.133+03:00  INFO 5568 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-20T11:41:11.134+03:00  INFO 5568 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1222 ms
+2024-05-20T11:41:11.791+03:00  WARN 5568 --- [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d1e359d2-dfed-40e3-b18f-5ac912225ec4
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-05-20T11:41:11.886+03:00  INFO 5568 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 13 endpoint(s) beneath base path '/actuator'
+2024-05-20T11:41:11.895+03:00  INFO 5568 --- [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2a341243, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@76d50fe1, org.springframework.security.web.context.SecurityContextHolderFilter@40271e4f, org.springframework.security.web.header.HeaderWriterFilter@1d1d4ce4, org.springframework.web.filter.CorsFilter@69059225, org.springframework.security.web.csrf.CsrfFilter@1876912b, org.springframework.security.web.authentication.logout.LogoutFilter@2d8466d3, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@2d8770b2, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@50673517, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@6f77f9ae, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@41d3bdd1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7e80e665, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@23c97aa7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@65db5809, org.springframework.security.web.access.ExceptionTranslationFilter@6f2ed4de, org.springframework.security.web.access.intercept.AuthorizationFilter@1d4cd0ce]
+2024-05-20T11:41:11.921+03:00  INFO 5568 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-20T11:41:11.965+03:00  INFO 5568 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-20T11:41:11.972+03:00  INFO 5568 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : Started MycoolappApplication in 2.456 seconds (process running for 2.828)
+```
+
+Okay, so the app is up and running.
+Let's do a little bit of investigating here in this console.
+So in the spring boot console here and moving down.
+And so the default userID is **user**, but the password is this generated password;
+that's included right here, `d1e359d2-dfed-40e3-b18f-5ac912225ec4`, in the logs.
+And remember, you can always customize this,
+using regular spring security techniques by adding in databases or encrypted passwords.
+But for now we'll just kind of make use of the default security password here.
+Okay, so let's go ahead and verify the security on the actuator endpoints for `/mappings`.
+
+![image41]()
+
+Oh yeah, this is good.
+So we have security, so we try to access mappings,
+but it prompted us to log in,
+so we know the default user ideas user.
+And then for the password,
+we need to use that generated password.
+So and it's a big long password.
+So let me swing over here
+and just kind of do a little copy paste exercise on this.
+So I'll just kind of copy that information from the console,
+swing over here to the dialogue
+and then just kind of paste it in here.
+And now just go ahead and log in.
+Oh yeah, so this is great.
+So now the system's actually prompting us,
+for user ID and password.
+We give that information
+and then they can give us all the different details here,
+for those actuator endpoints.
+So this is good.
+So we have security in place,
+so a random person can't just come through
+and actually log in, you know, and access those mappings.
+So this is all secured, good job.
+And if I try to access this actuator slash info,
+remember earlier I said that's still available,
+even if you have security enabled,
+that's already available by default.
+So what we can do here is actually disable those endpoints.
+So we're gonna disable the endpoints for slash health
+and also disable the endpoints for slash info.
+So I can disable that in my application properties file.
+So on application properties,
+I'm gonna do an exclude on a comma,
+delimited list of endpoints here.
+So I'll just kind of copy paste the line from above
+and I'll just paste it and I'll make one important update.
+So instead of include, I'm gonna say exclude.
+And now I give the list of the endpoints,
+that I want to exclude.
+So here I want to exclude health and info.
+All right, so now these two new endpoints,
+they're excluded, they won't be available.
+So I just save and then if I move back to my browser,
+I should get 404 on those given endpoints,
+because now we've excluded them.
+They're not even available anywhere.
+So just kinda move over here to slash health.
+Just do a reload on this page.
+And we get a 404, the white label error.
+And that's good because we actually disabled,
+the slash health endpoint or excluded that given endpoint.
+Now let's do a similar thing for info.
+So actuator slash info, again, we get this error page
+and that's fine again because we disabled the info endpoint.
+Okay, great, all right, so there we go.
+Now I actually want to comment out that configuration,
+because slash health and slash info,
+they're actually very useful for real-time applications
+and real-time projects.
+So I simply did this earlier just as an academic exercise,
+but here I normally recommend to keep those available,
+for real-time projects just because it's great,
+for DevOps work and for application monitoring.
+So I just commented that out
+and now we can actually access those given endpoints,
+for slash health and also slash info.
+All right, good job.
+So nice little test here,
+by making use of the spring boot actuator
+and actually adding security to those given endpoints.
+
 </div>
 
 
