@@ -1725,7 +1725,7 @@ and also you have the default configuration of the **Spring Boot plugin**.
 So those are the main benefits there of using a **Spring Boot Starter Parent**.
 </div>
 
-### Spring Boot DevTools
+## [Spring Boot DevTools]()
 <div style="text-align:justify">
 
 In this section, we're going to cover **Spring Boot Dev Tools**.
@@ -2034,7 +2034,7 @@ So I recommend that you use this for your applications
 as you go through your development process.
 </div>
 
-### Spring Boot Actuator
+## [Spring Boot Actuator]()
 <div style="text-align:justify">
 
 In this section, we'll cover the **Spring Boot Actuator**.
@@ -2782,7 +2782,7 @@ So nice little test here, by making use of the spring boot actuator
 and actually adding security to those given endpoints.
 </div>
 
-### Spring Boot Run from Command-Line
+## [Spring Boot Run from Command-Line]()
 <div style="text-align:justify">
 
 In this section, we're going to learn how to run **Spring Boot** from the command line.
@@ -3067,17 +3067,554 @@ and there was no requirement to have the IDE up and running.
 We did everything from the command line.
 </div>
 
-
+## [Injecting Custom Application Properties]()
 <div style="text-align:justify">
 
+In this section, we'll cover **Spring Boot and custom application properties**.
+So you have a problem you need for your app to be configurable,
+no hard coding of values,
+and you also need to be able to read app configuration from a `properties` file.
 
+So the solution is to make use of an app `properties` file.
+So by default, **Spring Boot** will actually read information from a standard `properties` file.
+And this file is located at `src/main/resources/aplication.properties`.
+So that's _the standard **Spring Boot** file name_ of where to look for, 
+for application properties. 
+And you can actually define any custom properties in this file.
+And your **Spring Boot** app can access these properties
+by simply using the `@Value` annotation.
+And other than that, there's no additional coding or configuration required.
+**Spring Boot** will automatically load this `application.properties` file
+and make it available to you via the `@Value` annotation.
+Alright, so let's look at the development process:
+
+1. So the first thing we're going to do is define custom properties
+in our `application.properties` file.
+2. And then we'll actually inject those properties 
+into our **Spring Boot** application using the `@Value` annotation. 
+
+Okay, so let's start with step one of defining custom application properties.
+
+```properties
+#
+# Define custom properties
+#
+coach.name=Mickey Mouse
+team.name=The Mouse Club
+```
+
+We'll make use of that standard Spring Boot file name, `application.properties`,
+and we'll define our own custom properties.
+So for this example, I'll define a `coach.name=Mickey Mouse`,
+and `team.name=The Mouse Club`.
+And again, remember, you can use any custom property names in this given file,
+and there's also no limit on the number of properties you can add.
+You can add as many properties here as you'd like.
+
+```java
+@RestController
+public class FunRestController {
+
+    // inject properties for: coach.name and team.name
+    
+    @Value("${coach.name}")
+    private String coachName;
+
+    @Value("${team.name}")
+    private String teamName;
+}
+```
+
+Alright, so let's look at step two of injecting the properties into our **Spring Boot** application.
+And what we'll do is we'll make use of that rest controller from the previous sections.
+So we had our **FunRestController**,
+and what we'll do is we'll actually inject the properties for `coach.name` and also `team.name`.
+So what I'll do here is I'll make use of that @value annotation,
+and I'll inject the property `coach.name`,
+and I'll assign it to this field we have here called **String** _coachName_.
+And remember, this is actually injected from the actual properties file, 
+`application.properties`, It'll get that actual property name,
+take that value, and inject it here for this given field.
+And then I just repeat the process here for `team.names`.
+I use `@Value("${team.name}")`.
+And again, it'll actually pull the information from the properties file `team.name`, 
+give the value here, assign it to our field _teamName_, and that's basically it.
+So the nice thing to notice here is that 
+there's no additional coding or configuration required.
+Spring Boot will automatically load that `application.properties` file,
+make it available to your application, and you can access those values
+by using the `@Value` annotation.
+
+
+Alright, let's go and move into our IDE.
+And if your **Spring Boot** app is already running now, please stop it.
+And we create new package folder by copying and pasting `05-command-line-demo`.
+I'll call it `06-properties-demo`.
+
+```properties
+# Use wildcard "*" to expose all endpoints
+# Can also expose individual endpoints with a comma-delimited list
+management.endpoints.web.exposure.include=*
+management.info.env.enabled=true
+
+# Exclude individual endpoints with a comma-delimited list
+# management.endpoints.web.exposure.exclude=health,info
+
+info.app.name=My Super Cool App
+info.app.description=A crazy fun app, yoohoo!
+info.app.version=1.0.0
+
+#
+# Define my crazy properties
+#
+
+coach.name=Mickey Mouse
+team.name=The Mouse Club
+```
+
+Step-1: Define custom properties in `application.properties`.
+So I'll just move down to my `application.properties`.
+So that's kind of my step one of defining my custom properties in `application.properties`,
+kind of expand this window here.
+And remember `application.properties`
+that's the standard spring boot application properties name
+that we can use to add our own custom or crazy properties.
+And so my first property here
+I'll call it `coach.name` equals _Mickey Mouse_.
+And the `team.name` is The _Mouse Club_.
+You can give any values here that you'd like.
+And also we can give any custom property names here that we'd like also.
+
+Okay, so now Step-2: Injecting those properties into our spring boot application
+using the `@Value` annotation.
+So let's go ahead and move into our **FunRestController**.
+
+```java
+@RestController
+public class FunRestController {
+
+    // inject properties for: coach.name and team.name
+    
+    @Value("${coach.name}")
+    private String coachName;
+
+    @Value("${team.name}")
+    private String teamName;
+
+    // expose "/" that return "Hello World"
+    @GetMapping("/")
+    public String sayHello() {
+        return "Hello World!";
+    }
+
+    // expose a new endpoint for "workout"
+    @GetMapping("/workout")
+    public String getDailyWorkout() {
+        return "Run a hard 5k!";
+    }
+
+    // expose a new endpoint for "fortune"
+    @GetMapping("/fortune")
+    public String getDailyFortune() {
+        return "Today is your lucky day.";
+    }
+}
+```
+
+And let me write a quick comment here to myself,
+just to keep myself on track.
+Okay, great, so we're going to inject properties for `coach.name` and also `team.name`.
+So let me just set up the fields here for _coachName_.
+Do a similar thing here for _teamName_.
+And then remember we actually inject those properties using the `@Value` annotation,
+and we give the dollar sign curly brace,
+and the actual property name `coach.name`,
+so that portion looks good.
+And then also let me just do a little copy-paste on this line,
+and just paste it down here.
+And let me just update the actual property name.
+So that's `team.name`, save that.
+What I'd like to do is actually go through and add a method or add a new endpoint
+that'll use this information.
+So let me just put a little quick comment here.
+
+```java
+@RestController
+public class FunRestController {
+
+    // inject properties for: coach.name and team.name
+    
+    @Value("${coach.name}")
+    private String coachName;
+
+    @Value("${team.name}")
+    private String teamName;
+    
+    // expose new endpoint for "teamInfo"
+    @GetMapping("/teamInfo")
+    public String getTeamInfo() {
+        return "Coach: " + coachName + ", Team name: " + teamName;
+    }
+    
+    // expose "/" that return "Hello World"
+    @GetMapping("/")
+    public String sayHello() {
+        return "Hello World!";
+    }
+
+    // expose a new endpoint for "workout"
+    @GetMapping("/workout")
+    public String getDailyWorkout() {
+        return "Run a hard 5k!";
+    }
+
+    // expose a new endpoint for "fortune"
+    @GetMapping("/fortune")
+    public String getDailyFortune() {
+        return "Today is your lucky day.";
+    }
+}
+```
+
+So this new endpoint, we'll call it **teamInfo**,
+and it'll give us the information for the coach name, and also the team name.
+All right, so just a basic method here just to get mapping `/teamInfo`.
+We have a method public stream, `getTeamInfo`, and we'll return the _coachName_,
+which is at field that we have up above,
+And also the _teamName_, and that's it, just basic, very straightforward.
+And so remember here, coach name is that field _coachName_,
+and team name maps over to that field _teamName_.
+All right, so that looks good so far, and I guess we can go ahead and run it right?
+Let's go ahead and test this out.
+So just run it as a Java application.
+
+![image60](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image60.png?raw=true)
+
+Alright, so our app is up and running.
+Let's swing over to our web browser here, and let's access team info.
+So we do the `localhost:8080/teamInfo`.
+And, it works.
+So we have the Mickey Mouse coming in, and we have a team name of the _Mouse Club_.
+And this is all based on information from that properties file, right?
+Those custom properties that we defined, and we simply injected those properties
+using the `@Value` annotation.
+So this is a good example here of how you can define your own custom properties
+and use them in your application.
 </div>
 
-
-
+## [Configuring the Spring Boot Server]()
 <div style="text-align:justify">
 
+In this section, we'll cover **Spring Boot properties**.
+**Spring Boot** can be configured in the `application.properties` file.
+So, some of the properties you can set is 
+that you can actually set up the actual server port,
+the context path, actuator endpoints, security settings, and so on.
+And in fact, **Spring Boot** has over 1000 properties.
+But hey, don't worry; 
+this link [here](https://www.luv2code.com/spring-boot-props) 
+actually has a list of the common properties here.
+So, it'll actually redirect you to the official **Spring Boot** documentation
+that has a list of those common properties,
+and you can drill down and get more details on those given properties.
 
+But don't let those 1000 plus properties overwhelm you or scare you.
+The properties are roughly grouped into the following categories.
+So, you have the categories of **Core**, **Web**, **Security**, **Data**,
+**Actuator**, **Integration**, **DevTools**, and **Testing**.
+So that's kind of the logical grouping
+of those different properties that are out there.
+And what we'll do here is we'll actually review
+some properties just so you can see how they're used,
+become accustomed to them and so on.
+
+```properties
+# Log levels severity mapping
+logging.level.org.springframework=DEBUG
+logging.level.org.hibernate=TRACE
+logging.level.com.luv2code=INFO
+
+#Log file name
+logging.file.name=my-crazy-stuff.log
+logging.file.path=D:/JAVA_STUDY/Github/dev-spring-boot/01-spring-boot-overview/myApps/demo
+```
+
+Okay, so let's start with the core properties.
+So again, in this `application.properties` file,
+we can set up the logging levels and set up different severity mappings
+for those given packages or for those given projects.
+So for example, if you'd like to set up the logging level
+for the `org.springframework`, set it to `DEBUG`.
+You could set `org.hibernate` to `TRACE` levels,
+and you can also set `com.luv2code` to `INFO` level.
+So, basically you're setting these logging levels
+based on the actual package name, and this applies to all subpackages
+for those given projects or package names.
+
+And then as far as the different logging levels that are out there, 
+you can set `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`, and `OFF`.
+You could also have the data sent to a given specific log file as far as output,
+so instead of the regular console, you can give the file of `my-crazy-stuff.log`
+and all the information will be stored in that given log file.
+Now if you'd like to get more details on **Spring Boot** logging, 
+just access the link [here](https://www.luv2code.com/spring-boot-logging) on the page,
+it'll give you the official **Spring Boot** documentation 
+for actually performing all the different logging configurations and so on.
+
+```properties
+# HTTP server port
+server.port=7070
+
+# Context path of the application
+server.servlet.context-path=/my-silly-app
+
+# Default HTTP session time out
+server.servlet.session.timeout=15m
+```
+
+Next, we can take a look at some of the web properties.
+So again, in this `application.properties` file,
+we can actually set up the actual port that the server will listen to on.
+So by default, the port is `8080`, but you may want to change it
+to listen on a different port here, so I'll say `server.port=7070`.
+We can also change the context path of the application,
+so the actual default is just a forward slash, `/`,
+but here we'll give an actual context path of `/my-silly-app`, 
+so then that means that when you actually access your application in the web browser, 
+we give `localhost:7070`, that's the port, slash, the contact path, `/my-silly-app`,
+and then slash whatever endpoints you're going to access,
+like our fortune or our workout or whatever.
+We can also set another property here, like the `default HTTP session timeout`,
+I set that to `15m`, that's basically 15 minutes, so `m` is short for minutes.
+
+```properties
+# Endpoints to include by name or wildcard
+management.endpoints.web.exposure.include=*
+
+# Endpoints to exclude by name or wildcard
+management.endpoints.web.exposure.exclude=beans,mapping
+
+# Base path for actuator endpoints
+management.endpoints.web.base-path=/actuator
+```
+
+Now, let's take a look at some of the properties we can set for **Actuator**.
+You've seen some of these already, right?
+So you can set up the endpoints to include,
+so we can give the endpoints by name or by wildcards, I'll have `include=*`.
+We can also give endpoints to exclude by the name or wildcards.
+So here I'll say `.exclude=beans,mapping`.
+We can also set up the base path for the actuator endpoints.
+So the actual default is `/actuator`, so when we access it via our web,
+we say `localhost:`, whatever our port name is, `7070/actuator/health`.
+And you can easily change that value to anything you'd like 
+for your actual **Actuator** endpoints.
+
+```properties
+# Default user name
+spring.security.user.name=admin
+
+# Password for default user
+spring.security.user.password=topsecret
+```
+
+And then you can set up some **Security** properties here.
+So, we saw earlier how we could secure the rest endpoints 
+for the **Spring Boot Actuator** making use of the default _username_.
+So here we can actually provide a different default username.
+We say `user.name=admin`, and we can also set up a default password,
+so instead of using that generated password by **Spring Boot**,
+we can give the `user.password=topsecret`.
+And remember, earlier I also mentioned that you can easily customize this
+to make use of our normal **Spring Security** work, our **Spring Security** configuration
+where you can basically hook in databases, roles, encrypted passwords, and so on,
+just using the same information that we did earlier in the course
+for setting up custom **Spring Security**.
+
+```properties
+# JDBC URL of the database
+spring.datasource.url=jdbc:/mysql://localhost:3306/ecommerce
+
+# Login username of the database
+spring.datasource.username=scott
+
+# Login password of the database
+spring.datasource.password=tiger
+```
+
+And also Spring Boot has support for some data properties here.
+So in your `application.properties` file,
+we can go ahead and set up, like, the JDBC URL.
+So this `datasource.url=jdbc:mysql`, localhost ecommerce.
+We can set up the username of scott and the password of tiger.
+And then we'll actually get into more of this later
+when we move into **Spring Boot** for data access,
+**Spring Boot** data, and all that good stuff.
+
+```properties
+# JDBC URL of the database
+spring.datasource.url=jdbc:/mysql://localhost:3306/ecommerce
+
+# Login username of the database
+spring.datasource.username=scott
+
+# Login password of the database
+spring.datasource.password=tiger
+```
+
+So don't worry, I got you covered.
+And again, just as a reminder,
+a list of the **Common Spring Boot** properties is available 
+here at the [link](https://www.luv2code.com/spring-boot-props).
+Alright, so now with our development process:
+
+1. What we're going to do here is we'll actually modify **Spring Boot**,
+we'll configure the server port to listen to a different port,
+2. and then we'll also configure the application context path.
+
+Now let's go ahead and swing back into our IDE. 
+And what we'll do is we'll make some configuration changes here for our given application.
+Step-1: Configure the server port.
+And what we'll do is we'll start with step one of configuring the server port.
+
+```properties
+#
+# Change Spring Boot embedded server port
+#
+server.port=6060
+```
+
+So we'll set this property here `server.port=6060`.
+The default port is `8080`, but we'll actually override it here and set the value to `6060`.
+I'll save this file here and note here it'll automatically reload,
+because we're using the spring boot DevTools, 
+and we'll kind of scan over here and investigate the console logs.
+
+````html
+2024-05-20T19:37:50.920+03:00  INFO 432 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-05-20T19:37:50.955+03:00  INFO 432 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-20T19:37:50.955+03:00  INFO 432 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-20T19:37:51.805+03:00  INFO 432 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 6060 (http)
+2024-05-20T19:37:51.814+03:00  INFO 432 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-20T19:37:51.814+03:00  INFO 432 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-20T19:37:51.846+03:00  INFO 432 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-20T19:37:51.848+03:00  INFO 432 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 891 ms
+2024-05-20T19:37:52.349+03:00  WARN 432 --- [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 2558bb2e-47e4-433d-95c9-6f057447c9d7
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-05-20T19:37:52.425+03:00  INFO 432 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 13 endpoint(s) beneath base path '/actuator'
+2024-05-20T19:37:52.435+03:00  INFO 432 --- [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@323d606e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3126e411, org.springframework.security.web.context.SecurityContextHolderFilter@18d91a28, org.springframework.security.web.header.HeaderWriterFilter@35504b6c, org.springframework.web.filter.CorsFilter@584a5031, org.springframework.security.web.csrf.CsrfFilter@6f7cec28, org.springframework.security.web.authentication.logout.LogoutFilter@729d9a7b, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@23ad7098, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@65f76128, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@4e3ed08a, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@4bc90a22, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@28caa894, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5cf13d1c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@17d9e733, org.springframework.security.web.access.ExceptionTranslationFilter@116445e2, org.springframework.security.web.access.intercept.AuthorizationFilter@5e5f531]
+2024-05-20T19:37:52.463+03:00  INFO 432 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-20T19:37:52.496+03:00  INFO 432 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 6060 (http) with context path ''
+2024-05-20T19:37:52.503+03:00  INFO 432 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : Started MycoolappApplication in 1.838 seconds (process running for 2.145)
+````
+
+It says **Tomcat** service started on port `6060`.
+And that's all based on that configuration 
+that we just set here in the application properties file.
+
+Now let's go ahead and verify this.
+Let's swing over to our browser.
+And if we simply left it at `8080` and tried to access this page, 
+you should get a 404 or an error.
+The site can't be reached
+because no one's listening on `8080` at the moment, they're only listening on `6060`.
+So we need to update this URL to use the correct port.
+So now I give `localhost:6060`:
+
+![image61]()
+
+Things work out just fine because we're using the
+correct port number and that's based on the configurations from our `application.properties` file.
+And so with Step 2: Configure the application context path.
+So this is a **Spring Boot** configuration property here,
+server dot server context path equals /mycoolapp.
+
+```properties
+# Use wildcard "*" to expose all endpoints
+# Can also expose individual endpoints with a comma-delimited list
+management.endpoints.web.exposure.include=*
+management.info.env.enabled=true
+
+# Exclude individual endpoints with a comma-delimited list
+# management.endpoints.web.exposure.exclude=health,info
+
+info.app.name=My Super Cool App
+info.app.description=A crazy fun app, yoohoo!
+info.app.version=1.0.0
+
+#
+# Define my crazy properties
+#
+
+coach.name=Mickey Mouse
+team.name=The Mouse Club
+
+#
+# Change Spring Boot embedded server port
+#
+server.port=6060
+
+#
+# Set the context path of the application
+#
+# All requests should be prefixed with /mycoolapp
+#
+server.servlet.context-path=/mycoolapp
+```
+
+So that's the actual name of the application 
+or the name of the context path that we'll use for this given app. 
+So this basically means here that all requests 
+for this application should be prefixed with `/mycoolapp`.
+Alright, so this looks pretty good.
+Let's go ahead and save this file,
+and we'll actually see the **Spring Boot** server.
+It's restarted in the background so just digging into the logs a bit more.
+
+```html
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-05-20T19:51:45.223+03:00  INFO 432 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 13 endpoint(s) beneath base path '/actuator'
+2024-05-20T19:51:45.226+03:00  INFO 432 --- [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@77d38f61, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7ad7a5e6, org.springframework.security.web.context.SecurityContextHolderFilter@6bff03d6, org.springframework.security.web.header.HeaderWriterFilter@5e83c259, org.springframework.web.filter.CorsFilter@4eab1252, org.springframework.security.web.csrf.CsrfFilter@6a0b1aea, org.springframework.security.web.authentication.logout.LogoutFilter@453636cb, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@544c108e, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@340f719, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@88eae40, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@7817de91, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@59919809, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@43916438, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@63cd90b7, org.springframework.security.web.access.ExceptionTranslationFilter@16f18d7e, org.springframework.security.web.access.intercept.AuthorizationFilter@34e72dd0]
+2024-05-20T19:51:45.231+03:00  INFO 432 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-20T19:51:45.240+03:00  INFO 432 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 6060 (http) with context path '/mycoolapp'
+2024-05-20T19:51:45.245+03:00  INFO 432 --- [  restartedMain] c.l.s.d.mycoolapp.MycoolappApplication   : Started MycoolappApplication in 0.315 seconds (process running for 834.886)
+2024-05-20T19:51:45.247+03:00  INFO 432 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+```
+
+Okay, so it's restarted, it's on port 6060, 
+that's fine we know about that already.
+And now, ooh, the new thing here with context path of `/mycoolapp`.
+And that's all based on the configuration
+that we just set up for this given **Spring Boot** application.
+Okay, so let's go ahead and test this out.
+Let's go ahead and swing over to our browser 
+and see how this works out for us.
+
+![image62]()
+
+So now if I simply use the existing `6060/teamInfo`
+that I'd URL does not work anymore, so we should get a 404.
+Yeah, because we've now changed the actual context path here for a given application.
+So we need to prefix that with `/mycoolapp/teamInfo`.
+And again, this is all based on the configuration
+that we have in our `application.properties` file.
+
+![image63]()
+
+So that works.
+And again, we're just kind of connecting the dots here.
+Team info properties file.
+So now we could also do a similar thing here for workout
+get the actual workout information, and also we can get our fortune endpoint.
+And that's all using that mycoolapp prefix 
+that we've set up for a given context path.
+So this is great.
+We are able to go through and configure **Spring Boot** using some of its properties.
 </div>
 
 
