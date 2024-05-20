@@ -2903,8 +2903,7 @@ So no need for the IDE to be running.
 
 Now, the command line steps are different depending on the operating system that you're using.
 I'll only discuss for the users of Microsoft Windows.
-At the moment, my files are on the D drive 
-under `D:\JAVA_STUDY\Github\dev-spring-boot\`.
+At the moment, my files are on the D drive under `D:\JAVA_STUDY\Github\dev-spring-boot\`.
 Now you can place your files anywhere in your file system.
 Just make sure that they're easy to access.
 Also, as a warning, don't use directories 
@@ -2924,132 +2923,149 @@ Just go down here to the little search icon, type in `CMD` for command,
 and it'll give you this reference here.
 Command Prompt, go ahead and select that app.
 And now this opens up the command prompt window.
-Okay, now let's check to see if **Java** is installed properly.
+Okay, now let's check to see if **Java** is installed properly,
+and `JAVA_HOME` must be edited in environment variables.
 This is a requirement that we need to have in place
 before we can actually run the **Spring Boot** apps from the command line.
-Now type this command, `java --version`, and then you should get this output here.
+First, type this command, `java --version`, and then you should get this output here.
 
-![image45]()
+![image45](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image45.png?raw=true)
 
 Then you're okay and **Java** is installed properly.
-However, if entry is missing, then **Java** is not installed properly.
+However, if this entry is missing, then **Java** is not installed properly.
 So you need to have both of these items correct to have **Java** installed properly.
 So if you're missing it, then there's some work we have to do.
-But don't worry, I have a Java installation video
-that'll take you through that entire process
-and help you resolve this issue.
-Simply go to the link that I have here on the slide
-and it'll take you to a video
-and it'll walk you through the entire process
-of installing Java properly.
-But the important thing is that you have to have Java
-installed properly before you can proceed
-with this given video.
-So if you need to kind of pause this one for a second,
-go take a look at the other video, get Java set up properly
-and then you can come back here and continue.
+Simply go to the link [here](https://www.luv2code.com/install-java-on-ms-windows), 
+and it'll take you to a YouTube video,
+and it'll walk you through the entire process of installing **Java** properly.
+But the important thing is that you have to have **Java**
+installed properly before you can proceed.
+Next, type `echo %JAVA_HOME%`, and hit Enter.
+
+![image46](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image46.png?raw=true)
+
+This means I don't have edited environment variables.
+So, I should open `Edit environment variables for your account` from `settings`.
+
+![image47](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image47.png?raw=true)
+
+This will bring up this dialogue here.
+And what we'll do is we'll create a new environment variable for java home.
+It's a special environment variable used by the Java system.
+I'll choose `new`.
+For the variable name `JAVA_HOME`.
+For the actual value, I'll use the browse directory 
+to actually browse to where our jdk directory is on my file system.
+It's in `C:\Users\korha\.jdks` directory.
+I'll select the latest jdk version, which is `openjdk-21.0.2` for now. 
+
+![image48](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image48.png?raw=true)
+
+Now, we're going to edit the environment for the path 
+to include a reference to our jdk path.
+So I'll select the `Path` variable here,
+and I'll choose `Edit`.
+I'll click again, `New` button.
+And I'll type `%JAVA_HOME%\bin`.
+
+![image49](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image49.png?raw=true)
+
+So this will actually refer to the other environment variable
+that we created earlier using the percents `%`s,
+and then I'll move this up to make sure that 
+this value appears before the other values here.
+So you should have `%JAVA_HOME%\bin` listed first.
+And that's all we need to do here. 
+I'll click Ok's.
+Let's go ahead verify the environment variable. 
+I'll open the command prompt window.
+And I'll type `echo %JAVA_HOME%`, and hit Enter.
+
+![image50](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image50.png?raw=true)
+
 Alright, so Java's installed properly,
 we can go ahead and clear this screen.
-And now what I want to do is move into our project directory
-on the command line.
-What I'll do here is I'll actually move up
-to the explorer window here
-and I'll just copy this directory path.
-And what I'll do is I'll change into this directory,
-I'll type cd, space, and then I'll paste this directory
-and you can paste the directory by doing a right click.
-And then simply hit Enter and now you should be
-in that directory 05-command-line-demo.
-Now let's go ahead and package the app
-using the mvnw package command.
-I'll type in mvnw, space package
-and Maven will go off and do its work
-and a lot of work in the background,
-eventually you'll see build success.
+And now what I want to do is move into our project directory on the command line.
+First, I'll type `d:`, and then simply hit `Enter`:
+
+![image51](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image51.png?raw=true)
+
+What I'll do next is I'll actually move up to the explorer window here,
+and I'll just copy this directory path, 
+which is `D:\JAVA_STUDY\Github\dev-spring-boot\01-spring-boot-overview\05-command-line-demo`.
+I'll type `cd`, space, and then I'll paste this directory path by clicking right.
+And then simply hit `Enter`, 
+and now you should be in that directory `05-command-line-demo`.
+
+![image52](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image52.png?raw=true)
+
+Now let's go ahead and package the app using the `mvnw package command`.
+I'll type in `mvnw package`,
+and **Maven** will go off and do its work:
+
+![image53](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image53.png?raw=true)
+
+And a lot of work in the background, eventually you'll see build success.
 And also the important thing here is that
 this created a new file for us in this target directory
-called mycoolapp-0.0.1-SNAPSHOT.jar.
-That's the new JAR file that was created by mvnw package.
+called `mycoolapp-0.0.1-SNAPSHOT.jar`.
+That's the new JAR file that was created by `mvnw package`.
 And that's the actual JAR file that we'll run in a second.
+I'll type `java -jar target\mycoolapp-0.0.1-SNAPSHOT.jar`
+and then this will actually start up our **Spring Boot** app.
+So here we can see that our **Spring Boot** app is up and running.
 
-
-
-I'll type java -jar
-target\mycoolapp-0.0.1-SNAPSHOT.jar
-and then this will actually start up our Spring Boot app.
-So here we can see that our Spring Boot app
-is up and running.
-
-
+![image54](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image54.png?raw=true)
 
 Now let's test this out.
-Let's go ahead and open up our browser
-and then we'll go to localhost:8080
-and that'll give us our hello world, which is great.
-I like that.
-Let's also test out some of our other end points
-that we have here.
-We have a /workout.
+Let's go ahead and open up our browser,
+and then we'll go to `localhost:8080`:
+
+![image55](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image55.png?raw=true)
+
+And that'll give us our hello world, which is great.
+Let's also test out some of our other end points that we have here.
+We have a `/workout`.
+
+![image56](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image56.png?raw=true)
+
 Okay, that's good.
-And then we also have our other one, /fortune.
-So this is great, so we see that our application
-is up and and running and it's running from command line.
+And then we also have our other one, `/fortune`.
 
+![image57](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image57.png?raw=true)
 
+So this is great, so we see that our application is up 
+and running, and it's running from the command line.
+No need to have the IDE open, we're simply doing it from the command line.
+Now let me swing back over to my command prompt window
+and stop my application by simply doing `Control + C`.
+Alright, so the app is stopped; it's not running now.
 
-No need to have the IDE open,
-we're simply doing it from command line.
-Now lemme swing back over to my command prompt window
-and stop my application by simply doing Control + C.
-Alright, so the app is stopped, it's not running now.
-
-
+![image58](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image58.png?raw=true)
 
 And what I'd like to do now is actually run the app
-
-
-
-using the Spring Boot Maven plugin.
+using the **Spring Boot Maven plugin**.
 So just a different way of running the application.
-
-
-
 We don't really have to give the full JAR files.
-Spring Boot will figure all that out for us.
-So here I can say mvnw spring-boot:run
-and it kind of goes through the same process and now,
-again, our application is up and running.
+**Spring Boot** will figure all that out for us.
+So here I can say `mvnw spring-boot:run`
 
+![image59](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image59.png?raw=true)
 
-
+It kind of goes through the same process, and now again, our application is up and running.
 And I can confirm this by just simply going over
-to the browser and just doing a reload
-on any one of my pages here.
+to the browser and just doing a reload on any one of my pages here.
 And great, so I'm getting the results as desired.
 So this was great.
 Move back into our command prompt window here
-and let's go ahead and stop our application
-with the Ctrl + C.
-Now just type exit
-to exit out of this command prompt window.
+and let's go ahead and stop our application with the `Ctrl + C`.
+Now just type exit to exit out of this command prompt window.
 So the app's no longer running, I can close the browser.
-
-
-
-And so success, so we're able to run our Spring Boot app
-
-
-
+And so success, so we're able to run our **Spring Boot** app
 from the command line on Microsoft Windows,
 and there was no requirement to have the IDE up and running.
-
-
-
 We did everything from the command line.
-So I'd like to say good job, my friend.
-
 </div>
-
 
 
 <div style="text-align:justify">
