@@ -3525,7 +3525,7 @@ because no one's listening on `8080` at the moment, they're only listening on `6
 So we need to update this URL to use the correct port.
 So now I give `localhost:6060`:
 
-![image61]()
+![image61](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image61.png?raw=true)
 
 Things work out just fine because we're using the
 correct port number and that's based on the configurations from our `application.properties` file.
@@ -3595,7 +3595,7 @@ Okay, so let's go ahead and test this out.
 Let's go ahead and swing over to our browser 
 and see how this works out for us.
 
-![image62]()
+![image62](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image62.png?raw=true)
 
 So now if I simply use the existing `6060/teamInfo`
 that I'd URL does not work anymore, so we should get a 404.
@@ -3604,7 +3604,7 @@ So we need to prefix that with `/mycoolapp/teamInfo`.
 And again, this is all based on the configuration
 that we have in our `application.properties` file.
 
-![image63]()
+![image63](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image63.png?raw=true)
 
 So that works.
 And again, we're just kind of connecting the dots here.
@@ -3617,10 +3617,66 @@ So this is great.
 We are able to go through and configure **Spring Boot** using some of its properties.
 </div>
 
-
+# [Spring Core]()
+## [What is Inversion of Control (IoC)?]()
 <div style="text-align:justify">
 
+In this section, we'll cover **inversion of control**.
+What exactly is inversion of control?
+Well, here's the textbook definition.
+It's the approach of outsourcing the construction and management of objects.
+So instead of us manually creating the objects ourselves,
+we'll outsource this to another entity.
 
+![image64](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image64.png?raw=true)
+
+Now let's look at a coding scenario.
+So here's our application, and we have a **CricketCoach** 
+we'd like to call a method on the **CricketCoach** and says, 
+hey, give me a _dailyWorkout_, and then it'll give us that response.
+Now, this application should be configurable
+such that we could easily change the coach for another sport, 
+such as baseball, hockey, tennis, gymnastics, etc.
+We'd like for this app to be configurable.
+We can easily ask a coach for a workout, and they'll give us a given response.
+
+![image65](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image65.png?raw=true)
+
+Now, let's look at the ideal solution.
+So we have our application.
+We can talk to an object factory and say, hey,
+give me a coach object.
+This object factory, based on a configuration,
+it'll create a coach for us and give us a reference to it.
+So it could create a CricketCoach, a hockey coach
+or a baseball coach.
+This is all based on a configuration.
+And so this is where the Spring container comes into place.
+So the Spring container basically works
+as an object factory.
+So we'll tell Spring, hey,
+give me a given coach object in the background.
+Spring will determine which coach object that you need based
+on a configuration, and then give you a reference
+to that given coach object.
+Now, a bit more here as far
+as the Spring container kind of working
+as an object factory.
+So this Spring container has two primary functions.
+One, to create and manage the objects using inversion
+of control, and then also injecting the object dependencies
+that's making use of dependency injection.
+Now, how can we configure the Spring container?
+Well, three different approaches here.
+One is that we can make use
+of XML configuration, Java annotations
+or by configuring using Java source code.
+Now, XML configuration is considered legacy
+so we won't cover it in this course.
+However, we will focus on the modern solutions here,
+such as Java annotations and Java source code.
+We have plenty examples in this section as far
+as making this type of configuration set up.
 </div>
 
 
