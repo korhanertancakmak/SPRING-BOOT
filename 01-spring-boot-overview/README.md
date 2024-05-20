@@ -10,8 +10,8 @@ In this course, you will learn how to:
 * apply Spring Security to control application access
 * leverage all Java configuration (no xml) and Maven
 
-## [Spring Boot - Qverview]()
-<div align="justify">
+## [Spring Boot - Overview]()
+<div style="text-align:justify">
 
 Spring's a very popular framework for building Java applications.
 It provides a large number of helper classes and annotations.
@@ -161,7 +161,7 @@ or you use Maven, the command line and a plain text editor, totally up to you.
 </div>
 
 ### Spring Boot Initializr Demo
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we'll get a demo of the **Spring Boot Initializr**.
 Earlier we discussed the Spring Initializr.
@@ -254,7 +254,7 @@ I can swing over to my file system, and the next step is unzipping that file.
 So I'll just move into my downloads directory on my computer.
 And here's that `mycoolapp.zip` 
 that was just created by the Spring Initializr website.
-I'll simply unzip it or uncompress it.
+I'll simply unzip it or uncompressed it.
 And then, I'll basically just take this folder here
 and just copy it.
 So in my file system, I have a directory here called `dev-spring-boot`.
@@ -363,7 +363,7 @@ but we still need to do a bit more work.
 </div>
 
 ### Spring Boot—Create a REST Controller
-<div align="justify">
+<div style="text-align:justify">
 
 Here, I'm going to create a basic REST controller, 
 because in the previous section we had Spring-Boot up and running.
@@ -499,8 +499,8 @@ So we're getting our `Hello World!` response based on the code
 that we just created in that **FunRestController**.
 </div>
 
-## [Spring Framework - Qverview]()
-<div align="justify">
+## [Spring Framework - Overview]()
+<div style="text-align:justify">
 
 I'm going to give you an overview of the **Spring Framework**.
 So first off, here's the official website for Spring.
@@ -697,7 +697,7 @@ if you could use them in your own project.
 </div>
 
 ## [What is Maven?]()
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we'll cover a **Maven Crash** course.
 So here's the relationship between **Spring Boot** and **Maven**.
@@ -808,7 +808,7 @@ And again, that gives you more free time to sit there and drink your coffee.
 </div>
 
 ### Maven Project Structure
-<div align="justify">
+<div style="text-align:justify">
 
 Now, normally when you join a new project, 
 each development team, they dream up their own directory structure,
@@ -901,7 +901,7 @@ And you can definitely use it for your enterprise projects.
 </div>
 
 ### Maven Key Concepts
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we're going to cover some **Maven Key Concepts**.
 So we'll start with a discussion of the **POM File**,
@@ -1140,7 +1140,7 @@ as far as getting the dependency coordinates.
 </div>
 
 ## [Spring Boot Project Files]()
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we're going to cover 
 the **Spring Boot** project structure.
@@ -1392,7 +1392,7 @@ I'll show you how to do that in later sections,
 but just kind of heads up,
 if you wanted to get started quickly, just be aware of that one issue.
 
-All right, now, as far as templates, **Spring Boot** includes auto-configuration
+Alright now, as far as templates, **Spring Boot** includes auto-configuration
 for the following template engines:
 
 * FreeMarker
@@ -1428,7 +1428,7 @@ and see how these different files work out.
 </div>
 
 ### Spring Boot Starters
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we'll cover the **Spring Boot Starters**.
 Okay, so what's the problem?
@@ -1436,7 +1436,7 @@ So, as we know, building a **Spring** application is really hard
 and one of those frequently asked questions,
 as far as which **Maven** dependencies do I need to use?
 And this is just information that I pulled from the QA forum for this course,
-is that this is a common question that developers have as far as,
+is that this is a common question that developers have as far as:
 
 * _I want to build a Spring Embassy or hibernate application.
 What are the minimum dependencies that I need?_
@@ -1451,7 +1451,7 @@ having to search for each dependency and trying to see what's out there
 and see what's available there really should be an easier solution for all of this.
 So the solution here is by making use of **Spring Boot Starters**.
 All right, so the _Spring boot starters_ are a curated list of **Maven** dependencies.
-It's a collection of dependencies that are grouped together,
+It's a collection of dependencies that are grouped together
 that have been tested and verified by the **Spring Development** team.
 And these starters make it much easier for the developer 
 to get started with **Spring**, 
@@ -1503,7 +1503,7 @@ that needs web and security.
 Well, then we simply select the dependencies in the **Spring Initializr**.
 So here we have dependencies.
 We have these items selected for web security, **JPA**
-and **thymeleaf** and so then when it generates your project
+and **thymeleaf** and so then, when it generates your project,
 the Spring boot starters will automatically be added to your **Maven** `pom` file.
 
 ```xml
@@ -1558,7 +1558,7 @@ There's the starter security for giving security support.
 There's the starter data **JPA** for adding database support
 with **JPA** and **Hibernate** and so on.
 If you'd like a full list of **Spring Boot Starters**,
-simply go to the link [here](luv2code.com/spring-boot-starters),
+simply go to the link [here](https://www.luv2code.com/spring-boot-starters),
 this will automatically redirect you to the official **Spring Documentation** 
 that'll list out all the **Spring Boot Starters**.
 
@@ -1603,7 +1603,7 @@ or finding out what is in a given starter.
 </div>
 
 ### Spring Boot Starter Parent
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we'll cover the **Spring Boot Starter Parent**.
 **Spring Boot** provides a **Starter Parent**,
@@ -1726,7 +1726,7 @@ So those are the main benefits there of using a **Spring Boot Starter Parent**.
 </div>
 
 ### Spring Boot DevTools
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we're going to cover **Spring Boot Dev Tools**.
 Here's the problem.
@@ -2035,7 +2035,7 @@ as you go through your development process.
 </div>
 
 ### Spring Boot Actuator
-<div align="justify">
+<div style="text-align:justify">
 
 In this section, we'll cover the **Spring Boot Actuator**.
 You may have the questions:
@@ -2157,7 +2157,7 @@ It gives you a list of the audit events for your application.
 that are registered in the **Spring** application context.
 `/mappings` will give you a list of all request mappings for your given application.
 Now, for a full list of all the actuator endpoints,
-you simply go to this link [here](www.luv2code.com/actuator-endpoints). 
+you simply go to this link [here](https://www.luv2code.com/actuator-endpoints). 
 It'll redirect you to the official **Spring Boot Actuator** documentation, 
 and you can see a full list of all those actuator endpoints.
 
@@ -2263,11 +2263,7 @@ and we'll add the **spring-boot-starter-actuator**.
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
-
+        <!-- ADD SUPPORT FOR SPRING BOOT devTools-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -2404,7 +2400,7 @@ So in Firefox, choose the Raw Data and then choose Pretty Print.
 So Firefox has it built in.
 I'll just go through some additional steps here
 to kind of get Chrome up and running with this plugin.
-So I'll simply go [here](www.love2code.com/chrome-json-formatter).
+So I'll simply go [here](https://www.love2code.com/chrome-json-formatter).
 This will redirect us to the plugin that we can use for Chrome.
 Alright, so we'll see this **JSON Formatter** here.
 We just choose the option over on the right, `Add to Chrome`,
@@ -2548,7 +2544,7 @@ and then we give a comma-delimited list,
 so **health, info** and that way no one can access those given endpoints.
 
 Alright, now if you'd like to get more details on **Spring Boot Actuator** and so on,
-simply go to the link [here](www.luv2code.com/actuator-docs).
+simply go to the link [here](https://www.luv2code.com/actuator-docs).
 It'll redirect you to the official page, 
 and you can get all the glory details here on **Spring Boot Actuator**.
 Now let's take a look at the actual **Development Process** here.
@@ -2748,69 +2744,82 @@ Just do a reload on this page.
 
 ![image43](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image43.png?raw=true)
 
-And we get a 404, the white label error.
+And we get 404, the white label error.
 And that's good because we actually disabled,
-the slash health endpoint or excluded that given endpoint.
+the `/health` endpoint or excluded that given endpoint.
 Now let's do a similar thing for info.
-So actuator slash info, again, we get this error page
+
+![image44](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image44.png?raw=true)
+
+So `actuator/info`, again, we get this error page,
 and that's fine again because we disabled the info endpoint.
-Okay, great, all right, so there we go.
 Now I actually want to comment out that configuration,
-because slash health and slash info,
-they're actually very useful for real-time applications
-and real-time projects.
+because /health and /info,
+they're actually very useful for real-time applications and real-time projects.
+
+```properties
+# Use wildcard "*" to expose all endpoints
+# Can also expose individual endpoints with a comma-delimited list
+management.endpoints.web.exposure.include=*
+management.info.env.enabled=true
+
+# Exclude individual endpoints with a comma-delimited list
+# management.endpoints.web.exposure.exclude=health,info
+
+info.app.name=My Super Cool App
+info.app.description=A crazy fun app, yoohoo!
+info.app.version=1.0.0
+```
+
 So I simply did this earlier just as an academic exercise,
-but here I normally recommend to keep those available,
-for real-time projects just because it's great,
+but here I normally recommend to keep those available for real-time projects 
+just because it's great,
 for DevOps work and for application monitoring.
-So I just commented that out
+So I just commented that out,
 and now we can actually access those given endpoints,
-for slash health and also slash info.
-All right, good job.
-So nice little test here,
-by making use of the spring boot actuator
+for `/health` and also `/info`.
+So nice little test here, by making use of the spring boot actuator
 and actually adding security to those given endpoints.
-
 </div>
 
 
 
-<div align="justify">
-
-
-</div>
-
-
-
-<div align="justify">
+<div style="text-align:justify">
 
 
 </div>
 
 
 
-<div align="justify">
+<div style="text-align:justify">
 
 
 </div>
 
 
 
-<div align="justify">
+<div style="text-align:justify">
 
 
 </div>
 
 
 
-<div align="justify">
+<div style="text-align:justify">
 
 
 </div>
 
 
 
-<div align="justify">
+<div style="text-align:justify">
+
+
+</div>
+
+
+
+<div style="text-align:justify">
 
 
 </div>
