@@ -3644,46 +3644,220 @@ We can easily ask a coach for a workout, and they'll give us a given response.
 
 Now, let's look at the ideal solution.
 So we have our application.
-We can talk to an object factory and say, hey,
-give me a coach object.
+We can talk to an object factory and say, 
+_hey, give me a **coach** object_.
 This object factory, based on a configuration,
 it'll create a coach for us and give us a reference to it.
-So it could create a CricketCoach, a hockey coach
-or a baseball coach.
+So it could create a **CricketCoach**, a **HockeyCoach** or a **BaseballCoach**.
 This is all based on a configuration.
-And so this is where the Spring container comes into place.
-So the Spring container basically works
-as an object factory.
-So we'll tell Spring, hey,
-give me a given coach object in the background.
-Spring will determine which coach object that you need based
-on a configuration, and then give you a reference
-to that given coach object.
-Now, a bit more here as far
-as the Spring container kind of working
-as an object factory.
-So this Spring container has two primary functions.
-One, to create and manage the objects using inversion
-of control, and then also injecting the object dependencies
-that's making use of dependency injection.
-Now, how can we configure the Spring container?
-Well, three different approaches here.
-One is that we can make use
-of XML configuration, Java annotations
-or by configuring using Java source code.
-Now, XML configuration is considered legacy
+
+And so this is where the **Spring** container comes into place.
+So the **Spring** container basically works as an object factory.
+So we'll tell **Spring**, 
+_hey, give me a given coach object in the background_.
+**Spring** will determine which coach object that you need based on a configuration, 
+and then give you a reference to that given coach object.
+
+Now, a bit more here as far as the **Spring** container kind of working as an object factory.
+So this **Spring** container has two primary functions:
+
+1. Create and manage the objects (Inversion of Control) 
+2. Injecting the object dependencies (Dependency Injection).
+
+Now, how can we configure the **Spring** container?
+Well, three different approaches here:
+
+1. We can make use of XML configuration file (legacy)
+2. Java annotations (modern) 
+3. By configuring using Java source code (modern)
+
+Now, XML configuration is considered legacy,
 so we won't cover it in this course.
 However, we will focus on the modern solutions here,
 such as Java annotations and Java source code.
-We have plenty examples in this section as far
-as making this type of configuration set up.
+We have plenty of examples in this section 
+as far as making this type of configuration set up.
 </div>
 
-
-
+## [Defining Spring Dependency Injection]()
 <div style="text-align:justify">
 
+In this section, we'll cover **spring dependency injection**.
+Dependency injection makes use of the dependency inversion principle.
+That's where the client delegates to another object
+the responsibility of providing its dependencies.
 
+Now, let's consider an example of using a car factory.
+So I want to purchase a car.
+So I communicate with the car factory, 
+"_Hey give me a car object._"
+And in the background they'll actually go off
+and grab the given car and make it available to me.
+Now, since it's a factory,
+they may have to actually assemble the car from various parts 
+like the door, the engine, the windshield, all the different components there.
+And then once it's all put together, they'll give me the actual car,
+the whole idea of dependency injection is saying,
+"_Hey, give me a given object.
+If it has any components or helper components,
+then assemble all that for me ahead of time
+and simply give it to me, so I can use it out of the box._"
+So that's the idea of dependency injection.
+Injecting the given dependencies or helper components for a given object.
+
+Now remember here with the **Spring** container,
+the **Spring** container kind of works as the object factory.
+So my application can talk to the spring container.
+"_Hey, give me a coach object._"
+This coach object may have additional dependencies or additional helpers.
+So imagine you have a head coach.
+The head coach may have a staff of assistant coaches, 
+physical trainers, a medical staff, and so on.
+So I can say, "_Hey, give me everything that I need to make use of this given coach_", 
+and then they'll give it to me, all put together, ready to go out of the box.
+So that's dependency injection here using the **Spring** container.
+
+Now, just as a refresher here, 
+remember with the **Spring** container here, it has primary functions.
+So the one function is creating and managing the objects.
+That's the inversion of control.
+And then also injecting the object's dependencies using dependency injection.
+Those are the two key functions there.
+
+Now let's look at a demo example here.
+So I have a **Coach** that provides daily workouts,
+and then we have the **DemoController** that wants to use a **Coach**.
+So in this case, the **Coach** is the helper.
+So this is known as a dependency.
+And what we'd like to do is inject this dependency into our controller 
+or inject the coach into the given controller.
+
+Now, as far as injection types,
+there are multiple injection types available with **Spring**.
+We'll cover the two recommended types of injection:
+
+1. Constructor Injection
+2. Setter Injection
+
+Now you may wonder, well, which type of injection should I use?
+Well, use a **constructor injection** when you have required dependencies, 
+and it's generally recommended by the `spring.io` development team as the first choice.
+There's also setter injection,
+and you can use this when you have optional dependencies.
+So in this case, if the dependency is not provided,
+your app can provide reasonable default logic.
+And I'll show you coding examples of constructor injection
+and also setter injection in some of the upcoming sections.
+
+Now, what is **Spring AutoWiring**?
+Well, for dependency injection, **Spring** can make use of auto wiring.
+So **Spring** will look for a class that matches.
+So it can match by type, either a class or interface
+and then **Spring** will inject it automatically.
+Hence, that given dependency is auto wired.
+
+Now with an auto wiring example, injecting a coach implementation, 
+**Spring** will scan for a `@Components` 
+or any class annotated with the component annotation, and it'll say, 
+"_Hey does anyone implement the coach interface? 
+If so, then let's inject them._"
+So in our example, it could say, 
+_Hey there's a cricket coach.
+Let's go ahead, inject this **CricketCoach** as a dependency_ 
+for this given example.
+And so that's an example here of auto wiring.
+
+![image66]()
+
+Now, let's look at another example application here.
+So we have our Web Browser, we have this DemoController
+and then we have a Coach.
+So on our Web Browser
+we'll go to this endpoint /dailyworkout.
+Our DemoController will communicate
+with the Coach that says, "hey, getDailyWorkout"
+by calling that method.
+That method's gonna return a string,
+"Practice fast bowling for 15 minutes",
+and then we'll simply return that to the browser.
+So that's kind of the big picture here.
+This example that we want to put together.
+Now here's the development process
+using Constructor Injection.
+So the first thing that we'll do is
+we'll define the dependency interface and class.
+Then we'll create our Demo REST Controller
+and then we'll create a constructor
+in our class for injections.
+And then finally we'll add a @GetMapping
+for the /dailyworkout endpoint.
+Alrighty, starting with step one here
+of defining the dependency interface and class.
+So we'll have this interface called Coach.
+It has a method getDailyWorkout(),
+and then we'll have a CricketCoach that implements Coach.
+And it has this method, getDailyWorkout(),
+"Practice fast bowling for 15 minutes".
+Now notice here that this class
+has the @Component annotation.
+So this marks the class as a Spring Bean
+and makes it a candidate for dependency injection.
+Now a bit more here on the @Component annotation.
+Marks the class as a Spring Bean.
+So a Spring Bean is just a regular Java class
+that's managed by Spring.
+And the @Component annotation also makes the bean available
+for dependency injection.
+Now step two of creating a Demo REST Controller.
+We create this DemoController,
+we give it the @RestController annotation,
+very basic REST example here.
+And then in step three, we create the constructor
+in our class for injections.
+So we define a private field here, myCoach,
+and then we create this constructor, DemoController.
+We pass in, Coach theCoach, and then we make use
+of the @Autowired annotation.
+And so remember the Spring Object Factory will handle
+injecting this dependency based on the configuration.
+And notice the @Autowired annotation tells Spring
+to inject the dependency.
+And if you only have one constructor,
+then the @Autowired annotation
+on the constructor is optional.
+Okay?
+But I'll keep it here, just for academic purposes.
+Just because we're in the early stages
+of learning this technology.
+But this annotation here is optional in this specific case,
+of only one constructor.
+And then at the moment, we only have one Coach
+implementation, CricketCoach.
+So Spring can figure out which one it needs.
+Later in the course we'll cover the case of multiple Coach
+implementations and I'll show you
+how to configure your application accordingly.
+We will cover that in some of the later videos.
+Alrighty, we're making good progress here.
+So in step four we're gonna add the @GetMapping
+for dailyworkout.
+So in our coding here at the bottom notice we
+have this @GetMapping /dailyworkout.
+So that's the REST endpoint they'll use.
+We'll basically say return myCoach.getDailyWorkout()
+and I'll return that as a string.
+And so remember you're kinda pulling this all together
+with the Web Browser, they go to /dailyworkout.
+We talk to this DemoController which in turn
+talks to the Coach, gets the DailyWorkout,
+then returns that value accordingly to the application.
+Alrighty, so this all looks pretty good.
+I'm kinda excited.
+(Teacher giggles softly)
+I wanna go ahead and move
+inside the IDE and start writing this code
+and start writing our first Spring project.
+So, I'll see ya in the next video.
 </div>
 
 
