@@ -3618,7 +3618,6 @@ We are able to go through and configure **Spring Boot** using some of its proper
 </div>
 
 
-
 <div style="text-align:justify">
 
 
