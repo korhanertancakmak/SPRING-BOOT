@@ -3767,97 +3767,208 @@ Let's go ahead, inject this **CricketCoach** as a dependency_
 for this given example.
 And so that's an example here of auto wiring.
 
-![image66]()
+![image66](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image66.png?raw=true)
 
 Now, let's look at another example application here.
-So we have our Web Browser, we have this DemoController
-and then we have a Coach.
-So on our Web Browser
-we'll go to this endpoint /dailyworkout.
-Our DemoController will communicate
-with the Coach that says, "hey, getDailyWorkout"
-by calling that method.
-That method's gonna return a string,
-"Practice fast bowling for 15 minutes",
+So we have our **Web Browser**, we have this **DemoController**, 
+and then we have a **Coach**.
+So in our **Web Browser**, we'll go to this endpoint `/dailyworkout`.
+Our **DemoController** will communicate with the **Coach** that says, 
+"_hey, getDailyWorkout_" by calling that method.
+That method's going to return a string,
+"_Practice fast bowling for 15 minutes_",
 and then we'll simply return that to the browser.
 So that's kind of the big picture here.
 This example that we want to put together.
-Now here's the development process
-using Constructor Injection.
-So the first thing that we'll do is
-we'll define the dependency interface and class.
-Then we'll create our Demo REST Controller
-and then we'll create a constructor
-in our class for injections.
-And then finally we'll add a @GetMapping
-for the /dailyworkout endpoint.
-Alrighty, starting with step one here
-of defining the dependency interface and class.
-So we'll have this interface called Coach.
-It has a method getDailyWorkout(),
-and then we'll have a CricketCoach that implements Coach.
-And it has this method, getDailyWorkout(),
-"Practice fast bowling for 15 minutes".
-Now notice here that this class
-has the @Component annotation.
-So this marks the class as a Spring Bean
+
+Now here's the development process using **Constructor Injection**:
+
+1. So the first thing that we'll do is we'll define the dependency interface and class.
+2. Then we'll create our **Demo REST Controller** 
+3. And then we'll create a constructor in our class for injections.
+4. And then finally, we'll add a `@GetMapping` for the `/dailyworkout` endpoint.
+   
+Alright, starting with step 1: defining the dependency interface and class.
+
+```java
+package com.luv2code.springcoredemo;
+
+public interface Coach {
+    
+    String getDailyWorkout();
+}
+```
+
+So we'll have this interface called **Coach**.
+It has a method _getDailyWorkout()_.
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach {
+    
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+Then we'll have a **CricketCoach** that implements **Coach**.
+And it has this method, _getDailyWorkout()_,
+"`Practice fast bowling for 15 minutes`".
+Now notice here that this class has the `@Component` annotation.
+So this marks the class as a **Spring Bean**
 and makes it a candidate for dependency injection.
-Now a bit more here on the @Component annotation.
-Marks the class as a Spring Bean.
-So a Spring Bean is just a regular Java class
-that's managed by Spring.
-And the @Component annotation also makes the bean available
-for dependency injection.
-Now step two of creating a Demo REST Controller.
-We create this DemoController,
-we give it the @RestController annotation,
-very basic REST example here.
-And then in step three, we create the constructor
-in our class for injections.
-So we define a private field here, myCoach,
-and then we create this constructor, DemoController.
-We pass in, Coach theCoach, and then we make use
-of the @Autowired annotation.
-And so remember the Spring Object Factory will handle
-injecting this dependency based on the configuration.
-And notice the @Autowired annotation tells Spring
-to inject the dependency.
-And if you only have one constructor,
-then the @Autowired annotation
-on the constructor is optional.
-Okay?
+
+Now a bit more here on the `@Component` annotation.
+It marks the class as a **Spring Bean**.
+So a **Spring Bean** is just a regular Java class managed by **Spring**.
+And the `@Component` annotation also makes the bean available for dependency injection.
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController {
+    
+}
+```
+
+Now step 2: Creating a Demo REST Controller.
+We create this **DemoController**,
+we give it the `@RestController` annotation, very basic **REST** example here.
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController {
+    
+    private Coach myCoach;
+    
+    @Autowired
+    public DemoController(Coach theCoach) {
+        myCoach = theCoach;
+    }
+}
+```
+
+And then in step 3: we create the constructor in our class for injections.
+So we define a private field here, _myCoach_,
+and then we create this constructor, **DemoController**.
+We pass in, **Coach** _theCoach_, and then we make use of the `@Autowired` annotation.
+And so remember the **Spring Object Factory** will handle injecting this dependency 
+based on the configuration.
+And notice the `@Autowired` annotation tells **Spring** to inject the dependency.
+And if you only have one constructor, 
+then the `@Autowired` annotation on the constructor is optional.
 But I'll keep it here, just for academic purposes.
-Just because we're in the early stages
-of learning this technology.
-But this annotation here is optional in this specific case,
-of only one constructor.
-And then at the moment, we only have one Coach
-implementation, CricketCoach.
-So Spring can figure out which one it needs.
-Later in the course we'll cover the case of multiple Coach
-implementations and I'll show you
-how to configure your application accordingly.
-We will cover that in some of the later videos.
-Alrighty, we're making good progress here.
-So in step four we're gonna add the @GetMapping
-for dailyworkout.
-So in our coding here at the bottom notice we
-have this @GetMapping /dailyworkout.
-So that's the REST endpoint they'll use.
-We'll basically say return myCoach.getDailyWorkout()
+Just because we're in the early stages of learning this technology.
+But this annotation here is optional in this specific case of only one constructor.
+And then at the moment, we only have one **Coach** implementation, **CricketCoach**.
+So **Spring** can figure out which one it needs.
+Later in the course, we'll cover the case of multiple **Coach** implementations, 
+and I'll show you how to configure your application accordingly.
+We will cover that in some of the later sections.
+
+Alright, we're making good progress here.
+So in step 4: Adding the `@GetMapping` for `/dailyworkout`.
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController {
+    
+    private Coach myCoach;
+    
+    @Autowired
+    public DemoController(Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+So in our coding here at the bottom notice we have this `@GetMapping("/dailyworkout")`.
+So that's the **REST** endpoint they'll use.
+We'll basically say `return myCoach.getDailyWorkout()`
 and I'll return that as a string.
-And so remember you're kinda pulling this all together
-with the Web Browser, they go to /dailyworkout.
-We talk to this DemoController which in turn
-talks to the Coach, gets the DailyWorkout,
+And so remember you're kinda pulling this all together with the **Web Browser**, 
+they go to `/dailyworkout`.
+We talk to this **DemoController** which in turn talks to the **Coach**, 
+gets the _DailyWorkout_,
 then returns that value accordingly to the application.
-Alrighty, so this all looks pretty good.
-I'm kinda excited.
-(Teacher giggles softly)
-I wanna go ahead and move
-inside the IDE and start writing this code
-and start writing our first Spring project.
-So, I'll see ya in the next video.
+Alright, so this all looks pretty good. 
+I want to go ahead and move inside the IDE and start writing this code
+and start writing our first **Spring** project.
+
+So let's go ahead and get started.
+So go ahead and open up a web browser, 
+and we're going to go to **Springs Initializer** website at `start.spring.io`.
+So once we're here at the website,
+let's go ahead and set up some of our project settings here.
+
+![image67]()
+
+In the project section, be sure to choose **Maven** for the project type.
+For language, choose **Java**.
+For the **Spring boot version** choose the latest 3.2.5 version.
+Again, remember, avoid the snapshot versions.
+For the project metadata for the group,
+I'll call it com.luv2code
+And then for the artifact id, I'll call it springcoredemo.
+And for the packaging, make sure that Jar is selected.
+And now we'll go through and add some of our dependencies.
+The first dependency that we'll add is
+Spring Boot Devtools.
+So you can simply type in Dev
+and then we'll also add in spring web support.
+You can simply type in web and select that one
+and just make sure your dependencies match what I have here
+on the screen.
+Once everything looks good, go ahead
+and hit the generate button
+and it'll download a zip file to your computer.
+I'll go ahead and swing over to my file system here
+and I'll open up two windows so I can make some updates.
+And I'll move into my Dev Spring Boot folder
+that we've been using already in the course.
+And I'll create a new folder here just to kind
+of structure all the code that we're creating.
+And I'll call this 02-spring-boot-spring-core.
+In the other window I'll move over
+to the downloads folder that I have.
+This is where my web browser downloads the files.
+I'll simply unzip this file here, springcoredemo
+and then I'll simply move this file
+into the folder 02-spring-boot-spring-core.
+And now what I'll do is I'll go through
+and rename this folder
+and I'll call it 01-constructor-injection.
+And I'll simply just move in here and expand this.
+So this is just a normal Maven project.
+I can open this project
+by simply dragging and dropping it into IntelliJ.
+Give it some time to download and sync all the assets.
+But shortly, you should be okay.
 </div>
 
 
