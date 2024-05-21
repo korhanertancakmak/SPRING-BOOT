@@ -720,70 +720,655 @@ This implicitly defines a base search package that you can make use of.
 So it allows you to leverage default component scanning
 without having to explicitly referencing the base package name.
 
-![image08]()
+![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image08.png?raw=true)
 
 So here's a diagram to kind of pull this together.
-We have our Main Spring Boot application class.
-It automatically component scans
-the package and sub-packages.
+We have our **Main Spring Boot** application class.
+It automatically component scans the package and sub-packages.
 We can create any other sub-packages that we want.
 We can give these sub-packages any name,
-and then it scans everything in core luv2code.springcoredemo
-package, and any sub-packages.
-So basically it starts scanning
-at the Main Spring Boot application class level
+and then it scans everything in core `com.luv2code.springcoredemo` package, and any sub-packages.
+So basically it starts scanning at the **Main Spring Boot application** class level
 and then all sub-packages underneath that.
-Now, a common pitfall when you're making use
-of Spring Boot, you may say,
-Hey, I'm going to use different packages
-and move things around and change things up or whatever.
+
+![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image09.png?raw=true)
+
+Now, a common pitfall when you're making use of Spring Boot, 
+you may say, _Hey, I'm going to use different packages
+and move things around and change things up or whatever_.
 Here's an example.
-So we have our Spring Core Demo, that's the package
-of our Main Spring Boot application class.
+So we have our **Spring Core Demo**, that's the package of our **Main Spring Boot** application class.
 Then, you may create other packages outside of that.
-So using this example here of demo utils,
-notice here that it's outside of our Spring Core Demo.
-And so by default,
-Spring Boot will not component scan these packages.
-It will only scan the package
-of the Main Spring Boot application class and sub-packages.
-So this is very important.
-So, the default scanning works fine
-if everything is under com.luv2code.springcoredemo.
+So using this example here of **demo** utils,
+notice here that it's outside our **Spring Core Demo**.
+And so by default, **Spring Boot** will not component scan these packages.
+It will only scan the package of the **Main Spring Boot** application class and sub-packages.
+So this is crucial.
+
+So, the default scanning works fine if everything is under `com.luv2code.springcoredemo`.
 But what about my other packages?
-Like I want to use some different names or whatever
-like com.luv2code.util, or org.acme.cart,
-or edu.cmu.spirit racing systems.
+Like I want to use some different names 
+or whatever like `com.luv2code.util`, or `org.acme.cart`, or `edu.cmu.srs` racing systems.
 How will this kind of work out,
 or how can I configure this accordingly?
-Well, what you can do is,
-in your Spring Boot application annotation
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication(
+        scanBasePackages = {"com.luv2code.springcoredemo",
+                            "com.luv2code.util",
+                            "org.acme.cart",
+                            "edu.cmu.srs"})
+public class SpringcoredemoApplication {
+    
+	public static void main(String[] args) {
+		SpringApplication.run(SpringcoredemoApplication.class, args);
+	}
+}
+```
+
+Well, what you can do is, in your **Spring Boot** application annotation
 then you can tell it to scan base packages.
-So, here I'm going to explicitly list
-the base packages to scan.
-And you simply give a comma'd limited list
-of those packages that you want Spring Boot to scan.
-So, give our com.luv2code.sprincoredemo,
-and then luv2code.util, org.acme.cart, edu.cmu.srs.
-All right, so this is all really good stuff.
-We're going to move into the next video,
-we're going to write the code.
-I'll show you how to make use
-of default scanning, and also I'll show you how
-to manually list the actual package scanning.
-I'll see ya in the next video.
+So, here I'm going to explicitly list the base packages to scan.
+And you simply give a comma delimited list of those packages 
+that you want **Spring Boot** to scan.
+So, give our `com.luv2code.sprincoredemo`,
+and then `com.luv2code.util`, `org.acme.cart`, `edu.cmu.srs`.
+
+Now, I'll show you how to make use of default scanning, 
+and also I'll show you how to manually list the actual package scanning.
+I'll move into my finder window,
+and I'll move into our `dev-spring-boot` directory
+and our `02-spring-boot-spring-core`.
+And for this constructor-injection,
+I'll simply copy and paste this directory,
+and then I'll rename it as `02-component-scanning`.
+And now I'll simply open this directory here in IntelliJ.
+So let me just move in here to my code, and I'm going to create a new package.
+I'll give the package name of `rest`.
+I'll also create another new package.
+I'll call this `common`.
+And then I'll move my **DemoController** into my package `rest`.
+Alright, so that looks good.
+And then I'll also move my **Coach** and **CricketCoach** into the `common` package.
+And then note here, these are all sub packages of our main **springcoredemo** application.
+So they'll be component scanned automatically for us
+using the default component scanning of **Spring Boot**.
+So I can rebuild on the project because I had some old compiled code from one of the previous projects.
+Now let's go ahead and swing over to our web browser
+and open up our endpoint `localhost:8080/dailyworkout`.
+
+![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image10.png?raw=true)
+
+And everything loads up for us a-ok.
+So our app works because we simply just moved those subpackages of our main **Spring Boot** application.
+So this is pretty good.
+We're making use of the default component scanning of **Spring Boot**.
+
+Well, everything's working just fine, but let's go ahead and break it on purpose.
+I want to see how **Spring** can handle things if I change up some packages 
+or move things around a bit.
+Let's go ahead and select the `java` folder in the list here,
+and we're going to create a new package.
+And the name of the new package,
+I'll call it, `com.luv2code.util`.
+And so, the important thing to notice is that it's not a subpackage of our `springcoredemo`.
+It's outside that.
+So, we may have some issues with some of our default component scanning.
+And what I'll do here is I'll move into the `springcoredemo`
+`common` package and I will move **Coach** and **CricketCoach**
+to this new util package that I just created.
+Okay, so that looks okay so far.
+Now, notice our main Spring Boot application is under `springcoredemo`.
+So, **Spring** will scan everything in this package and any subpackages, 
+but by default **Spring** will not component scan this new package here that I created, `com.luv2code.util`.
+So, let's go ahead and test this out and see what happens.
+
+```html
+Error starting ApplicationContext. To display the condition evaluation report, re-run your application with 'debug' enabled.
+2024-05-21T17:30:46.933+03:00 ERROR 42148 --- [springcoredemo] [  restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.luv2code.springcoredemo.rest.DemoController required a bean of type 'com.luv2code.util.Coach' that could not be found.
+
+Action:
+
+Consider defining a bean of type 'com.luv2code.util.Coach' in your configuration.
+```
+
+The Application failed to start.
+A parameter of constructor demo controller required of being 
+of `com.luv2code.util.Coach`, but could not be found.
+Because it, just it's not part of the default component scanning.
+It's just that just won't work.
+And so what's going on here?
+Well now, we need to explicitly tell **Spring Boot**
+how to find these other packages out there.
+And so, we can accomplish that by editing our **springcoredemo** application
+and updating the annotation **Spring Boot** application.
+Inside here, I'll explicitly list the base packages to scan.
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication(
+        scanBasePackages = {"com.luv2code.springcoredemo",
+                            "com.luv2code.util"})
+public class SpringcoredemoApplication {
+    
+	public static void main(String[] args) {
+		SpringApplication.run(SpringcoredemoApplication.class, args);
+	}
+}
+```
+
+So, I give scan base packages,
+and then I simply set up a comma-delimited list of the packages that I want it to scan.
+So, I give `com.luv2code.springcoredemo`, and then, I also give `com.luv2code.util`.
+So, remember, by default of the only component scan `springcoredemo`, 
+but we have this `util`, so we have to list both of those here.
+Let's go ahead and run this and test it out:
+
+```html
+2024-05-21T17:35:29.387+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-21T17:35:29.440+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-21T17:35:29.440+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-21T17:35:30.213+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-21T17:35:30.226+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-21T17:35:30.227+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-21T17:35:30.258+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-21T17:35:30.259+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 818 ms
+2024-05-21T17:35:30.512+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-21T17:35:30.549+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-21T17:35:30.555+03:00  INFO 57496 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 1.495 seconds (process running for 1.811)
+```
+
+And the issue's resolved.
+So, the application actually starts up successfully.
+We don't have the problem that we had before.
+And then, we can test this in our browser
+by hitting this endpoint and just doing a reload on it,
+and we get the data back as desired,
+so it's able to find everything.
+It's able to perform the injection,
+and we're all set up because we were very explicit here by listing out those packages.
+
+Alright, now I'm going to go ahead and move things back to their original packages, 
+just so we can take advantage of the default component scanning with **Spring Boots**.
+So, I'll just grab **Coach** and **CricketCoach**.
+I'll move those back over to the `common` package.
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/*
+@SpringBootApplication(
+        scanBasePackages = {"com.luv2code.springcoredemo",
+                            "com.luv2code.util"})
+*/
+@SpringBootApplication
+public class SpringcoredemoApplication {
+    
+	public static void main(String[] args) {
+		SpringApplication.run(SpringcoredemoApplication.class, args);
+	}
+}
+```
+
+And then, this code that I had here, I could delete it, or in this case I'll just comment it out,
+kind of leave it around for a little bit in case you wanted to refer to it later.
+And then, I'll just use a regular **Spring Boot** application
+by itself and make use of the default configuration the default component scanning,
+and I'll save all that stuff and test it and make sure it still works and great.
+So, our app starts up just fine and swings over to our browser, 
+do a reload here, and the import works out just fine.
+So, we kind of put things back the way they were set up originally.
 </div>
 
 ## [Setter-Field Injections]()
 <div style="text-align:justify">
 
+Now let's cover **setter injection**.
+Earlier I mentioned the two recommended injection types:
 
+* Constructor Injection
+* Setter Injection
+
+In this section, we'll focus on setter injection.
+Setter injection is when we inject dependencies by calling setter methods on your class.
+Now let's consider an autowiring example.
+Here, we want to inject a **Coach** implementation, spring's going to scan for components,
+and I'll basically say, "_Hey is there anyone that implements the **Coach** interface?_"
+If so, let's inject them.
+For example, the **CricketCoach**.
+
+And here's our development process:
+
+1. The first thing we'll do is we'll create the setter methods in our class for injections
+2. And then we'll configure the dependency injection using the **@Autowired** annotation.
+
+Alright, let's start with step 1: Creating the setter methods in our class for injections.
+Here we have our **DemoController**, and then we'll have this new setter method here, _setCoach_.
+
+```java
+@RestController
+public class DemoController{
+
+    // define a private field for the dependency
+    private Coach myCoach;
+
+    // define a constructor for dependency injection
+    @Autowired
+    public DemoController(Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+
+    @Autowired
+    public void setCoach(Coach theCoach) {
+        myCoach = theCoach;
+    }
+}
+```
+
+And then in step 2: Configure the dependency injection with the `@Autowired` annotation.
+So in our _setCoach_ method, we make use of the `@Autowired` annotation.
+
+The **Spring Framework** will perform operations behind the scenes for you.
+Now let's take a look at how **Spring** will process your application.
+We have our **Coach** interface, our **CricketCoach** implementation, 
+and our **DemoController**, and we want to inject the dependency into our **DemoController**.
+
+```html
+Coach theCoach = new CricketCoach();
+DemoController demoController = new DemoController();
+demoController.setCoach(theCoach);
+```
+
+Behind the scenes, **Spring** will create an instance of the **CricketCoach**.
+It'll create an instance of the **DemoController**,
+and then it'll say `demoController.setCoach`,
+and it'll the pass in the **Coach** implementation.
+
+Now, we could also inject our dependencies by calling any method on our class.
+We can give it any method name, simply give the `@Autowired` annotation.
+And here's a coding example of this.
+We have our **DemoController**, and instead of a traditional setter method,
+we could say, _doSomeStuff_.
+
+```java
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public void doSomeStuff(Coach theCoach) {
+        myCoach = theCoach;
+    }
+    
+    // ...
+}
+```
+
+We annotate this method as `@Autowired`,
+and we can simply give any method name here for this given method,
+and **Spring** will handle the dependency injection for us.
+
+Let's step back a bit.
+You know, we've seen the different injection types,
+constructor injection, setter injection, and you're probably wondering,
+well, which injection type I should use?
+`Constructor injection`, this is the one that you use when you have required dependencies.
+It's generally recommended by the `spring.io` development team as the first choice.
+And, you should use `setter injection` when you have optional dependencies.
+So if a dependency is not provided, then your app can provide some reasonable default logic.
+So that's the basic guidance that the **Spring** development team provides us for,
+is which injection type to use.
+Let's go ahead and move into our IDE, and let's write some code.
+
+
+Let's take care of our normal housekeeping;
+stopping all apps and closing all windows.
+And I'll move in here into my file system into my `O2-spring-boot-core`.
+And then I'll copy-paste our `O2-component-scanning` directory here, 
+and I'll simply rename it `03-setter-injection`.
+Now go ahead and open up this project in IntelliJ.
+And what I'd like to do first is do a rebuild on the project.
+This will help with auto reloading of spring boot dev tools.
+
+And step 1: Create the setter method in our class for injections.
+And step 2: Configure the dependency with the `@Autowired` annotation.
+Let's go ahead and move into our **DemoController**.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+    
+    @Autowired
+    public void setCoach(Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And what I want to do is delete some of the previous code.
+So where we had our constructor injection,
+I want to delete this code because now we're going to make use of setter injection.
+I'll set up Autowired annotation, and I'll create this setter method _setCoach_,
+and then I make the appropriate assignments inside this method.
+Okay, so we have the basic things in place here for setter injection for our **DemoController**.
+
+```java
+package com.luv2code.springcoredemo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringcoredemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringcoredemoApplication.class, args);
+    }
+}
+```
+
+And now let me swing over to my spring boot application.
+I'm going to delete the previous code I had for all the scanned based packages.
+Just kind of get rid of it for right now.
+We already have backups of it in some of the other directories.
+And great so that's all cleaned up now.
+Now let's go ahead and run our application.
+And our application is up and running.
+Just swing over to our browser, and we go to our `localhost:8080/dailyworkout`.
+
+![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image11.png?raw=true)
+
+And our app's going to work the same.
+We're going to get the output here for this **CricketCoach** `practice fast bowling for 15 minutes`.
+So we know that our application is actually performing the setter injection at this point.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        //return "Practice fast bowling for 15 minutes";
+        return "Practice fast bowling for 15 minutes :-)";
+    }
+}
+```
+
+Now what I'd like to do is move in here and just change this method real quick
+just to make the text a little bit different.
+Just do a quick save on it should reload for us.
+And then swinging back over into our browser reloading, we should see the new output.
+So that's our recent update that we have here.
+
+![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image12.png?raw=true)
+
+And now what I'd like to do in our **DemoController** is actually making a modification.
+So instead of using a traditional setter method, I want to just give it any method name here.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+    
+    @Autowired
+    public void doSomeStuff(Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+So instead of _setCoach_, I'll give any method name I'll call it, I don't know, _doSomeStuff_.
+You can give whatever name you'd like here.
+The fact that this method is annotated with the `@Autowired` annotation
+then **Spring** will use this for dependency injection.
+Alright, so if we save that accordingly come back over here.
+Reload, and our app works just fine.
+So we're getting the message.
+So we know that our app is working with injection, based on any method name that we provide.
+And again, because of that `@Autowired` annotation.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+        //return "Practice fast bowling for 15 minutes :-)";
+    }
+}
+```
+
+Just do a quick little update on the method here, and okay, great.
+So we're getting the latest and greatest here.
+So this part is working out as desired.
+Now what I'd like to do is kind of just swing back
+and just put it back to the traditional set of methods
+just to make it straightforward and easy to read and understandable.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+    
+    @Autowired
+    //public void doSomeStuff(Coach theCoach) {
+    public void setCoach(Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+Instead of _doSomeStuff_, I'll call it _setCoach_ that's exactly what we're doing,
+we're setting a coach.
+So that's in place. 
+We're all set up.
+So that's a quick example there of using setter injection with **Spring**.
+
+Let's cover field injection with annotations and autowiring.
+Now, as I discussed earlier, there are different **Spring** injection types,
+and so there are the types that are recommended by the `spring.io` development team.
+That's constructor injection for required dependencies,
+setter injection for optional dependencies.
+Now, here's an injection type that's not recommended by the `spring.io` development team
+and that's field injection.
+
+And field injection is no longer cool.
+So in the early days, field injection was very popular on **Spring** projects
+but in recent years it has fallen out of favor.
+And why is that?
+Because in general, it makes the code harder to unit test.
+Now, as a result, the `spring.io` team does not recommend field injection,
+however, you'll still see it being used on legacy projects,
+and also you'll see it being used
+in a lot of old blog posts on the internet,
+and even in previous versions of this course,
+I actually used field injection, but now with modern times here,
+removing the useless field injection,
+and instead making use of construction or setter injection,
+but I'll still show you a little quick example here of using field injection 
+just in case you encounter it on some of your legacy projects.
+
+Field injection is the idea of injecting in dependencies
+by setting the values on your class directly, even on private fields,
+and this is accomplished by using Java reflection.
+So in step 1: Configure the dependency injection using the `@Autowired` annotation.
+
+```java
+@RestController
+public class DemoController{
+
+    @Autowired
+    private Coach myCoach;
+
+    // no need for constructors or setters
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And so here's a code example on our **DemoController**.
+Notice here we have this field private **Coach**, _myCoach_,
+and we give the `@Autowired` annotation, and behind the scenes,
+**Spring** will inject a given **Coach** implementation,
+and it'll do it behind the scenes even on a private field.
+It'll automatically or directly set it on this controller,
+and notice here; `there's no need for constructors`,
+`there's no need for setters`, **Spring** will set the field directly.
+However, like I mentioned, field injection is not recommended
+by the `spring.io` development team because it makes the code harder to unit test.
+All right, so that's field injection.
+So I wanted to show it to you just in case you encounter it
+on some of your legacy projects.
 </div>
 
 ## [Qualifiers]()
 <div style="text-align:justify">
 
+In this section, we will cover annotation **Autowiring** and **Qualifiers**.
+For auto wiring, we're injecting a **Coach** implementation.
+So, **Spring** will scan for `@Components`,
+check to see if anyone implements a given **Coach** interface.
+If so, let's inject them.
+But if we have multiple implementations, which one,
+like what algorithm will **Spring** use to determine
+which **coach** that it should implement?
 
+![image13]()
+
+So, here's a diagram here
+of our multiple coach implementations.
+So, we have coach, cricket coach,
+baseball coach, track coach, tennis coach, et cetera.
+And then, we have the actual source code
+for these implementations.
+So, we have our cricket coach, baseball, track and tennis.
+All implement the coach interface.
+So, when we ask for a coach implementation,
+which one will Spring pick?
+Well, we have a little problem.
+So, this is the error message that you'll actually
+encounter when you run your application.
+
+
+
+Spring will say there's a parameter zero of the constructor
+and the controller required a single bean,
+but four were found.
+Okay so, I need a coach,
+but there's too many of them out here.
+And at this point, Spring will not start up.
+The application will not start
+because there's too much ambiguity.
+Spring can't figure out which one you want.
+So, one solution here is to be specific
+and that's by making use of the qualifier annotation.
+And so, here's our coding here for our demo controller.
+And everything looks the same except
+for this one new entry here for qualifier.
+So, here we give qualifier
+and then we specify the bean ID of cricket coach.
+Now the bean ID has the same name
+as the class except for the first character as lowercase.
+All right. So, that's how we come
+up with cricket coach here, starting with lower case.
+And this will actually resolve the issue
+because now we're being very specific.
+We're saying, hey, use cricket coach
+as the injection for this given item.
+And there's other bean IDs out there that we could use
+such as baseball coach, track coach, or tennis coach.
+But in this scenario here,
+we're making use of the cricket coach.
+Now that's for constructor injection.
+For setter injection, you can do a similar thing.
+You can also use the qualifier annotation.
+And then, here's our code examples,
+our normal setter method set coach
+and then we specify qualifier annotation
+and then give cricket coach.
+Again, the bean ID is the same name as the class
+except for the first character is lowercase.
+All righty, this looks pretty good.
+Let's go ahead and move into our (indistinct)
+and let's write the code.
 </div>
 
 ## [Primary]()
