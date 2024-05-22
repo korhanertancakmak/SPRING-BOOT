@@ -1309,78 +1309,1015 @@ check to see if anyone implements a given **Coach** interface.
 If so, let's inject them.
 But if we have multiple implementations, which one,
 like what algorithm will **Spring** use to determine
-which **coach** that it should implement?
+which **Coach** that it should implement?
 
-![image13]()
+![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image13.png?raw=true)
 
-So, here's a diagram here
-of our multiple coach implementations.
-So, we have coach, cricket coach,
-baseball coach, track coach, tennis coach, et cetera.
-And then, we have the actual source code
-for these implementations.
-So, we have our cricket coach, baseball, track and tennis.
-All implement the coach interface.
-So, when we ask for a coach implementation,
-which one will Spring pick?
+So, here's a diagram here of our multiple **Coach** implementations.
+So, we have **Coach**, **CricketCoach**, **BaseballCoach**, **TrackCoach**, **TennisCoach**, etc.
+And then, we have the actual source code for these implementations.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach {
+    
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class BaseballCoach implements Coach {
+    
+    @Override
+    public String getDailyWorkout() {
+        return "Spend 30 minutes in batting practice";
+    }
+}
+```
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class TrackCoach implements Coach {
+    
+    @Override
+    public String getDailyWorkout() {
+        return "Run a hard 5k!";
+    }
+}
+```
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class TennisCoach implements Coach {
+    
+    @Override
+    public String getDailyWorkout() {
+        return "Practice your backhand volley";
+    }
+}
+```
+
+All implement the **Coach** interface.
+So, when we ask for a coach implementation, which one will **Spring** pick?
 Well, we have a little problem.
-So, this is the error message that you'll actually
-encounter when you run your application.
 
+```html
+Parameter 0 of constructor in com.luv2code.springcoredemo.rest.DemoController
+required a single bean, but 4 were found:
 
+— baseballCoach
+- cricketCoach
+- tennisCoach
+- trackCoach
 
-Spring will say there's a parameter zero of the constructor
-and the controller required a single bean,
-but four were found.
-Okay so, I need a coach,
-but there's too many of them out here.
-And at this point, Spring will not start up.
-The application will not start
-because there's too much ambiguity.
-Spring can't figure out which one you want.
+...
+```
+
+So, this is the error message that you'll actually encounter when you run your application. 
+**Spring** will say there's a parameter zero of the constructor
+and the controller required a single bean, but four were found.
+So, I need a **Coach**, but there are too many of them out here.
+And at this point, **Spring** will not start up.
+The application will not start because there's too much ambiguity.
+**Spring** can't figure out which one you want.
+
 So, one solution here is to be specific
-and that's by making use of the qualifier annotation.
-And so, here's our coding here for our demo controller.
-And everything looks the same except
-for this one new entry here for qualifier.
-So, here we give qualifier
-and then we specify the bean ID of cricket coach.
-Now the bean ID has the same name
-as the class except for the first character as lowercase.
-All right. So, that's how we come
-up with cricket coach here, starting with lower case.
-And this will actually resolve the issue
-because now we're being very specific.
-We're saying, hey, use cricket coach
-as the injection for this given item.
-And there's other bean IDs out there that we could use
-such as baseball coach, track coach, or tennis coach.
-But in this scenario here,
-we're making use of the cricket coach.
-Now that's for constructor injection.
+and that's by making use of the `@Qualifier` annotation.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+// ...
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And so, here's our coding here for our **DemoController**.
+And everything looks the same except for this one new entry here for `@Qualifier`.
+So, here we give `@Qualifier`, and then we specify the bean id of _cricketCoach_.
+Now the bean id has the same name as the class except for the first character as lowercase.
+And this will actually resolve the issue because now we're being very specific.
+We're saying, _hey, use cricket coach as the injection for this given item_.
+And there are other bean IDs out there that we could use
+such as _baseballCoach_, _trackCoach_, or _tennisCoach_.
+But in this scenario here, we're making use of the _cricketCoach_.
+That's for constructor injection.
+
 For setter injection, you can do a similar thing.
-You can also use the qualifier annotation.
-And then, here's our code examples,
-our normal setter method set coach
-and then we specify qualifier annotation
-and then give cricket coach.
-Again, the bean ID is the same name as the class
-except for the first character is lowercase.
-All righty, this looks pretty good.
-Let's go ahead and move into our (indistinct)
-and let's write the code.
+You can also use the `@Qualifier` annotation.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+// ...
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public void setCoach(@Qualifier("cricketCoach") Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And then, here are our code examples, our normal setter method _setCoach_,
+and then we specify `@Qualifier` annotation and then give _cricketCoach_.
+Again, the bean ID is the same name as the class except for the first character is lowercase.
+Alright, this looks pretty good.
+Let's go ahead and move into our IDE and let's write the code.
+
+
+Let's take care of our normal housekeeping work.
+Let's stop all apps and close all windows.
+And now I'll go ahead and do a copy, paste here on our `03-setter-injection`,
+and then I'll rename it as `04-qualifiers`.
+And then I'll go ahead and open this project in IntelliJ.
+I'll go ahead and do a rebuild project 
+just to make sure all of our auto loading will work accordingly.
+And then let's go ahead and move into our **DemoController**.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    //public void setCoach(Coach theCoach) {
+    public DemoController(Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And what I'd like to do is I'd like to change the code back to make use of constructor injection.
+So we have constructor injection set up. 
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class BaseballCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "Spend 30 minutes in batting practice";
+    }
+}
+```
+
+Now I'd like to go through and create multiple implementations of the **Coach** interface 
+just so we can kind of test this all out.
+I'll move into this `common` package here, and I'll create a new class.
+And this new class is called **BaseballCoach**
+and this **BaseballCoach** implements, **Coach**.
+And I also add the `@Component` annotation on this class.
+And then I'll go ahead and return a given string here for the daily workout.
+I'll tell the person to `spend 30 minutes in batting practice`.
+And now let's repeat the process here.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class TennisCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice your backhand volley";
+    }
+}
+```
+
+I'll create a new class here for **TennisCoach**.
+Implement the **Coach** interface.
+I'll also annotate this class with `@Component`.
+And for **TennisCoach** here, we'll say `practice your backhand volley`.
+All right, and let's repeat the drill one more time here.
+Let's create a new class and this will be for our **TrackCoach**.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class TrackCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "run a hard 5k";
+    }
+}
+```
+
+The **TrackCoach** implements the **Coach** interface.
+We'll say, `run a hard 5k`.
+For a second and let's run our application.
+
+```html
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of method setCoach in com.luv2code.springcoredemo.rest.DemoController required a single bean, but 4 were found:
+	- baseballCoach: defined in file [D:\JAVA_STUDY\Github\dev-spring-boot\02-spring-boot-spring-core\04-qualifiers\target\classes\com\luv2code\springcoredemo\common\BaseballCoach.class]
+	- cricketCoach: defined in file [D:\JAVA_STUDY\Github\dev-spring-boot\02-spring-boot-spring-core\04-qualifiers\target\classes\com\luv2code\springcoredemo\common\CricketCoach.class]
+	- tennisCoach: defined in file [D:\JAVA_STUDY\Github\dev-spring-boot\02-spring-boot-spring-core\04-qualifiers\target\classes\com\luv2code\springcoredemo\common\TennisCoach.class]
+	- trackCoach: defined in file [D:\JAVA_STUDY\Github\dev-spring-boot\02-spring-boot-spring-core\04-qualifiers\target\classes\com\luv2code\springcoredemo\common\TrackCoach.class]
+
+This may be due to missing parameter name information
+
+Action:
+
+Consider marking one of the beans as @Primary, updating the consumer to accept multiple beans, or using @Qualifier to identify the bean that should be consumed
+```
+
+We see that we have a problem, right?
+Things didn't work out.
+It said the application failed to start.
+And if we can kind of expand our window here for a bit and just scroll
+through the log messages here.
+Parameter zero of the constructor required a single bean, but three were found four.
+Baseball, Cricket, Tennis, Track.
+And so basically we kind of broke it the way we plan to break it, right?
+We plan to break it with four **Coach** implementations.
+So anyway, it, it's broken as desired here at the bottom 
+to give us some actions that we could possibly make use of consider doing this stuff.
+And it says, Hey, one of the options is making use of `@Qualifier` annotation 
+to identify the bean that should be consumed.
+Well, thanks for that hint, let's go ahead and implement that hint.
+I'll move into our **DemoController** here.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    //public DemoController(Coach theCoach) {
+    public DemoController(@Qualifier("baseballCoach") Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And in my **DemoController** I'll make use of that `@Qualifier` annotation.
+So I'll specify the bean ID that I want,
+and I'll specify the bean ID of **baseballCoach**.
+So I'll use the same name as the class except for the first character is lowercase.
+So I'm being super specific saying _Use this implementation of the **Coach** interface_.
+So now we can go ahead and run our application
+
+```html
+2024-05-21T21:06:58.450+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-21T21:06:58.487+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-21T21:06:58.487+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-21T21:06:59.111+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-21T21:06:59.121+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-21T21:06:59.121+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-21T21:06:59.150+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-21T21:06:59.150+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 663 ms
+2024-05-21T21:06:59.363+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-21T21:06:59.395+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-21T21:06:59.401+03:00  INFO 53576 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 1.193 seconds (process running for 1.474)
+```
+
+We see success, so the application started successfully
+So, we kind of resolved the whole ambiguity issue,
+and I can go over to my browser `localhost8080/dailyworkout`,
+and I should get a baseball workout.
+
+![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image14.png?raw=true)
+
+Great. 
+So it says, `Hey, spend 30 minutes in batting practice`.
+And that's coming from our **baseballCoach** implementation.
+This is good.
+And now let's swing back over and let's change this up a bit,
+based on some configuration here.
+So instead of **baseballCoach**, I'd like to modify to make use of **trackCoach**,
+and it should reload the new version for me out there
+and just do a reload on the browser over here and run a hard 5k.
+
+![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image15.png?raw=true)
+
+Great.
+So this is good.
+And then, just to kind of set everything back to what we originally had, 
+we'll make use of this **cricketCoach** as part of the `@Qualifier` here. 
+
+![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image16.png?raw=true)
+
+It makes sure that we actually load the **cricketCoach** implementation
+`practice our fast bowling for 15 minutes`.
+Awesome. 
+So as you can see here using a spring object factory 
+spring container, we can actually configure how we want to use a given bean
+and how we can inject a given bean based on the configuration.
+So this is good.
 </div>
 
 ## [Primary]()
 <div style="text-align:justify">
 
+Now resolving the issue with multiple **Coach** implementations,
+we saw the example in the previous section by making use of the `@Qualifier` annotation.
+We were super specific by mentioning a coach by name.
+However, there's an alternate solution available.
 
+Instead of specifying a coach by name using a `@Qualifier` annotation,
+I simply need a **Coach**.
+I don't care which **Coach**.
+And I could say, _Hey, if there are multiple coaches out there, 
+then you figure it out_.
+You tell me who's the **primary** coach.
+I really don't care.
+I simply need a **Coach** to help me out here.
+That's it.
+So as before, we had our multiple coach implementations,
+our track coach, baseball coach, tennis coach, and cricket coach.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
+@Component
+@Primary
+public class TrackCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "run a hard 5k";
+    }
+}
+```
+
+And then the one thing to notice here is that now we make use of this new annotation `@Primary`.
+So this annotation basically says, out of the multiple coach implementations, 
+this is going to be the **primary** implementation that you should use.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(Coach theCoach) {
+    //public DemoController(@Qualifier("trackCoach") Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+Now we can resolve this using the `@Primary`.
+So here's our code for our **DemoController**.
+And now one thing to notice here, with our **DemoController**,
+and our constructor injection, is that there's no need to use the `@Qualifier` annotation.
+Because now, if there are multiple coaches,
+we know the primary coach, based on that primary annotation,
+that's on the track coach.
+All right, so notice the difference here.
+
+There's one warning here.
+When you are using the primary annotation, 
+and you probably were wondering about this, and thought about this.
+When using the primary annotation can have **only one** for multiple implementations.
+If you mark multiple classes with primary, then we have a little problem.
+And when you run your application, if you try to mark multiple classes with primary,
+then, in the error messages it'll say:
+
+```html
+Unsatisfied dependency expressed through constructor parameter 0:
+No qualifying bean of type 'com.luv2code.springcoredemo.common.Coach' available:
+
+More than one 'primary' bean found among candidates:
+[baseballCoach, cricketCoach, tennisCoach, trackCoach]
+...
+```
+
+_Hey, more than one primary bean found_.
+So spring will say, _I don't know what you want me to do, here_.
+_There's more than one primary.
+I'm not sure which one to use, so I'm not going to start_.
+So, have to be aware of that.
+You can only mark one class with primary.
+
+Now, you may also wonder, 
+well, what about mixing `@Primary` and `@Qualifier` at the same time?
+Can I use both of those in the same class?
+The answer is yes, but you're asking for trouble.
+Not really, but you have to be aware of this is,
+that `@Qualifier` has the higher priority.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+So even if you mention a given class as the `@Primary` class,
+that can be overridden, or have higher `@Primary`,
+by making use of the `@Qualifier` annotation.
+So even though there's a `@Primary` in **trackCoach**,
+this example will actually make use of **cricketCoach**.
+Alright, so just something to be aware of.
+
+And so you may wonder, well, which one should I use?
+Should I use `@Primary`, or should I use `@Qualifier`?
+Well, `@Primary` leads it up to the implementation classes.
+You could have issues of multiple `@Primary` classes leading to an error.
+`@Qualifier` allows you to be very specific on which bean you want.
+And so in general, I recommend using `@Qualifier`,
+and the reasoning is that it's more specific,
+and it also has a higher priority compared to `@Primary` annotation.
+Let's go ahead and write some code using the `@Primary` annotation.
+
+
+First, we take care of our normal housekeeping work.
+We'll stop all of our apps and close all of our windows.
+And I'll just do a little copy-paste here in this `04-qualifiers directory`,
+and I'll rename it as `05-primary`.
+And I'll go ahead and open this up in IntelliJ.
+I'll just do a rebuild on the project.
+I'll just do a quick cleanup here.
+There's an old folder that we have, our `util` folder.
+We're not using that anymore.
+I'll just delete that.
+And now I'll go ahead and remove the code for the `@Qualifier` annotation.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    //public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+    public DemoController(Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+I'll move into this class here, **DemoController**.
+And we had the `@Qualifier` annotation.
+I'll just remove that piece of code here. 
+And this should fail, right?
+Because we have multiple implementations out here,
+and it's not sure which one it's going to use.
+Let's just go ahead and run it real quick just to verify.
+Alright, so we see the issue here.
+The Application failed to start multiple implementations,
+not sure which one that it should use.
+We've seen all this stuff before.
+Down in the action section, this is where it gave you
+some hints or tips on how to resolve this issue.
+All the way over to the right,
+we already saw the example here of using the `@Qualifier` annotation.
+We implemented that already, but notice here they also mentioned the `@Primary` annotation.
+So let's mark one of the beans as `@Primary`.
+All right. 
+Let's try it out.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+@Primary
+public class TrackCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "run a hard 5k";
+    }
+}
+```
+
+I'll move into my **TrackCoach** here,
+and I'll use the `@Primary` annotation here.
+Basically what I'm saying here is since there are multiple implementations,
+then make the **TrackCoach** as the `@Primary` coach.
+In our **DemoController**, one thing to notice here,
+since we're using `@Primary` and **DemoController**
+there's no need to use `@Qualifier` because we have a `@Primary` coach.
+In this example, we set it up on the **TrackCoach**
+such to resolve any issues or questions
+that **Spring** may have as far as which one to use.
+Make use of the `@Primary` one.
+Let's go ahead and run our application,
+
+```html
+2024-05-21T23:18:29.958+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-21T23:18:29.994+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-21T23:18:29.994+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-21T23:18:30.650+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-21T23:18:30.659+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-21T23:18:30.660+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-21T23:18:30.693+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-21T23:18:30.696+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 699 ms
+2024-05-21T23:18:30.925+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-21T23:18:30.953+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-21T23:18:30.960+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 1.252 seconds (process running for 1.541)
+```
+
+And success. 
+The application starts successfully.
+So there's no problem, there are no errors.
+**Spring** knows which one of the coaches it should use 
+because we're making use of the `@Primary` annotation.
+Swing over into my web browser.
+Go to `localhost:8080/dailyworkout`, and I should get a track workout.
+
+![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image15.png?raw=true)
+
+Excellent.
+Run a hard 5K because we're making use of that **TrackCoach** because it's `@Primary`.
+Alright, swing back in, and let's try and break it on purpose.
+So let's go ahead and add multiple `@Primary` components and let's see what happens.
+We know that **TrackCoach** is already `@Primary`.
+Let's go ahead and make **CricketCoach** `@Primary`.
+We're trying to add multiple primaries, what will **Spring** do?
+
+```html
+Error starting ApplicationContext. To display the condition evaluation report, re-run your application with 'debug' enabled.
+2024-05-21T23:23:26.820+03:00 ERROR 57712 --- [springcoredemo] [  restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'demoController' defined in file [D:\JAVA_STUDY\Github\dev-spring-boot\02-spring-boot-spring-core\05-primary\target\classes\com\luv2code\springcoredemo\rest\DemoController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.luv2code.springcoredemo.common.Coach' available: more than one 'primary' bean found among candidates: [baseballCoach, cricketCoach, tennisCoach, trackCoach]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1355) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:962) ~[spring-context-6.1.6.jar:6.1.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624) ~[spring-context-6.1.6.jar:6.1.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.5.jar:3.2.5]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.2.5.jar:3.2.5]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.2.5.jar:3.2.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.5.jar:3.2.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-3.2.5.jar:3.2.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) ~[spring-boot-3.2.5.jar:3.2.5]
+	at com.luv2code.springcoredemo.SpringcoredemoApplication.main(SpringcoredemoApplication.java:10) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.5.jar:3.2.5]
+Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No qualifying bean of type 'com.luv2code.springcoredemo.common.Coach' available: more than one 'primary' bean found among candidates: [baseballCoach, cricketCoach, tennisCoach, trackCoach]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.determinePrimaryCandidate(DefaultListableBeanFactory.java:1755) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.determineAutowireCandidate(DefaultListableBeanFactory.java:1715) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1416) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904) ~[spring-beans-6.1.6.jar:6.1.6]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782) ~[spring-beans-6.1.6.jar:6.1.6]
+	... 22 common frames omitted
+```
+
+Your app should reload automatically, and it's going to reload, 
+and it's going to fail on the reload.
+So if we scroll up a bit and take a look at the error message,
+it says, "`Unsatisfied dependency exception.`"
+In all this ugly stacked tray stuff, they're creating bean with **DemoController**.
+And unsatisfied dependency.
+So no qualifying bean of type coach available.
+More than one `@Primary` bean found among the candidates.
+So **Spring** figured us out.
+It says, "_Hey, you have too many primaries out here. 
+You can't do that._"
+And so that's the main issue, that's the root cause.
+And we can resolve that by simply having a single `@Primary` component.
+And so I'll just do that here by just going to **CricketCoach**,
+removing that `@Primary` annotation, saving, and it should reload 
+
+```html
+2024-05-21T23:26:54.413+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-21T23:26:54.499+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-21T23:26:54.500+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-21T23:26:54.500+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-21T23:26:54.510+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-05-21T23:26:54.510+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 96 ms
+2024-05-21T23:26:54.541+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-21T23:26:54.549+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-21T23:26:54.551+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 0.149 seconds (process running for 505.132)
+2024-05-21T23:26:54.552+03:00  INFO 57712 --- [springcoredemo] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+```
+
+And reload successfully.
+So our app is up and running, and everything's up.
+All right, so this is a good example of handling the issue of multiple implementations
+by making use of the `@Primary` annotation.
+And just swinging back into our **DemoController** here,
+we see that there's no need to use `@Qualifier`
+because we actually have a `@Primary` coach,
+and by swinging over to **TrackCoach** here,
+you can see that this given **TrackCoach** is marked as `@Primary`.
 </div>
 
 ## [Lazy Initialization]()
 <div style="text-align:justify">
 
+In this section, we're going to cover **lazy initialization**.
+Now by default, when your application starts, all beans are initialized.
+So it'll scan for all the `@Component`s, and all those `@Component`s will be initialized.
+So **Spring** will create a new instance of each, and make them available.
 
+```java
+@Component
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    // ...
+}
+```
+
+Now we can get some insights into this by setting up some diagnostics,
+or adding some println statements to our constructors.
+So on our **CricketCoach**, we'll add a `println` statement 
+where we'll simply print out the name of the class that we're processing on.
+We'll do a similar thing here for **BaseballCoach**:
+
+```java
+@Component
+public class BaseballCoach implements Coach{
+
+    public BaseballCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    // ...
+}
+```
+
+**TrackCoach**: 
+
+```java
+@Component
+public class TrackCoach implements Coach{
+
+    public TrackCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    // ...
+}
+```
+
+And also **TennisCoach**:
+
+```java
+@Component
+public class TennisCoach implements Coach{
+
+    public TennisCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    // ...
+}
+```
+
+And now, when we start our application, then in the actual logs we should see:
+
+```html
+...
+In constructor: BaseballCoach
+In constructor: CricketCoach
+In constructor: TennisCoach
+In constructor: TrackCoach
+...
+```
+
+Again, by default when your application starts, all beans are initialized, 
+and **Spring** will create an instance of each and make them available.
+Now we could make use of lazy initialization,
+where instead of creating all the beans up front, we can specify **lazy initialization**.
+So, a bean will only be initialized in the following cases:
+
+* Either when it's needed for a dependency injection, 
+* Or it is explicitly requested.
+
+We simply add the `@Lazy` annotation to a given class 
+and those rules will come into play.
+
+```java
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
+@Component
+@Lazy
+public class TrackCoach implements Coach{
+
+    public TrackCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    // ...
+}
+```
+
+And here's a coding example. 
+So for our **TrackCoach**, we'll say that our **TrackCoach** is lazy,
+so we'll make use of the `@Lazy` annotation.
+This given bean will only be initialized if it's needed for dependency injection.
+If it's not needed, they won't create it.
+
+```java
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+    //public DemoController(Coach theCoach) {
+        myCoach = theCoach;
+    }
+    // ...
+}
+```
+
+In this coding example here, with our **DemoController** 
+and our constructor injection, we're going to inject the **CricketCoach**.
+And when we run the application: 
+
+```html
+...
+In constructor: BaseballCoach
+In constructor: CricketCoach
+In constructor: TennisCoach
+...
+```
+
+We'll see the outputs for our **BaseballCoach**, **CricketCoach**, and **TennisCoach**.
+Since we're not injecting the **TrackCoach** in this given scenario, 
+then **TrackCoach** is not initialized.
+So basically we're saying,
+"_Hey, don't create me unless I'm actually needed.
+I don't wanna simply stand around and do nothing._"
+
+Now, to configure the other beans for **lazy initialization**,
+well, we'd need to add the `@Lazy` annotation to each class.
+Not a big deal if we have a small number of classes,
+but it turns into some real tedious work for a large number of classes. 
+I wish there was a way we could set up a global configuration property,
+just do it across the board.
+
+And the answer's, yes, we can actually do that.
+So in our `application.properties` file, we can set this **Spring Boot** property,
+`spring.main.lazy-initialization=true`.
+All beans are lazy, no beans are created 
+until they're explicitly needed, including our **DemoController**.
+Once we access our **REST** endpoint of `/dailyworkout`,
+then **Spring** will determine the dependencies for the **DemoController** 
+and for the dependency resolution,
+**Spring** will create an instance of the **CricketCoach** first,
+and then create an instance of the **DemoController**
+and inject the actual **CricketCoach** into the **DemoController**.
+
+For more diagnostics, let's add a print line to our **DemoController** constructor.
+So here at **DemoController**:
+
+```java
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+    }
+    // ...
+}
+```
+
+We have the `@Autowired` annotation here `System.out.println` 
+in constructor, print out the actual class name.
+So again, for the dependency resolution,
+**Spring** will create an instance of the **CricketCoach** first,
+then create an instance of the **DemoController**,
+and inject that into the actual **DemoController**.
+
+```html
+...
+In constructor: CricketCoach
+In constructor: DemoController
+...
+```
+
+Alright, so kind of stepping back here and looking at lazy initialization, 
+as far as the advantages:
+
+* It only creates the objects as needed
+* It may help you with faster startup time if you have a large number of components.
+
+The disadvantages: 
+
+* If you have some web related components like `@RestController` not created until requested.
+So the first time out, you'll have to kind of create it first and then use it.
+* May not discover any configuration issues until too late. 
+* And you also need to make sure you have enough memory for all beans once created.
+
+So with this lazy initialization feature, it's actually disabled by default.
+You should really profile your application before configuring **lazy initialization**,
+to see if the advantages will even help you.
+And also, I want to say, avoid the common pitfall of premature optimization.
+Because you could try and optimize something that's really not even worth it.
+Alright, so just be aware of that
+if you're moving to thinking about **lazy initialization**.
+However, I did want to cover it here, just so you understand the concept,
+and just so you understand the techniques.
+Let's do a code example.
+
+First, take care of our normal housekeeping, 
+stopping all the apps and closing all the windows.
+And let's do a little copy and paste on this `05-primary`.
+And then we'll rename it as `06-lazy-initialization`.
+Now let's go ahead and open this project up and IntelliJ.
+What I'd like to do here is change the code bag
+to using the qualifier annotation
+and removing the primary annotation.
+And we'll set the qualifier annotation here
+to make use of the CricketCoach.
+And we'll open up the TrackCoach implementation
+and remove the @Primary annotation.
+Now let's go ahead and run the application
+
+
+
+just to make sure everything still works as desired.
+Accessing this endpoint localhost:8080/dailyworkout,
+and we're getting the CricketCoach workout
+practice our fast bowling for 15 minutes.
+Okay, this is great.
+What I'd like to do here is add some diagnostics here
+or add some print line statements to the constructors
+just so we can see everyone being created
+when the application starts up.
+I'll just start here at the top with BaseballCoach.
+And I'll add a no argument constructor here
+for BaseballCoach.
+And I'll add a system out print line here
+to display the actual class name.
+And I'll just copy this information
+and I'll move over to CricketCoach,
+and I'll paste in the information.
+I'll update the constructor name - CricketCoach,
+and then we have our existing code here
+for printing out the actual class name.
+Move over to TennisCoach.
+Do more of the same -
+well, actually, I can't paste that.
+Let me swing back to CricketCoach.
+Grab this constructor information, copy it,
+swing back over to TennisCoach,
+and now I can paste it.
+And then update the actual constructor name accordingly.
+And then more the same here for TrackCoach.
+And I'll copy this print line statement
+and I'll use that print line statement
+in my demo controller.
+It's on this demo controller here
+where we do the injection.
+I'll also paste in that print line statement
+and that piece should be in place.
+Okay, great.
+So, this coding all looks pretty good.
+I've added all the diagnostics here
+for the various classes here that we're using
+in this example.
 </div>
 
 ## [Bean Scopes]()
