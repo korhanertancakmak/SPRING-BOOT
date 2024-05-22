@@ -2996,7 +2996,54 @@ Alright, so this kind of works out as desired.
 ## [Bean Lifecycle Methods]()
 <div style="text-align:justify">
 
+In this section, we'll cover **Bean Lifecycle Methods**.
+Here's a high-level view of the bean lifecycle.
 
+![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image19.png?raw=true)
+
+When the **Spring** containers started beans are instantiated, 
+dependencies are injected, internal **Spring** processing occurs, 
+and then it can execute your own custom initialization method.
+At that point, your bean is ready to use.
+And then once the container is shut down or stopped,
+they'll actually make a call to your custom destroy method.
+So what's the purpose of these bean lifecycle methods or hooks?
+Well, this is where you can add your own custom code
+during bean initialization.
+So calling custom business logic methods,
+setting up handles to resources,
+like databases, sockets, files.
+You can also add custom code during bean destruction.
+So again, calling some custom business logic,
+or cleaning up handles to any resources
+that you may have such as databases, sockets, files,
+and so on.
+Now, this is how we can set up the method configuration
+for an init method.
+We have our class here, in this example, CricketCoach,
+and then we make use
+of this annotation called PostConstruct.
+And then we can provide a method here,
+in this example, doMyStartupStuff.
+You can give it any method name,
+but the key here is that this is where you can add
+your own custom initialization code
+once the bean has been constructed.
+And we can do a similar thing here for the destroy method.
+So we make use of this annotation here, PreDestroy,
+and we have a method, in this case,
+public void doMyCleanupStuff.
+Again, you can have any method name.
+And this allows you to add your own custom logic here
+for any cleanup work that you need to do.
+Okay, so here's the basic development process.
+So you go through and you define your methods
+for init and destroy,
+and then you add the annotations
+for PostConstruct and PreDestroy.
+All right, so the next video,
+we'll go ahead and write the code
+and we'll test out this functionality.
 </div>
 
 ## [Java Config Bean]()
