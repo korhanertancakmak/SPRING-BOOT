@@ -3007,47 +3007,491 @@ and then it can execute your own custom initialization method.
 At that point, your bean is ready to use.
 And then once the container is shut down or stopped,
 they'll actually make a call to your custom destroy method.
+
 So what's the purpose of these bean lifecycle methods or hooks?
-Well, this is where you can add your own custom code
-during bean initialization.
-So calling custom business logic methods,
-setting up handles to resources,
+Well, this is where you can add your own custom code during **bean initialization**.
+So calling custom business logic methods, setting up handles to resources,
 like databases, sockets, files.
-You can also add custom code during bean destruction.
+You can also add custom code during **bean destruction**.
 So again, calling some custom business logic,
-or cleaning up handles to any resources
-that you may have such as databases, sockets, files,
-and so on.
-Now, this is how we can set up the method configuration
-for an init method.
-We have our class here, in this example, CricketCoach,
-and then we make use
-of this annotation called PostConstruct.
-And then we can provide a method here,
-in this example, doMyStartupStuff.
-You can give it any method name,
-but the key here is that this is where you can add
-your own custom initialization code
+or cleaning up handles to any resources that you may have 
+such as databases, sockets, files, and so on.
+
+```java
+@Component
+public class CricketCoach implements Coach {
+    
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    
+    @PostConstruct
+    public void doMyStartupStuff() {
+        System.out.println("In doMyStartupStuff(): " + getClass().getSimpleName());
+    }
+    
+    // ...
+}
+```
+
+Now, this is how we can set up the method configuration for an init method.
+We have our class here, in this example, **CricketCoach**,
+and then we make use of this annotation called `@PostConstruct`.
+And then we can provide a method here, in this example, _doMyStartupStuff_.
+You can give it any method name, but the key here is that 
+this is where you can add your own custom initialization code
 once the bean has been constructed.
+
+```java
+@Component
+public class CricketCoach implements Coach {
+    
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    
+    @PostConstruct
+    public void doMyStartupStuff() {
+        System.out.println("In doMyStartupStuff(): " + getClass().getSimpleName());
+    }
+
+    @PreDestroy
+    public void doMyCleanupStuff() {
+        System.out.println("In doMyCleanupStuff(): " + getClass().getSimpleName());
+    }
+    
+    // ...
+}
+```
+
 And we can do a similar thing here for the destroy method.
-So we make use of this annotation here, PreDestroy,
-and we have a method, in this case,
-public void doMyCleanupStuff.
+So we make use of `@PreDestroy` annotation here, and we have a method, 
+in this case, public void _doMyCleanupStuff_.
 Again, you can have any method name.
-And this allows you to add your own custom logic here
-for any cleanup work that you need to do.
-Okay, so here's the basic development process.
-So you go through and you define your methods
-for init and destroy,
-and then you add the annotations
-for PostConstruct and PreDestroy.
-All right, so the next video,
-we'll go ahead and write the code
-and we'll test out this functionality.
+And this allows you to add your own custom logic here for any cleanup work that you need to do.
+Okay, so here's the basic development process:
+
+1. So you go through, and you define your methods for init and destroy.
+2. And then you add the annotations for `@PostConstruct` and `@PreDestroy`.
+
+
+So we'll do our normal housekeeping work.
+And let's move in here to our file system,
+and we'll copy this directory, `07-bean-scopes`,
+and we'll paste it, and we'll give it a new name.
+And the new name we'll give it is `08-bean-lifecycle-methods`.
+And let's go ahead and open this project in IntelliJ.
+And one thing I'd like to do here is just some cleanup work.
+I'd like to change the code to inject only one **Coach** and to use **singleton** scope.
+Just want to kind of keep it simple.
+Give me some good baseline code to work with.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+    // private Coach anotherCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+           // @Qualifier("cricketCoach") Coach theAnotherCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+        // anotherCoach = theAnotherCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+
+    @GetMapping("/check")
+    public String check() {
+        return "Comparing beans: myCoach == anotherCoach, " + (myCoach == anotherCoach);
+    }
+}
+```
+
+I'll move into the **DemoController**,
+and I'll remove one of the coaches here.
+So I'll remove this _anotherCoach_ field.
+And then I'll also move down here and remove the `@Qualifier` for _theAnotherCoach_.
+And fix the curly brace here.
+Remove this line with the assignment.
+And so this is kind of what my constructor should look like for the **DemoController**.
+And then this `@GetMapping("/check")`, we'll go ahead and delete this section of code also.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+Alright, so this is basically what our application should look like 
+or our **Coach** should look like at this point.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+// import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+// import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+// @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+And then I'd also like to go over and make the change here to **CricketCoach**.
+And so I want to remove the **prototype** scope.
+So I'll just delete this Scope annotation here.
+Alright, so this looks pretty good.
+
+And then we can kind of get down to business here.
+So step 1: Defining the methods for init and destroy
+and then step 2: Adding the annotations here for `@PostConstruct` and `@PreDestroy`.
+I'll just write some quick comments here to myself
+just to kind of keep myself on track.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    
+    // define our init method
+    @PostConstruct
+    public void doMyStartupStuff() {
+        System.out.println("In doMyStartupStuff(): " + getClass().getSimpleName());
+    }
+    
+    // define our destroy method
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+Okay, this is our basic game plan here
+defining our init method and also defining our destroy method.
+So I'll start here with the init method,
+and I'll make use of the annotation `@PostConstruct`.
+I give a method here, _doMyStartupStuff_.
+Again, you can use any method name here that you want.
+And then I'll just do a little print line statement here
+just to let them know that _hey, we're in doStartupStuff for a given class_.
+Alright, this looks pretty good for our `@PostConstruct`.
+So this is our init method.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    
+    // define our init method
+    @PostConstruct
+    public void doMyStartupStuff() {
+        System.out.println("In doMyStartupStuff(): " + getClass().getSimpleName());
+    }
+    
+    // define our destroy method
+    @PreDestroy
+    public void doMyCleanupStuff() {
+        System.out.println("In doMyCleanupStuff(): " + getClass().getSimpleName());
+    }
+    
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+Let's copy-paste this and let's do a similar thing here for `@PreDestroy`.
+So I'll just paste it.
+I'll update the annotation `@PreDestroy`.
+And then I'll just move down here
+and just give it a new method name, _doMyCleanupStuff_.
+Let's update our print line accordingly.
+And that's the coding there for our destroy method.
+Now let's go ahead and test this out.
+Let's just run our application.
+Our app is up and running.
+
+```html 
+2024-05-22T16:43:50.986+03:00  INFO 41752 --- [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T16:43:51.021+03:00  INFO 41752 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-22T16:43:51.021+03:00  INFO 41752 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-22T16:43:51.717+03:00  INFO 41752 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-22T16:43:51.727+03:00  INFO 41752 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T16:43:51.727+03:00  INFO 41752 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T16:43:51.756+03:00  INFO 41752 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T16:43:51.757+03:00  INFO 41752 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 734 ms
+In constructor: BaseballCoach
+In constructor: CricketCoach
+In doMyStartupStuff(): CricketCoach
+In constructor: TennisCoach
+In constructor: TrackCoach
+In constructor: DemoController
+2024-05-22T16:43:52.003+03:00  INFO 41752 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-22T16:43:52.034+03:00  INFO 41752 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-22T16:43:52.046+03:00  INFO 41752 --- [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 1.294 seconds (process running for 1.629)
+```
+
+And one thing to notice here, we see the code or the execution of our init method here.
+So in _doMyStartupStuff_ for **CricketCoach**.
+So notice the previous line, we're in the constructor for **CricketCoach**,
+and then we have our custom init method that runs as a `@PostConstruct`.
+
+Now if I stop the application, then we should execute our `@PreDestroy` method.
+So we're gonna just stop, scroll down a bit,
+and then we'll see that this print line here in _doMyCleanupStuff_.
+So this code is actually executed as desired.
+</div>
+
+### [Special Note about Prototype Scope and Destroy Lifecycle Method and Lazy Init]()
+<div style="text-align:justify">
+
+For prototype beans and destroy lifecycle,
+there is a subtle point you need to be aware of with "**prototype**" scoped beans.
+
+For "**prototype**" scoped beans, **Spring** does not call the destroy method.
+
+In contrast to the other scopes, 
+**Spring** does not manage the complete lifecycle of a **prototype** bean: 
+
+The container instantiates, configures, 
+and otherwise assembles a **prototype** object, 
+and hands it to the client, with no further record of that **prototype** instance.
+Thus, although initialization lifecycle callback methods are called on all objects 
+regardless of scope. 
+
+In the case of **prototypes**, 
+configured destruction lifecycle callbacks are not called. 
+The client code must clean up **prototype**-scoped objects 
+and release expensive resources that the **prototype** bean(s) are holding.
+
+For prototype beans and lazy initialization,
+**prototype** beans are lazy by default. 
+There is no need to use the `@Lazy` annotation for **prototype** scopes beans.
 </div>
 
 ## [Java Config Bean]()
 <div style="text-align:justify">
 
+Now, we're going to configure beans with Java code.
+What we'll do is we'll introduce a new **Coach**.
+
+```java
+package com.luv2code.sringcoredemo.common;
+
+public class SwimCoach implements Coach {
+    
+    // ...
+}
+```
+
+So we'll have this **SwimCoach** that implements the **Coach** interface,
+and we're not going to use any special annotations on the class.
+So, for example, we're not going to use the `@Component` annotation.
+Instead, we're gonna configure this via Java code.
+And here's our development process.
+So in the first step,
+we're gonna create this configuration class,
+and then in step two we'll define a @Bean method
+to configure the bean.
+And then finally we'll inject the bean into our controller.
+Okay, step one of creating a Java class
+and annotating it using the @Configuration annotation.
+So we'll have this public class here called sport config.
+And then we have this annotation for configuration.
+So this is basically a configuration class
+for configuring Spring using our custom approach.
+Then in step two,
+we'll define the @Bean method to configure the bean.
+So in this configuration class,
+we'll have this new annotation here, @Bean,
+and then we'll have this method, public coach, swim coach.
+And inside of here,
+we'll actually return an instance of the swim coach.
+So we'll manually construct the object
+and return it to the given caller.
+Now the bean ID actually defaults to the method name.
+So this bean will have a bean ID of swim coach.
+And in step three, we'll inject the bean
+into our controller.
+Here's our demo controller code.
+And then notice here for the qualifier,
+we make use of the bean id.
+And so in this case, the bean ID is swim coach,
+because we're using the default bean ID
+based on the method name of that bean annotation.
+Now here's the use case for the @Bean annotation.
+You may wonder, well using the new keyword, is that it?
+Why not just annotate the class
+with the component annotation?
+We could do that in this example
+since we actually have access to the code.
+But I'll show you some scenarios where we will need
+to use the @Bean annotation.
+The main use case for the @Bean annotation
+is to make an existing third-party class available
+to the Spring framework.
+In these scenarios here, you may not have access
+to the source code of the third-party class.
+You simply may have a JAR file, you wanna pull that in,
+and then leverage that as a Spring bean.
+So that's the whole idea.
+So you wanna take a given outside a third-party class
+and make that class available as a Spring bean.
+So that's the main motivation
+for using the @Bean annotation.
+And then also, let me give you a real world project example.
+On one of the projects that I worked on,
+we made use of Amazon Web Services, or AWS,
+to store documents.
+AWS has this feature
+called the Amazon Simple Storage Service, or Amazon S3.
+S3 is really just a cloud-based storage system
+for storing PDF documents, images,
+or any type of binary object out there
+or text object out there that you want.
+So just think of it as like a file store
+that's in the cloud.
+And we wanted to make use of the AWS S3 client
+as a Spring bean in our application.
+So we wanted to have our code
+that could communicate with the cloud
+and store documents and also retrieve documents.
+Now the AWS S3 client code is part of the AWS SDK.
+So we can't really modify the AWS SDK source code
+'cause it comes as a JAR file or Maven dependency.
+So we can't simply just add the @Component annotation
+to their code, right?
+It's all managed and coordinated by the AWS team.
+However, we can configure it
+as a Spring bean using the @Bean annotation.
+So here's some sample codes similar
+to the project that I worked on.
+So we have this configuration class called documents config,
+and then we have this @Bean annotation,
+and we make use of this S3 client.
+So S3 client is from the AWS S3 SDK,
+and we have this remote client.
+We go through and we create an S3 client instance
+to connect to AWS S3 storage.
+So we go through all the credentials provider,
+we select our region, we go through
+and build the client and so forth.
+But at this point, once we have the client built in,
+we can return this S3 client.
+And so now it's a Spring bean,
+and the nice thing about it is that once it's a Spring bean,
+then we can use it in other parts of our Spring application.
+Now I can go through and inject the S3 client as a bean.
+So here's my document service.
+I have this private S3 client,
+and then I can auto-wire in this S3 client.
+So for this given constructor injection here,
+document service, then I'll auto-wire,
+then I'll inject the S3 client bean
+and make the appropriate assignments.
+Then I could have this other method here
+in my document service
+once I've already auto wired this bean here.
+Then I can go ahead and process the documents.
+So I'll pass in some document, objects,
+something that's specific to our project.
+But basically, we're gonna use this
+to actually store a document in the cloud.
+So I go through and create this, put object request builder,
+set up a bucket name, the key, and the ACLs and so forth.
+And then I'll actually perform the put object operation
+to the AWS S3 cloud using our auto-wired bean.
+So S3 client dot put object,
+pass in the appropriate parameters,
+and then I'll actually store our document in the cloud.
+So don't worry about all the gory details here,
+but basically we can auto-wire in this S3 client.
+And then from there, we can actually go through
+and store our document in the cloud,
+or process our document to go into the cloud.
+So kind of as a wrap up here, you know,
+with this example, is that we could use the AWS S3 client
+in our Spring application.
+The S3 client class was not originally annotated
+with the @Component annotation.
+However, we configured the S3 client
+as a Spring bean using the @Bean annotation.
+It is now a Spring bean,
+and we can inject it into other services of our application.
+So the main use case here
+for the @Bean annotation is to make an existing
+third party class available to the Spring framework.
+So hopefully, this kind of pulls it together
+for you to see the real use case here
+for the @Bean annotation.
+Alrighty, so let's go ahead and move to the next video,
+and we'll write some code where we can test out
+using the @Bean annotation.
+So I'll see ya in the next video.
+Yo yo.
 
 </div>
