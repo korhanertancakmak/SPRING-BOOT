@@ -2267,57 +2267,327 @@ And let's do a little copy and paste on this `05-primary`.
 And then we'll rename it as `06-lazy-initialization`.
 Now let's go ahead and open this project up and IntelliJ.
 What I'd like to do here is change the code bag
-to using the qualifier annotation
-and removing the primary annotation.
-And we'll set the qualifier annotation here
-to make use of the CricketCoach.
-And we'll open up the TrackCoach implementation
-and remove the @Primary annotation.
+to using the `@Qualifier` annotation and removing the `@Primary` annotation.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And we'll set the qualifier annotation here to make use of the **CricketCoach**.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+//import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
+@Component
+//@Primary
+public class TrackCoach implements Coach{
+
+    @Override
+    public String getDailyWorkout() {
+        return "run a hard 5k";
+    }
+}
+```
+
+And we'll open up the **TrackCoach** implementation and remove the `@Primary` annotation.
 Now let's go ahead and run the application
-
-
-
 just to make sure everything still works as desired.
-Accessing this endpoint localhost:8080/dailyworkout,
-and we're getting the CricketCoach workout
-practice our fast bowling for 15 minutes.
-Okay, this is great.
+Accessing this endpoint `localhost:8080/dailyworkout`:
+
+![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image16.png?raw=true)
+
+And we're getting the **TrackCoach** workout
+`practice our fast bowling for 15 minutes`.
+
 What I'd like to do here is add some diagnostics here
 or add some print line statements to the constructors
-just so we can see everyone being created
-when the application starts up.
+just so we can see everyone being created when the application starts up.
 I'll just start here at the top with BaseballCoach.
-And I'll add a no argument constructor here
-for BaseballCoach.
-And I'll add a system out print line here
-to display the actual class name.
-And I'll just copy this information
-and I'll move over to CricketCoach,
-and I'll paste in the information.
-I'll update the constructor name - CricketCoach,
-and then we have our existing code here
-for printing out the actual class name.
-Move over to TennisCoach.
-Do more of the same -
-well, actually, I can't paste that.
-Let me swing back to CricketCoach.
-Grab this constructor information, copy it,
-swing back over to TennisCoach,
-and now I can paste it.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class BaseballCoach implements Coach{
+
+    public BaseballCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    
+    @Override
+    public String getDailyWorkout() {
+        return "Spend 30 minutes in batting practice";
+    }
+}
+```
+
+And I'll add a no argument constructor here for **BaseballCoach**.
+And I'll add a `System.out.println here` to display the actual class name.
+And I'll just copy this information,
+and I'll move over to **CricketCoach**, and I'll paste in the information.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+I'll update the constructor name - **CricketCoach**,
+and then we have our existing code here for printing out the actual class name.
+Move over to **TennisCoach**.
+Do the same.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class TennisCoach implements Coach{
+
+    public TennisCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice your backhand volley";
+    }
+}
+```
+
 And then update the actual constructor name accordingly.
-And then more the same here for TrackCoach.
-And I'll copy this print line statement
-and I'll use that print line statement
-in my demo controller.
-It's on this demo controller here
-where we do the injection.
-I'll also paste in that print line statement
-and that piece should be in place.
-Okay, great.
+And then more the same here for **TrackCoach**.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+//import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
+@Component
+//@Primary
+public class TrackCoach implements Coach{
+
+    public TrackCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "run a hard 5k";
+    }
+}
+```
+
+And I'll copy this print line statement,
+and I'll use that print line statement in my **DemoController**.
+It's on this **DemoController** here where we do the injection.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+I'll also paste in that print line statement and that piece should be in place.
 So, this coding all looks pretty good.
-I've added all the diagnostics here
-for the various classes here that we're using
-in this example.
+I've added all the diagnostics here for the various classes here 
+that we're using in this example.
+
+Now we can go ahead and start our application and test it out.
+
+```html
+2024-05-22T13:20:45.597+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T13:20:45.643+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-22T13:20:45.643+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-22T13:20:46.456+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-22T13:20:46.466+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T13:20:46.466+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T13:20:46.500+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T13:20:46.500+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 856 ms
+In constructor: BaseballCoach
+In constructor: CricketCoach
+In constructor: TennisCoach
+In constructor: TrackCoach
+In constructor: DemoController
+2024-05-22T13:20:46.764+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-22T13:20:46.793+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-22T13:20:46.799+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 1.496 seconds (process running for 1.869)
+```
+
+And when we look at the logs here,
+we can see that we have all of these constructor print line statements here
+for baseball coach, cricket coach, and so on.
+So notice here all the beans are created at application startup.
+Now let's go ahead and mark the track coach as `@Lazy`.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+@Lazy
+public class TrackCoach implements Coach{
+
+    public TrackCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "run a hard 5k";
+    }
+}
+```
+
+I'll open up my track coach implementation here,
+and I'll simply annotate it with the lazy annotation.
+
+```html
+2024-05-22T13:23:06.566+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T13:23:06.674+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-22T13:23:06.675+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T13:23:06.675+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T13:23:06.684+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T13:23:06.684+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 117 ms
+In constructor: BaseballCoach
+In constructor: CricketCoach
+In constructor: TennisCoach
+In constructor: DemoController
+2024-05-22T13:23:06.734+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-22T13:23:06.741+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-22T13:23:06.743+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 0.191 seconds (process running for 141.812)
+2024-05-22T13:23:06.745+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+```
+
+Alright and so now when we run our application again,
+we should see this output here baseball coach, cricket coach, tennis coach.
+And notice, since we're not injecting the track coach,
+it is not initialized, it's lazy.
+That's the person that says,
+_Hey, call me only if you really need me.
+If you don't need me, I'm not gonna just show up and do nothing_.
+So that's how lazy works out.
+
+Now let's go ahead and set up lazy initialization
+on a global scale or global configuration here.
+We can set that up in our `application.properties` file.
+
+```properties
+spring.main.lazy-initialization=true
+```
+
+I'll give the actual property `spring.main.lazy-initialization=true`.
+And remember that all beans are lazy.
+No beans are created until needed, including our `@DemoController`.
+Now let's zoom out here and let's go ahead,
+and run our application and test it out.
+And then our application is up and running.
+
+```html
+2024-05-22T13:27:10.283+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T13:27:10.373+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-22T13:27:10.374+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T13:27:10.374+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T13:27:10.384+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T13:27:10.384+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 98 ms
+2024-05-22T13:27:10.398+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-22T13:27:10.399+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-22T13:27:10.428+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 0.163 seconds (process running for 385.497)
+```
+
+Notice there were no log statements or print line statements
+for any of our beans because they weren't constructed yet or needed.
+They're all lazy, including our `@DemoController`.
+Now if we go ahead and hit this endpoint,
+then it's actually going to reference our `@DemoController`
+and also its dependencies accordingly.
+
+```html
+2024-05-22T13:27:10.283+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T13:27:10.373+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-22T13:27:10.374+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T13:27:10.374+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T13:27:10.384+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T13:27:10.384+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 98 ms
+2024-05-22T13:27:10.398+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-22T13:27:10.399+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-22T13:27:10.428+03:00  INFO 33508 --- [springcoredemo] [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 0.163 seconds (process running for 385.497)
+2024-05-22T13:29:09.594+03:00  INFO 33508 --- [springcoredemo] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-05-22T13:29:09.595+03:00  INFO 33508 --- [springcoredemo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-05-22T13:29:09.598+03:00  INFO 33508 --- [springcoredemo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+In constructor: CricketCoach
+In constructor: DemoController
+```
+
+So swinging back over here into our IDE and looking at the logs,
+we see that we're in constructor 
+for **CricketCoach** and also in constructor for **DemoController**.
+So for dependency resolution, **Spring** creates an instance of the **CricketCoach** first, 
+then it creates an instance of the **DemoController** and injects that **CricketCoach**.
+Alright, so now you kinda see how the lazy initialization works out 
+and also kinda how **Spring** is doing some work behind the scenes.
 </div>
 
 ## [Bean Scopes]()
