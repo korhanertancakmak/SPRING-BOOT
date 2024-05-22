@@ -2593,7 +2593,404 @@ and also kinda how **Spring** is doing some work behind the scenes.
 ## [Bean Scopes]()
 <div style="text-align:justify">
 
+**Scope** refers to the lifecycle of a bean, such as: 
 
+* how long does the bean live?
+* how many instances are created? 
+* how is the bean shared?
+
+Now the default scope in **Spring** is singleton.
+So the default scope is singleton, very important.
+What is a singleton?
+Well, **Spring Container** creates only one instance of the bean by default, 
+and it's cached in memory. 
+All dependency injections for that bean will reference the **SAME** bean.
+So it's just a singleton,
+one single item that's created in memory and shared amongst different other items.
+Here's an example of this, so I have this **DemoController**:
+
+```java
+@RestController
+public class DemoController {
+    private Coach myCoach;
+    private Coach anotherCoach;
+    
+    @Autowired
+    public DemoController(
+            @Qualifier("cricketCoach") Coach theCoach,
+            @Qualifier("cricketCoach") Coach theAnotherCoach) {
+        myCoach = theCoach;
+        anotherCoach = theAnotherCoach;
+    }
+}
+```
+
+I have two references here _myCoach_, _anotherCoach_,
+I'll inject it using `@Qualifier` _cricketCoach_, _theCoach_,
+another `@Qualifier` _cricketCoach_, _theAnotherCoach_,
+and they both point to the same instance because by default, 
+**Spring** beans are singleton beans.
+There's only one instance that's created.
+
+```java
+import org.springframework.beans.factory.config.ConfigurableBeacFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+public class CricketCoach implements Coach {
+    // ...
+}
+```
+
+Now, we could also explicitly specify the bean scope,
+so in our class **CricketCoach**, we could make use of `@Scope` annotation,
+and then we give `ConfigurableBeanFactory.SCOPE_SINGLETON`.
+
+| Scope              | Description                                                 |
+|--------------------|-------------------------------------------------------------|
+| <b>singleton</b>   | Create a single shared instance of the bean. Default scope. |
+| <b>prototype</b>   | Creates a new bean instance for each container request.     |
+| <b>request</b>     | Scoped to an HTTP web request. Only used for web apps.      |
+| <b>session</b>     | Scoped to an HTTP web request. Only used for web apps.      |
+| <b>application</b> | Scoped to a web app ServletContext. Only used for web apps. |
+| <b>websocket</b>   | Scoped to a web socket. Only used for web apps.             |
+
+There are additional **Spring** bean scopes.
+We already saw the first one here for the **singleton** scope.
+There's also a **prototype** scope,
+it'll create a new bean instance for each container request or for each injection point.
+There's **request** scope, that's scoped to an HTTP web request only used for web apps.
+There's also a **session** scope that's scoped to an HTTP web session, again, 
+only used for web apps.
+And we also have the **application** scope, it's scope to a web app _ServletContext_,
+again, only used for web apps.
+And then finally we have the **websocket** scope, which is scope to a web socket.
+Now, let's take a look at a prototype scope example.
+
+```java
+import org.springframework.beans.factory.config.ConfigurableBeacFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class CricketCoach implements Coach {
+    // ...
+}
+```
+
+Now with **prototype** scope, new object instances are created for each injection, 
+so we have to specify the scope on the actual class here, the bean.
+So **CricketCoach**, we have `@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)`
+create a new one for each instance.
+
+Let's look at a **prototype** scope example, a new object instance for each injection.
+
+```java
+@RestController
+public class DemoController {
+    
+    private Coach myCoach;
+    private Coach anotherCoach;
+    
+    @Autowired
+    public DemoController(
+            @Qualifier("cricketCoach") Coach theCoach,
+            @Qualifier("cricketCoach") Coach theAnotherCoach) {
+        myCoach = theCoach;
+        anotherCoach = theAnotherCoach;
+    }
+}
+```
+
+We have our **DemoController**, we have our two fields here,
+and then we reference our **cricketCoach**, _theCoach_, **cricketCoach**, _theAnotherCoach_.
+Since this is a **prototype** scope bean,
+you'll get a new object instance for each injection.
+So they point to two different areas of memory or two different beans.
+
+```java
+@RestController
+public class DemoController {
+    
+    private Coach myCoach;
+    private Coach anotherCoach;
+    
+    @Autowired
+    public DemoController(
+            @Qualifier("cricketCoach") Coach theCoach,
+            @Qualifier("cricketCoach") Coach theAnotherCoach) {
+        myCoach = theCoach;
+        anotherCoach = theAnotherCoach;
+    }
+    
+    @GetMapping("/check")
+    public String check() {
+        return "Comparing beans: myCoach == anotherCoach, " + (myCoach == anotherCoach);
+    }
+}
+```
+
+How could we check on the scope?
+Well, we could write some here as far as a `@GetMapping("/check")`,
+and I'll return to results here, so I'll say, "`Comparing beans: myCoach = anotherCoach,`"
+and then I put the actual expression here.
+This will check to see if this is the same bean.
+This will return **true** or **false** depending on the bean scope.
+For **singleton** scope, it'll return **true**,
+because remember, **singleton** is shared and it points to the same bean.
+And if it's **prototype** scope, it'll return false because with **prototype**, 
+you get a new instance for each one of them, and they won't point to the same item.
+Let's go ahead and dive into our IDE,
+and let's write the code for this and check out scopes.
+
+Let's take care of our normal housekeeping, stopping all apps and closing all windows.
+And in my file system here, I'll just do a copy and paste on this project.
+`O6-lazy-initialization` and I'll rename it as `O7-bean-scopes`.
+And then I'll go ahead and open this up in IntelliJ.
+I'll do a rebuild on the project.
+
+And I'll remove the `@Lazy` initialization,
+and I'll also remove the global configuration for lazy-init.
+I'll open up the application properties here and just remove that configuration.
+
+```properties
+spring.main.lazy-initialization=true
+```
+
+And then I'll do a similar thing here on the **TrackCoach**, remove that `@Lazy` annotation.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+//import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
+@Component
+//@Lazy
+public class TrackCoach implements Coach{
+
+    public TrackCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "run a hard 5k";
+    }
+}
+```
+
+And again, just cleaning up, just so I have some basic code to start with.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+Alright, so let's go ahead and move into our **DemoController** here and let's add a new field.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+    private Coach anotherCoach;
+
+    @Autowired
+    public DemoController(
+            @Qualifier("cricketCoach") Coach theCoach,
+            @Qualifier("cricketCoach") Coach theAnotherCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+        anotherCoach = theAnotherCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+I'll create this **Coach**, _anotherCoach_,
+and then I'll update my constructor to inject _anotherCoach_.
+Here I have `@Qualifier`, and I have **cricketCoach**,
+and then I have **Coach** _theAnotherCoach_.
+And then inside this constructor here, I make the appropriate assignments.
+So I'll have _anotherCoach_ equals _theAnotherCoach_.
+Alright, so that's our new constructor, that has been updated here.
+And again, a couple of things to point out here.
+The default scope is singleton, 
+so all dependency injections for the bean will reference the same bean.
+Let's also add some code here at the bottom to check the bean scopes.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+    private Coach anotherCoach;
+
+    @Autowired
+    public DemoController(
+            @Qualifier("cricketCoach") Coach theCoach,
+            @Qualifier("cricketCoach") Coach theAnotherCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+        anotherCoach = theAnotherCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+
+    @GetMapping("/check")
+    public String check() {
+        return "Comparing beans: myCoach == anotherCoach, " + (myCoach == anotherCoach);
+    }
+}
+```
+
+I'll add this new `@GetMapping("/check")`, and I'll return comparing beans.
+And I'll give `myCoach == anotherCoach`, just to see if they point to the same thing.
+Okay, so again, we're checking to see if this is the same beans.
+So **true** or **false**, depending on the bean scope.
+If it's a **singleton**, it should return **true**,
+**prototype** returns **false**.
+Alright, so we'll swing out here, and we'll go ahead and run this application.
+Okay, so our application is up and running.
+Open up our browser.
+Just go to this `localhost:8080/check`.
+
+![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image17.png?raw=true)
+
+Alright, great.
+So we're checking to see if this is the same bean.
+By default, we have **singleton** scope, hence **true**, 
+this kind of works out as desired.
+Now let's swing back into our application code here.
+And now what I want to do is move over to the **CricketCoach**
+and change the bean scope to **prototype**.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+I make use of the `@Scope` annotation, and then I choose `SCOPE_PROTOTYPE`.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+Now remember with this **prototype** scope,
+a new object instance is created for each injection.
+
+```html
+2024-05-22T15:41:47.180+03:00  INFO 31456 --- [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T15:41:47.293+03:00  INFO 31456 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-22T15:41:47.293+03:00  INFO 31456 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T15:41:47.293+03:00  INFO 31456 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T15:41:47.304+03:00  INFO 31456 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T15:41:47.304+03:00  INFO 31456 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 123 ms
+In constructor: BaseballCoach
+In constructor: TennisCoach
+In constructor: TrackCoach
+In constructor: CricketCoach
+In constructor: CricketCoach
+In constructor: DemoController
+2024-05-22T15:41:47.344+03:00  INFO 31456 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-22T15:41:47.351+03:00  INFO 31456 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-22T15:41:47.353+03:00  INFO 31456 --- [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 0.187 seconds (process running for 399.291)
+2024-05-22T15:41:47.355+03:00  INFO 31456 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+```
+
+And now with **prototype** scope, new object instance for each injection.
+And so out there we'll have two different objects that are injected, 
+and so they won't point to the same.
+So this should return false for us.
+So now browser, move over here and do a reload: 
+
+![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image18.png?raw=true)
+
+And excellent false.
+So again, we're checking to see if it's the same bean,
+since we have **prototype** scope, hence **false**,
+because we have two separate objects that were created,
+and it's not pointing to the exact same object.
+Alright, so this kind of works out as desired.
 </div>
 
 ## [Bean Lifecycle Methods]()
