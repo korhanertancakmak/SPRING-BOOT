@@ -3351,147 +3351,257 @@ public class SwimCoach implements Coach {
 So we'll have this **SwimCoach** that implements the **Coach** interface,
 and we're not going to use any special annotations on the class.
 So, for example, we're not going to use the `@Component` annotation.
-Instead, we're gonna configure this via Java code.
-And here's our development process.
-So in the first step,
-we're gonna create this configuration class,
-and then in step two we'll define a @Bean method
-to configure the bean.
-And then finally we'll inject the bean into our controller.
-Okay, step one of creating a Java class
-and annotating it using the @Configuration annotation.
-So we'll have this public class here called sport config.
-And then we have this annotation for configuration.
-So this is basically a configuration class
-for configuring Spring using our custom approach.
-Then in step two,
-we'll define the @Bean method to configure the bean.
-So in this configuration class,
-we'll have this new annotation here, @Bean,
-and then we'll have this method, public coach, swim coach.
-And inside of here,
-we'll actually return an instance of the swim coach.
-So we'll manually construct the object
-and return it to the given caller.
+Instead, we're going to configure this via Java code.
+And here's our development process:
+
+* Step 1: Create `@Configuration` class,
+* Step 2: Define a `@Bean` method to configure the bean.
+And then finally, we'll inject the bean into our controller.
+
+Okay, step one of creating a Java class and annotating it using the `@Configuration` annotation.
+
+```java
+package com.luv2code.springcoredemo.config;
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SportConfig {
+    
+    // ...
+}
+```
+
+So we'll have this public class here called **SportConfig**.
+And then we have this annotation for `@Configuration`.
+So this is basically a configuration class for configuring **Spring** 
+using our custom approach.
+
+```java
+package com.luv2code.springcoredemo.config;
+
+import com.luv2code.springcoredemo.common.Coach;
+import com.luv2code.springcoredemo.common.SwimCoach;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.beans.BeanProperty;
+
+@Configuration
+public class SportConfig {
+
+    @Bean
+    public Coach swimCoach() {
+        return new SwimCoach();
+    }
+}
+```
+
+Then in step two, we'll define the `@Bean` method to configure the bean.
+So in this configuration class, we'll have this new annotation here, `@Bean`,
+and then we'll have this method, public coach, _swimCoach_.
+And inside here, we'll actually return an instance of the **SwimCoach**.
+So we'll manually construct the object and return it to the given caller.
 Now the bean ID actually defaults to the method name.
-So this bean will have a bean ID of swim coach.
-And in step three, we'll inject the bean
-into our controller.
-Here's our demo controller code.
-And then notice here for the qualifier,
-we make use of the bean id.
-And so in this case, the bean ID is swim coach,
-because we're using the default bean ID
-based on the method name of that bean annotation.
-Now here's the use case for the @Bean annotation.
-You may wonder, well using the new keyword, is that it?
-Why not just annotate the class
-with the component annotation?
-We could do that in this example
-since we actually have access to the code.
-But I'll show you some scenarios where we will need
-to use the @Bean annotation.
-The main use case for the @Bean annotation
-is to make an existing third-party class available
-to the Spring framework.
-In these scenarios here, you may not have access
-to the source code of the third-party class.
-You simply may have a JAR file, you wanna pull that in,
-and then leverage that as a Spring bean.
+So this bean will have a bean ID of _swimCoach_.
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    public DemoController(@Qualifier("swimCoach") Coach theCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+    }
+
+    // ...
+}
+```
+
+And in step three, we'll inject the bean into our controller.
+Here's our **DemoController** code.
+And then notice here for the qualifier, we make use of the bean id.
+And so in this case, the bean ID is _swimCoach_,
+because we're using the default bean ID based on the method name of that `@Bean` annotation.
+
+Now here's the use case for the `@Bean` annotation.
+You may wonder, well using the **new** keyword, is that it?
+Why not just annotate the class with the `@Component` annotation?
+We could do that in this example since we actually have access to the code.
+But I'll show you some scenarios where we will need to use the `@Bean` annotation.
+
+The main use case for the `@Bean` annotation 
+is to make an existing third-party class available to the **Spring** framework.
+In these scenarios here, 
+you may not have access to the source code of the third-party class.
+You simply may have a JAR file, you want to pull that in,
+and then leverage that as a **Spring** bean.
 So that's the whole idea.
-So you wanna take a given outside a third-party class
-and make that class available as a Spring bean.
-So that's the main motivation
-for using the @Bean annotation.
+So you want to take a given outside a third-party class
+and make that class available as a **Spring** bean.
+So that's the main motivation for using the `@Bean` annotation.
+
 And then also, let me give you a real world project example.
 On one of the projects that I worked on,
-we made use of Amazon Web Services, or AWS,
-to store documents.
-AWS has this feature
-called the Amazon Simple Storage Service, or Amazon S3.
-S3 is really just a cloud-based storage system
-for storing PDF documents, images,
-or any type of binary object out there
+we made use of Amazon Web Services, or AWS, to store documents.
+AWS has this feature called the Amazon Simple Storage Service, or Amazon S3.
+Amazon S3 is really just a cloud-based storage system
+for storing PDF documents, images, or any type of binary object out there
 or text object out there that you want.
-So just think of it as like a file store
-that's in the cloud.
-And we wanted to make use of the AWS S3 client
-as a Spring bean in our application.
-So we wanted to have our code
-that could communicate with the cloud
+So just think of it as like a file store that's in the cloud.
+And we wanted to make use of the AWS S3 client as a **Spring** bean in our application.
+So we wanted to have our code that could communicate with the cloud
 and store documents and also retrieve documents.
+
 Now the AWS S3 client code is part of the AWS SDK.
 So we can't really modify the AWS SDK source code
-'cause it comes as a JAR file or Maven dependency.
-So we can't simply just add the @Component annotation
-to their code, right?
+because it comes as a JAR file or **Maven** dependency.
+So we can't simply just add the `@Component` annotation to their code, right?
 It's all managed and coordinated by the AWS team.
-However, we can configure it
-as a Spring bean using the @Bean annotation.
-So here's some sample codes similar
-to the project that I worked on.
-So we have this configuration class called documents config,
-and then we have this @Bean annotation,
-and we make use of this S3 client.
-So S3 client is from the AWS S3 SDK,
-and we have this remote client.
-We go through and we create an S3 client instance
-to connect to AWS S3 storage.
-So we go through all the credentials provider,
-we select our region, we go through
-and build the client and so forth.
+However, we can configure it as a **Spring** bean using the `@Bean` annotation.
+So here are some sample codes similar to the project that I worked on.
+
+```java
+package com.luv2code.springcoredemo.config;
+
+// ...
+import sofware.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import sofware.amazon.awssdk.regions.Region;
+import sofware.amazon.awssdk.services.s3.S3Client;
+
+@Configuration
+public class DocumentsConfig {
+    
+    @Bean
+    public S3Client remoteClient() {
+        
+        // Create an S3 client to connect to AWS S3
+        ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();
+        Region region = Region.US_EAST_1;
+        S3Client s3Client = S3Client.builder()
+                .region(region)
+                .credentialsProvider(credentialsProvider)
+                .build();
+
+        return s3Client;
+    }
+}
+```
+
+So we have this configuration class called **DocumentsConfig**,
+and then we have this `@Bean` annotation,
+and we make use of this **S3Client**.
+So **S3Client** is from the AWS S3 SDK, and we have this remote client.
+We go through, and we create an **S3Client** instance to connect to AWS S3 storage.
+So we go through all the _credentialsProvider_,
+we select our region, we go through and build the client and so forth.
 But at this point, once we have the client built in,
-we can return this S3 client.
-And so now it's a Spring bean,
-and the nice thing about it is that once it's a Spring bean,
-then we can use it in other parts of our Spring application.
-Now I can go through and inject the S3 client as a bean.
+we can return this **S3Client**.
+And so now it's a **Spring** bean,
+and the nice thing about it is that once it's a **Spring** bean,
+then we can use it in other parts of our **Spring** application.
+
+Now I can go through and inject the **S3Client** as a bean.
 So here's my document service.
-I have this private S3 client,
-and then I can auto-wire in this S3 client.
-So for this given constructor injection here,
-document service, then I'll auto-wire,
-then I'll inject the S3 client bean
-and make the appropriate assignments.
-Then I could have this other method here
-in my document service
-once I've already auto wired this bean here.
+
+```java
+package com.luv2code.springcoredemo.services;
+
+import sofware.amazon.awssdk.services.s3.S3Client;
+// ...
+
+@Component
+public class DocumentsService {
+    
+    private S3Client s3Client;
+    
+    @Autowired
+    public DocumentsService (S3Client theS3Client) {
+        s3Client = theS3Client;
+    }
+    
+    // ...
+}
+```
+
+I have this private **S3Client**,
+and then I can auto-wire in this **S3Client**.
+So for this given constructor injection here, **DocumentsService**, 
+then I'll use `@Autowired`, 
+then I'll inject the **S3Client** bean and make the appropriate assignments.
+
+```java
+package com.luv2code.springcoredemo.services;
+
+import sofware.amazon.awssdk.services.s3.S3Client;
+// ...
+
+@Component
+public class DocumentsService {
+    
+    private S3Client s3Client;
+    
+    @Autowired
+    public DocumentsService (S3Client theS3Client) {
+        s3Client = theS3Client;
+    }
+    
+    public void processDocument(Document theDocument) {
+        
+        // get the document input stream and file size ...
+        
+        // Store document in AWS S3
+        // Create a put request for the object
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(subDirectory + "/" + fileName)
+                .acl(ObjectCannedACL.BUCKET_OWNER_FULL_CONTROL).build();
+        
+        // perform the putObject operation to AWS S3 ... using our autowired bean
+        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(fileInputStream, contentLength));
+    }
+}
+```
+
+I could have this other method here in my **DocumentsService**
+once I've already `@Autowired` this bean here.
 Then I can go ahead and process the documents.
-So I'll pass in some document, objects,
-something that's specific to our project.
-But basically, we're gonna use this
-to actually store a document in the cloud.
-So I go through and create this, put object request builder,
-set up a bucket name, the key, and the ACLs and so forth.
-And then I'll actually perform the put object operation
-to the AWS S3 cloud using our auto-wired bean.
-So S3 client dot put object,
-pass in the appropriate parameters,
+So I'll pass some **Document** objects, something that's specific to our project.
+But basically, we're going to use this to actually store a document in the cloud.
+So I go through and create this, `PutObjectRequest.builder()`,
+set up a _bucketName_, the _key_, and the *ACL*s and so forth.
+And then I'll actually perform the _putObject_ operation
+to the AWS S3 cloud using our `@Autowired` bean.
+So `s3Client.putObject`, pass in the appropriate parameters,
 and then I'll actually store our document in the cloud.
 So don't worry about all the gory details here,
-but basically we can auto-wire in this S3 client.
-And then from there, we can actually go through
-and store our document in the cloud,
+but basically we can auto-wire in this **s3Client**.
+And then from there, we can actually go through and store our document in the cloud,
 or process our document to go into the cloud.
-So kind of as a wrap up here, you know,
-with this example, is that we could use the AWS S3 client
-in our Spring application.
-The S3 client class was not originally annotated
-with the @Component annotation.
-However, we configured the S3 client
-as a Spring bean using the @Bean annotation.
-It is now a Spring bean,
-and we can inject it into other services of our application.
-So the main use case here
-for the @Bean annotation is to make an existing
-third party class available to the Spring framework.
-So hopefully, this kind of pulls it together
-for you to see the real use case here
-for the @Bean annotation.
-Alrighty, so let's go ahead and move to the next video,
-and we'll write some code where we can test out
-using the @Bean annotation.
-So I'll see ya in the next video.
-Yo yo.
+
+So kind of as a wrap up here, you know with this example, 
+is that we could use the AWS S3 client in our **Spring** application.
+The **S3Client** class was not originally annotated with the `@Component` annotation.
+However, we configured the **S3Client** as a **Spring** bean using the `@Bean` annotation.
+It is now a **Spring** bean, and we can inject it into other services of our application.
+The main use case here for the `@Bean` annotation is 
+to make an existing third party class available to the **Spring** framework.
+So hopefully, this kind of pulls it together for you 
+to see the real use case here for the `@Bean` annotation.
+Now we'll write some code where we can test out using the `@Bean` annotation.
+
+
+
 
 </div>
