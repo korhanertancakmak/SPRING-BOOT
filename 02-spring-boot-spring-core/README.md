@@ -3601,7 +3601,282 @@ So hopefully, this kind of pulls it together for you
 to see the real use case here for the `@Bean` annotation.
 Now we'll write some code where we can test out using the `@Bean` annotation.
 
+Again, we'll take care of our normal housekeeping work.
+And then I'll do a copy and paste here in this directory, `08-bean-lifecycle-methods`.
+And I'll rename it as `09-Java-config-bean`.
+And then I'll open this project here in IntelliJ.
+I'll just do a rebuild on the project, 
+and I want to remove the code for `@PostConstruct` and `@PreDestroy`
+because we don't really need it for these examples here.
+So I'll just kind of clean it up a bit.
+I'll just move down here into my **CricketCoach**.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.springframework.stereotype.Component;
+
+@Component
+public class CricketCoach implements Coach{
+
+    public CricketCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    
+/*
+    // define our init method
+    @PostConstruct
+    public void doMyStartupStuff() {
+        System.out.println("In doMyStartupStuff(): " + getClass().getSimpleName());
+    }
+
+    // define our destroy method
+    @PreDestroy
+    public void doMyCleanupStuff() {
+        System.out.println("In doMyCleanupStuff(): " + getClass().getSimpleName());
+    }
+*/
+
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 15 minutes";
+    }
+}
+```
+
+I'll remove the code here for `@PostConstruct` and `@PreDestroy`.
+And now what I'll do is I'll create this new class call, **SwimCoach**.
+
+```java
+package com.luv2code.springcoredemo.common;
+
+public class SwimCoach implements Coach  {
+    
+    public SwimCoach() {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+    }
+    
+    @Override
+    public String getDailyWorkout() {
+        return "swim 1000 meters as a warm up";
+    }
+}
+```
+
+This **SwimCoach** will implement the **Coach** interface.
+And then our coach here says, `swim 1000 meters as a warm up`.
+And then we'll also create a constructor here just for diagnostics,
+just to see that this given class is being created.
+So I just assist our print line and constructor,
+and I simply print out the class name.
+And then notice here I'm not using a `@Component` annotation here on purpose.
+Now let's go ahead and move into our demo controller,
+and I'll inject our **SwimCoach**:
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    // public DemoController(@Qualifier("cricketCoach") Coach theCoach) {
+    public DemoController(@Qualifier("swimCoach") Coach theCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+And let's go ahead and run our application.
+And it's expected this will kind of crash and fail, right?
+
+```html
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.luv2code.springcoredemo.rest.DemoController required a bean of type 'com.luv2code.springcoredemo.common.Coach' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Qualifier("swimCoach")
+
+The following candidates were found but could not be injected:
+	- User-defined bean
+	- User-defined bean
+	- User-defined bean
+	- User-defined bean
 
 
+Action:
 
+Consider revisiting the entries above or defining a bean of type 'com.luv2code.springcoredemo.common.Coach' in your configuration.
+```
+
+It says it failed to start.
+The parameter of zero of the constructor could not be found
+and the injection point with the following annotation `@Qualifier` **SwimCoach**.
+So it couldn't find a _swimCoach_, and that's expected 
+because we really haven't done any special annotations on that **SwimCoach** class.
+We can't find a _swimCoach_ because it's not annotated with `@Component`.
+For this example, we can use an alternate solution.
+
+So step 1: Create a **@Configuration** class.
+And what I'll do is I'll first-off put this in a separate package,
+so I'll create this new package called `Config`.
+So in `com.luv2code.springcoredemo.config`.
+Alright, so I have this `config` package,
+now let's go ahead and create this new class called **SportConfig**.
+
+```java
+package com.luv2code.springcoredemo.config;
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SportConfig {
+
+    @Bean
+    public Coach swimCoach() {
+        return new SwimCoach();
+    }
+}
+```
+
+I'll make use of this annotation here, `@Configuration`.
+And then we'll cover Step 2: Define `@Bean` method to configure the bean.
+I'll make use of this `@Bean` annotation,
+and I'll create this method, public **Coach**, _swimCoach_.
+It's going to return an instance of a **SwimCoach**.
+And we're manually handling the construction here for this given coach.
+And then remember, the bean id defaults to the method name,
+so the bean id in this example is _swimCoach_, with a lowercase "s".
+And we can use that when we inject it into our controller.
+And we're okay now, we can go ahead and run this application.
+
+```html
+2024-05-22T19:35:56.267+03:00  INFO 31316 --- [  restartedMain] c.l.s.SpringcoredemoApplication          : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T19:35:56.305+03:00  INFO 31316 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-22T19:35:56.306+03:00  INFO 31316 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-22T19:35:56.971+03:00  INFO 31316 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-22T19:35:56.979+03:00  INFO 31316 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T19:35:56.980+03:00  INFO 31316 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T19:35:57.009+03:00  INFO 31316 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T19:35:57.010+03:00  INFO 31316 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 703 ms
+In constructor: BaseballCoach
+In constructor: CricketCoach
+In doMyStartupStuff(): CricketCoach
+In constructor: TennisCoach
+In constructor: TrackCoach
+In constructor: SwimCoach
+In constructor: DemoController
+2024-05-22T19:35:57.239+03:00  INFO 31316 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-22T19:35:57.269+03:00  INFO 31316 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-05-22T19:35:57.277+03:00  INFO 31316 --- [  restartedMain] c.l.s.SpringcoredemoApplication          : Started SpringcoredemoApplication in 1.246 seconds (process running for 1.525)
+```
+
+And then, success!
+Notice here, our diagnostics printed out,
+In constructor for **SwimCoach**,
+it's actually creating in a swim coach and making it available,
+and the application started up successfully, so nothing failed.
+So that **SwimCoach** was injected into our Controller.
+And then we can verify this by swinging over to our web browser 
+and then going to `localhost:8080/dailyworkout`:
+
+![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image20.png?raw=true)
+
+And "`Swim 1000 meters as a warm up`".
+So that comes from our actual **SwimCoach**, based on its configuration.
+So, remember **SwimCoach** did not have the `@Component` annotation,
+and it failed the first time we ran it.
+And then we simply configured this as a **Spring** bean using the `@Bean` annotation,
+and then everything worked out for us.
+Alright, so this is more of a contrived example,
+but from that real world example I gave you a little earlier
+the whole idea of making use of the `@Bean` annotation is
+to take an existing third-party class
+and then wrap it and expose it as a bean
+that we can use in our **Spring** applications.
+
+Let's play around with one more thing here.
+Let's swing back into our code and now let's give our bean a custom id,
+so instead of using whatever the method name is,
+let's give it a custom bean id: 
+
+```java
+package com.luv2code.springcoredemo.config;
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SportConfig {
+
+    @Bean("aquatic")
+    public Coach swimCoach() {
+        return new SwimCoach();
+    }
+}
+```
+
+And we can do that by simply providing a string here for this `@Bean` annotation,
+and I'll call this `@Bean("aquatic")`.
+So that's the bean id that we can use.
+We can swing back over into our controller,
+and then we can inject that given bean id:
+
+```java
+package com.luv2code.springcoredemo.rest;
+
+import com.luv2code.springcoredemo.common.Coach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController{
+
+    private Coach myCoach;
+
+    @Autowired
+    // public DemoController(@Qualifier("swimCoach") Coach theCoach) {
+    public DemoController(@Qualifier("aquatic") Coach theCoach) {
+        System.out.println("In constructor: " + getClass().getSimpleName());
+        myCoach = theCoach;
+    }
+
+    @GetMapping("/dailyworkout")
+    public String getDailyWorkout() {
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+So we make use of our custom bean id `aquatic`.
+Alright, everything should kind of reload there for us.
+And now if I swing back over to my browser and do a reload:
+
+![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image20.png?raw=true)
+
+Then everything still works as desired.
+So we're still injecting that _swimCoach_
+and we can still make use of them.
 </div>
