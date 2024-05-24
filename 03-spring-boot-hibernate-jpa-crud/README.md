@@ -3342,12 +3342,6 @@ We're really happy here that our query works as desired
 using these JPQL named parameters and our `WHERE` clause.
 </div>
 
-## [Querying Objects with JPA]()
-<div style="text-align:justify">
-
-
-</div>
-
 ## [Updating Objects with JPA]()
 <div style="text-align:justify">
 
