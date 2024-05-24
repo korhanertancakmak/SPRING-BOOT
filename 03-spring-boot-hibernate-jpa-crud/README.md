@@ -2087,12 +2087,380 @@ So we saw an example of saving one student, and then also saving multiple studen
 and also how MySQL handles the auto increment of the ID column.
 </div>
 
+### [Changing Index of MySQL Auto Increment]()
+<div style="text-align:justify">
 
+Another question that I get or a frequently asked question is,
+"_How do I change the auto increment values? 
+For example, I don't want to start the increment at number 1,
+I'd like to start it at a different number like 1,000, 5,000 or 20,000. 
+How can I do that?_"
+
+![image25](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image25.png?raw=true)
+
+What we can do is open up a new SQL window here.
+We can write some code to alter the start of the auto increment.
+I'll say `AUTO_INCREMENET=3000`.
+That's the new index that we want to start from,
+and we hit the yellow lightning bolt to execute it.
+Now, we go back into our application.
+We run our application again,
+so we're going to add those three student objects.
+We swing back to our application, we run that query one more time and get the latest.
+
+![image26](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image26.png?raw=true)
+
+And now, notice here we have three new entries at the bottom: _John_, _Mary_, and _Bonita_.
+But now these entries have IDs starting at 3000.
+So, 3000, 3001,3002.
+That's one approach there on how you can actually manage or change the actual start index of a given auto increment ID.
+
+Another question I get, "_How do I reset the AUTO_INCREMENT values back to 1?_"
+And what we can do here is make use of `TRUNCATE`.
+
+```sql
+TRUNCATE student_tracker.student
+```
+
+So this will truncate the database, and so this will actually remove data from the database
+and reset the auto increment to start at 1.
+Here I give "`TRUNCATE student_tracker.student`".
+Let's execute this, and then refresh the query.
+
+![image27](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image27.png?raw=true)
+
+Notice here that the data's been removed from the database and behind the scenes;
+the auto increment is set up to start at 1.
+Let's swing back over to our application, let's run our application again.
+And let's run our query one more time in my MySQL Workbench.
+
+![image28](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image28.png?raw=true)
+
+And then we see that we have those three students, but here the auto increment value
+has been reset to 1, and it starts there: 1, 2, and 3.
+And that's one solution there for resetting the auto increment.
+</div>
 
 ## [Reading Objects with JPA]()
 <div style="text-align:justify">
 
+In this section, we're going to learn how to retrieve an object.
+We're making some perfect progress here with creating our `CRUD` app.
+We've covered everything on doing the `create` portion of it.
+Now we'll focus on `read` an object.
 
+```java
+// retrieve/read from database using the primary key
+// in this example, retrieve Student with primary key: 1
+
+Student myStudent = entityManager.find(Student.class, 1);
+```
+
+Now, retrieving an object with **JPA**, in this example, 
+I'm going to retrieve a student using a primary key of `1`.
+Here I make use of `entityManager.find`.
+I give the actual name of the **Entity** class, `Student.class`.
+`1` is the primary key.
+And once it finds the object, it'll return it, and we can assign it accordingly.
+This is for the happy path.
+In the event that they cannot find a student with that given primary key, then it'll return `null`.
+So `null`'s returned if they don't find the given entity based on that primary key.
+Let's look at the development process for retrieving an object using our DAO example:
+
+1. We'll do is we'll add a new method to the DAO interface
+2. We'll add a new method to the DAO implementation
+3. Finally, we'll update our main application
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+
+public interface StudentDAO {
+    
+    //...
+    
+    Student findById(integer id);
+}
+```
+
+Starting here with step 1: Add a new method to the DAO interface.
+Here's our **studentDAO**.
+We have this method here, _fineById_, and we pass in an integer of the _id_.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+// ...
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    private EntityManager entityManager;
+    // ...
+
+    @Override
+    public Student fineById(Integer id) {
+        return entityManager.find(Student.class, id);
+    }
+}
+```
+
+And then in step 2: Define our DAO implementation.
+And here's the method that we implement here, _fineById_, pass in the _id_, 
+and then I make use of `entityManager.find`.
+I give the entity class of `student.class`, and then I give the primary key.
+That's the `id`.
+And again, if it's not found, it simply returns `null`.
+And notice here there's no need to make use of the `@Transactional` annotation
+since we're only doing a query.
+We're not performing any updates or modifications to the database.
+Simply read-only.
+
+```java
+package com.luv2code.cruddemo;
+
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+// ...
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			//createMultipleStudents(studentDAO);
+            
+            readStudent(studentDAO);
+		};
+	}
+    
+    private void readStudent(StudentDAO studentDAO) {
+        // create a student object
+        System.out.println("Creating new student object...");
+        Student tempStudent = new Student("Daffy", "Duck", "daffy@luv2code.com");
+
+        // save the student objects
+        System.out.println("Saving the student...");
+        studentDAO.save(tempStudent);
+
+        // display id of the saved student
+        System.out.println("Saved student. Generated id: " + tempStudent.getId());
+
+        // retrieve student based on the id: primary key
+        System.out.println("\nRetrieveing student with id: " + tempStudent.getId());
+        
+        Student myStudent = studentDAO.findById(tempStudent.getId());
+
+        System.out.println("Found the student: " + myStudent);
+    }
+
+    // ...
+}
+```
+
+Now in step 3: Update our main application.
+Here inside our _commandLineRunner_, that's where we add our custom code.
+I'll call this method _readStudent_, pass in the _studentDAO_,
+and then that's the code that we'll create over here.
+And we just go through the process here.
+We create a student object, we save the student,
+and we display the id of the saved student, and now I have that primary key, that _id_.
+And then I can retrieve the student based on the _id_ or based on their primary key.
+Here I make use of `studentDAO.fineById()`, and I give `tempStudent.getId()`,
+and I'll refine that given student, and then we can print out that given student.
+Alright, so that's the basic development process.
+Now let's start writing the code.
+
+We'll get started with step one of adding the new methods to our DAO interface.
+Here's our student DAO interface and let's go ahead and add this new method
+called findById returns a student, and we pass in the integer id,
+and that's the basic coding here for this new method.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+
+public interface StudentDAO {
+
+    void save(Student theStudent);
+
+    Student findById(Integer id);
+}
+```
+
+Now, we'll move ahead to step two, we'll add a new method to the DAO implementation.
+Let me go ahead and allow the IDE to implement the method for us, _findById_.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    // define field for entity manager
+    private EntityManager entityManager;
+
+    // inject entity manager using constructor injection
+    @Autowired
+    public StudentDAOImpl(EntityManager theEntityManager) {
+        this.entityManager = theEntityManager;
+    }
+
+    // implement save method
+    @Override
+    @Transactional
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
+    }
+
+    @Override
+    public Student findById(Integer id) {
+        //return null;
+        return entityManager.find(Student.class, id);
+    }
+}
+```
+
+And so now down here at the bottom we have this stub for the method,
+looks pretty good, and we'll make use of that method on the entity manager,
+we'll say `entityManager.find` will give the actual entity class, `student.class`, 
+the primary key, the `id` that's passed in. 
+So again, `student.class` is the entity class and then we have the actual primary key.
+
+```java
+package com.luv2code.cruddemo;
+
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	//public CommandLineRunner commandLineRunner(String[] args) {
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			// System.out.println("Hello World");
+			// createStudent(studentDAO);
+			// createMultipleStudents(studentDAO);
+            
+            readStudent(studentDAO)
+		};
+	}
+
+    private void readStudent (StudentDAO studentDAO) {
+        // create a student object
+        System.out.println("Creating new student object...");
+        Student tempStudent = new Student("Daffy", "Duck", "daffy@luv2code.com");
+
+        // save the student 
+        System.out.println("Saving the student...");
+        studentDAO.save(tempStudent);
+
+        // display id of the saved student
+        int theId = tempStudent.getId();
+        System.out.println("Saved student. Generated id: " + theId);
+
+        // retrieve student based on the id: primary key
+        System.out.println("Retrieving student with id: " + theId);
+        Student myStudent = studentDAO.findById(theId);
+
+        // display student
+        System.out.println("Found the student: " + myStudent);
+    }
+    
+	private void createMultipleStudents (StudentDAO studentDAO) {
+
+		// create multiple students
+		System.out.println("Creating 3 student objects...");
+		Student tempStudent1 = new Student("John", "Doe", "john@luv2code.com");
+		Student tempStudent2 = new Student("Mary", "Public", "mary@luv2code.com");
+		Student tempStudent3 = new Student("Bonita", "Applebum", "bonita@luv2code.com");
+
+		// save the student objects
+		System.out.println("Saving the students...");
+		studentDAO.save(tempStudent1);
+		studentDAO.save(tempStudent2);
+		studentDAO.save(tempStudent3);
+	}
+
+	private void createStudent (StudentDAO studentDAO) {
+
+		// create the student object
+		System.out.println("Creating new student object...");
+		Student tempStudent = new Student("Paul", "Doe", "paul@luv2code.com");
+
+		// save the student object
+		System.out.println("Saving the student...");
+		studentDAO.save(tempStudent);
+
+		// display id of the saved student
+		System.out.println("Saved student. Generated id: " + tempStudent.getId());
+	}
+}
+```
+
+And then finally, in step 3: update the main application to use this new DAO method.
+Down here in our _commandLineRunner_, we will comment out the call to this _createMultipleStudents_,
+and then we'll call this method _readStudent_.
+We'll use the IDE here to create that method for us, a stub for that method.
+And before I write the code here, let me write some comments to myself just to keep myself on track.
+We'll start off by creating a student object, we'll save the student, we'll display the ID of that student,
+we'll retrieve the student based on the ID and then also display the student.
+Creating a student, basic, right?
+We simply create a new student for `Daffy Duck`.
+We save the student using the code that we've created before, `studentDAO.save(tempStudent)`,
+and then we'll display `theId` of the saved student.
+I'll create a variable here, `theId` of `tempStudent.getId()`, I'll display it.
+Let's do a print retrieving the student with the given id,
+and then I make that call `studentDAO.findById(theId)`, and I pass in the id.
+We're really executing our new code here that we just created.
+And then we simply print out `myStudent`.
+And that's the basic code in there for reading it,
+so we kind of create a student first, we save them, then we retrieve them 
+and display them kind of going full circle here.
+Now let's go ahead and run this application and test it out:
+
+```html
+Creating new student object...
+Saving the student...
+Saved student. Generated id: 4
+Retrieving student with id: 4
+Found the student: Student{id=4, firstName='Daffy', lastName='Duck', email='daffy@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+And success.
+So here at the bottom it says creating a new student,
+saving, saved, the ID of four, and it prints out that student that it retrieved `Daffy Duck`.
+And I always like to verify this in the database.
+Move over to MySQL Workbench and then just do a query on that student table and success.
+
+![image29](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image29.png?raw=true)
+
+So we see that `Daffy Duck` here is in the list of students for this given database.
 </div>
 
 ## [Querying Objects with JPA]()
