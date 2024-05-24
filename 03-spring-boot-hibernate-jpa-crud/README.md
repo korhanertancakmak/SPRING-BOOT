@@ -2466,7 +2466,880 @@ So we see that `Daffy Duck` here is in the list of students for this given datab
 ## [Querying Objects with JPA]()
 <div style="text-align:justify">
 
+In this section, we'll learn how to query objects.
+Taking a look at our progress here of building a `CRUD` app,
+we've covered the basics on how to read a single object,
+here we're going to learn how to query for multiple objects.
+**JPA** has the JPA Query Language (JPQL).
+It's a query language for retrieving objects.
+It's similar in concept to SQL where you can select from a given table and grab some data accordingly.
+You can also make use of constraints here 
+or selectors like `where`, `like`, `order by`, `join`, so on and so forth.
+However, the difference here is that JPQL is based on the **entity name** and **entity fields**,
+as opposed to the direct table names and table columns.
+When you use JPQL, by default you make use of the entity name and entity fields,
+and we'll see some examples of this coming up.
 
+```java
+TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student", Student.class);
+
+List<Student> students = theQuery.getResultList();
+```
+
+And here's an example of retrieving all the students using JPQL.
+I make use of this **entityManager**, and I say _createQuery_, and then I give `FROM Student`.
+Now, this is the name of the actual **JPA** entity, the class name, and then we give, `Student.class`.
+This will make sure that this is a typed query, 
+and we make the assignment on the left-hand side that's the query.
+And one thing here on the query is that **Student**, this is not the name of the database table.
+All JPQL syntax is based on the **entity name** and **entity fields**.
+Now, once we have this query created, then we can retrieve the data by saying 
+`theQuery.getResultList` and it'll give us a list of students,
+and then from there we can use it in our application accordingly.
+But the key here is that when using JPQL, you make use of the **entity name** and also **entity fields**.
+
+```java
+TypedQuery<Student> theQuery = entityManager.createQuery(
+                                    "FROM Student WHERE lastName = 'Doe'", Student.class);
+
+List<Student> students = theQuery.getResultList();
+```
+
+Let's take a look at an example of retrieving students whose last name equals `Doe`.
+Here I make use of **entityManager**, I say _createQuery_, I give `FROM Student WHERE lastName = Doe`.
+_lastName_ is the field of the **JPA** entity, that's the actual field name.
+So we're not using the actual database column name, we're using a **JPA** entity field name. 
+
+```java
+TypedQuery<Student> theQuery = entityManager.createQuery(
+                        "FROM Student WHERE lastName = 'Doe' OR firstName='Daffy'", Student.class);
+
+List<Student> students = theQuery.getResultList();
+```
+
+We can also retrieve students using predicates.
+And note here _lastName_ and _firstName_, those are the names of the actual **JPA** entity Fields.
+
+```java
+TypedQuery<Student> theQuery = entityManager.createQuery(
+                        "FROM Student WHERE email LIKE '%luv2code.com'", Student.class);
+
+List<Student> students = theQuery.getResultList();
+```
+
+We could also retrieve students using the like predicate.
+In this example, I want to get a list of all the students whose email ends in `luv2code.com`.
+I used a percent in this scenario to say let's match on anything that ends with `luv2code.com`.
+
+In the previous examples, we kinda hard coded some the data like, you know, `lastName = Doe`.
+Well, you may want to use this as a parameter.
+So maybe a user entered this into a web form, and you want to read that information
+and then search for that user's name accordingly.
+Well, with JPQL we can make use of named parameters.
+
+```java
+public List<Student> findByLastName(String theLastName) {
+    TypedQuery<Student> theQuery = entityManager.createQuery(
+                                        "FROM Student WHERE lastName=:theData", Student.class);
+    
+    theQuery.setParameter("theData", theLastName);
+    
+    return theQuery.getResultList();
+}
+```
+
+We have this method called _FindByLastName_.
+This is a method that we're defining in our, maybe our DAO,
+and then I have the _lastName_ being passed in.
+I make use of `entityManager.createQuery`, I give `FROM Student WHERE lastName =`,
+and then I make use of this special syntax here, I use `:theData`.
+This is a JPQL named parameter, and these named parameters are prefixed with a colon.
+And you can kind of think of this as a placeholder that we'll fill in later.
+And then filling it in later on the next line of code, we give `theQuery.setParameter`,
+we provide the name of the parameter, `theData`, and then we give the actual value, `theLastName`.
+
+Now, let's talk about JPQL and the `select` clause.
+The query examples I've shown you so far, they did not really specify a `select` clause.
+And that's because the **Hibernate** implementation behind the scenes is lenient.
+It allows for a **Hibernate** query language, HQL, which is different from JPQL.
+For strict JPQL, the `select` clause is required.
+
+```java
+TypedQuery<Student> theQuery = 
+                    entityManager.createQuery("select s FROM Student s", Student.class);
+```
+
+So really to follow the JPL standards strictly, 
+we'd have to write our query such as `select s FROM Student s`.
+Now, the first `s` is really just an identification variable or like an alias.
+It basically gives us a reference to the student entity that's being returned.
+Now, this `s`, it can be any name.
+I simply just used it just because that's a good, you know, first initial for a student,
+but you can use any name, any variable, whatever,
+like a normal variable name or whatever or an alias.
+This identification variable here, it's useful for when you have complex queries,
+when you need to refer to the entity later and `WHERE` clauses and so on.
+But again, when you're making use of strict JPQL, the `select` clause is required.
+
+```java
+TypedQuery<Student> theQuery = entityManager.createQuery(
+                    "select s FROM Student s WHERE s.email LIKE '%luv2code.com'", Student.class);
+```
+
+And then we saw some other examples where we made use of queries and so forth for like,
+you know, checking for a student that has an email or checking for a student with a given last name.
+This is how you would kind of revise or refactor those queries using strict JPQL with a select clause.
+Here in the first example, I have select `s FROM Student s WHERE s.email`.
+So again, `s` is a reference to the entity or the object,
+so we know it's a student, and we know that a student has a field called `email`, 
+so that's why we have `s.email`, and then we give our normal `LIKE` like we had before.
+
+```java
+TypedQuery<Student> theQuery = entityManager.createQuery(
+                    "select s FROM Student s WHERE s.lastName=:theData", Student.class);
+```
+
+Here, we have another example, `select s FROM Student s WHERE s.lastName` equals
+whatever the data parameter that we're going to make use of.
+Again, `s` is a reference to the entity and then `.lastName`, 
+that's an actual field on the actual entity or the Java class.
+Alright, so that's a good little piece of information here regarding some of the strict JPQL
+in regard to the `select` clause.
+
+Let's take a look at our development process of how we can add this into our DAO application:
+
+1. Step 1: Add this new method to the DAO interface
+2. Step 2: Add a new method to the DAO implementation
+3. Step 3: Update the main application
+
+Let's take a look here at step 1: Adding a new method to the DAO interface.
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+import java.util.List;
+
+public interface StudentDAO {
+    // ...
+    
+    List<Student> findAll();
+}
+```
+
+Here's our **studentDAO**, we have this new method here, _findAll_, 
+that's going to return a list of students.
+
+And then in step 2: Define the DAO implementation.
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import java.util.List;
+
+public class StudentDAOImpl implements StudentDAO {
+    
+    private EntityManager entityManager;
+    // ...
+    
+    @Override
+    public List<Student> findAll() {
+        TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student", Student.class);
+        return theQuery.getResultList();
+    }
+}
+```
+
+We implement this method here, _findAll_.
+We give `entityManager.createQuery`, `FROM Student`, remember that's the name of the JPA entity.
+And notice here; there's no need to add the `@Transactional` annotation
+since we're doing a query, just kind of read-only.
+We're not making any updates or modifications to the database.
+
+And then finally, in step 3: Update our main application.
+
+```java
+@SpringBootApplication
+public class CruddemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(CruddemoApplication.class, args);
+    }
+    
+    @Bean
+    public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+        return runner -> {
+            
+            queryForStudents(studentDAO);
+        };
+    }
+    
+    private void queryForStudents(StudentDAO studentDAO) {
+        
+        // get list of students
+        List<Student> theStudents = studentDAO.findAll();
+        
+        // display list of students
+        for (Student tempStudent : theStudents) {
+            System.out.println(tempStudent);
+        }
+    }
+}
+```
+
+In our _commandLineRunner_, we call this method here, _queryForStudents_, pass in the _studentDAO_,
+and here's the method for the query for students.
+We make use of our `studentDAO.findAll`, that's a method that we just created previously.
+We get back a list of students, and then we simply display the list of students here,
+just doing a for loop `system.out.println(tempStudent)`.
+Okay, this all looks perfect.
+Let's start writing some code.
+
+Let's swing into our IDE and then step 1: Add a new method to the DAO interface.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import java.util.List;
+
+public interface StudentDAO {
+
+    void save(Student theStudent);
+
+    Student findById(Integer id);
+
+    List<Student> findAll();
+}
+```
+
+I'll move in here, and I'll define this method, _findAll_, and it'll return a list of students.
+I'll go ahead and fix the imports here for a second.
+Make sure you import on `java.util.list`.
+
+And now in step 2: Add a new method to the DAO implementation.
+We'll allow the IDE to help us with creating the stub for that method, _findAll_.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    // define field for entity manager
+    private EntityManager entityManager;
+
+    // inject entity manager using constructor injection
+    @Autowired
+    public StudentDAOImpl(EntityManager theEntityManager) {
+        this.entityManager = theEntityManager;
+    }
+
+    // implement save method
+    @Override
+    @Transactional
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
+    }
+
+    @Override
+    public Student findById(Integer id) {
+        //return null;
+        return entityManager.find(Student.class, id);
+    }
+
+    @Override
+    public List<Student> findAll() {
+        // create query
+        TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student", Student.class);
+        
+        // return query results
+        return theQuery.getResultList();
+    }
+}
+
+```
+
+And before I start writing the code, let me write some quick comments just to keep myself on track.
+The game plan is to **create the query**, and **return query results**.
+I'll go ahead and set up this **TypedQuery** of _student_, _theQuery_, 
+and then I have `entityManager.createQuery` "`FROM Student`, `student.class`".
+And remember `FROM Student`, **Student** is the actual JPA entity, the class name.
+And also remember that this is not the name of the database table.
+All JPQL syntax is based on the entity name, and entity fields, crucial.
+Now that we have the query, then we can actually return the query results by saying
+_theQuery_ that _getResultList_, and kind of stepping back here,
+and that's all the main coding here for this _findAll_ method.
+
+And just kind of moving right along here in step 3: Update our main application.
+I'll move in here to the _commandLineRunner_.
+
+```java
+package com.luv2code.cruddemo;
+
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	//public CommandLineRunner commandLineRunner(String[] args) {
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			// System.out.println("Hello World");
+			// createStudent(studentDAO);
+			// createMultipleStudents(studentDAO);
+			// readStudent(studentDAO);
+            
+            queryForStudent(studentDAO);
+		};
+	}
+
+    private void queryForStudent (StudentDAO studentDAO) {
+        
+        // get a list of students
+        
+        // display list of students
+        
+    }
+
+	private void readStudent (StudentDAO studentDAO) {
+		// create a student object
+		System.out.println("Creating new student object...");
+		Student tempStudent = new Student("Daffy", "Duck", "daffy@luv2code.com");
+
+		// save the student
+		System.out.println("Saving the student...");
+		studentDAO.save(tempStudent);
+
+		// display id of the saved student
+		int theId = tempStudent.getId();
+		System.out.println("Saved student. Generated id: " + theId);
+
+		// retrieve student based on the id: primary key
+		System.out.println("Retrieving student with id: " + theId);
+		Student myStudent = studentDAO.findById(theId);
+
+		// display student
+		System.out.println("Found the student: " + myStudent);
+	}
+
+	private void createMultipleStudents (StudentDAO studentDAO) {
+
+		// create multiple students
+		System.out.println("Creating 3 student objects...");
+		Student tempStudent1 = new Student("John", "Doe", "john@luv2code.com");
+		Student tempStudent2 = new Student("Mary", "Public", "mary@luv2code.com");
+		Student tempStudent3 = new Student("Bonita", "Applebum", "bonita@luv2code.com");
+
+		// save the student objects
+		System.out.println("Saving the students...");
+		studentDAO.save(tempStudent1);
+		studentDAO.save(tempStudent2);
+		studentDAO.save(tempStudent3);
+	}
+
+	private void createStudent (StudentDAO studentDAO) {
+
+		// create the student object
+		System.out.println("Creating new student object...");
+		Student tempStudent = new Student("Paul", "Doe", "paul@luv2code.com");
+
+		// save the student object
+		System.out.println("Saving the student...");
+		studentDAO.save(tempStudent);
+
+		// display id of the saved student
+		System.out.println("Saved student. Generated id: " + tempStudent.getId());
+	}
+}
+```
+
+I'll comment out _readStudent_, and I'll call this new method _queryForStudents_.
+And I pass in the _studentDAO_.
+Let the IDE create the stub for us for this method.
+Let me write some quick comments to kind of keep myself on track.
+
+```java
+private void queryForStudent (StudentDAO studentDAO) {
+
+    // get a list of students
+    List<Student> theStudents = studentDAO.findAll();
+    
+    // display list of students
+    for (Student tempStudent : theStudents) {
+        System.out.println(tempStudent);
+    }
+}
+```
+
+Okay, we want to get a list of students, and then display that list of students.
+I'll dive in here and start writing the code.
+I'll set up this list of students, equal studentDAO.findAll.
+Fix the imports there for `java.util.list`.
+And now just do a simple for loop here to display the list of students, by doing 
+`System.out.println(tempStudent)`.
+And that's basically it here for the coding for _queryForStudents_.
+Let's go ahead and run this application and test it out.
+
+```html
+Student{id=1, firstName='John', lastName='Doe', email='john@luv2code.com'}
+Student{id=2, firstName='Mary', lastName='Public', email='mary@luv2code.com'}
+Student{id=3, firstName='Bonita', lastName='Applebum', email='bonita@luv2code.com'}
+Student{id=4, firstName='Daffy', lastName='Duck', email='daffy@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+And success, the application printed out for students that it retrieved from the database.
+And let's swing over to MySQL workbench, and verify this.
+So we have the four students from the database also.
+And this matches with what our application displayed.
+Now let's swing back into our IDE, and I want to make a small enhancement to the application.
+I want to sort by last name.
+At the moment, things are just coming out the way we enter the data,
+and I want to sort it alphabetically by last name.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    // define field for entity manager
+    private EntityManager entityManager;
+
+    // inject entity manager using constructor injection
+    @Autowired
+    public StudentDAOImpl(EntityManager theEntityManager) {
+        this.entityManager = theEntityManager;
+    }
+
+    // implement save method
+    @Override
+    @Transactional
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
+    }
+
+    @Override
+    public Student findById(Integer id) {
+        //return null;
+        return entityManager.find(Student.class, id);
+    }
+
+    @Override
+    public List<Student> findAll() {
+        // create query
+        //TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student", Student.class);
+        TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student order by lastName", Student.class);
+
+        // return query results
+        return theQuery.getResultList();
+    }
+}
+```
+
+Let's move back into our **studentDAOImpl**, and let's modify our query here,
+"`FROM student order by lastName`", and in this case,
+_lastName_ is the field of the **JPA** entity.
+So that's the field from your Java class, not the database column but the actual **JPA** entity.
+By default, when you say `order by`, it'll sort ascending, kind of `A to Z`.
+We could also modify this to say, `order by lastName` descending, `desc`, that's for descending.
+Or we could be very explicit, and we could say `order by lastName`, `asc`, that's for ascending, 
+so up to you, but by default it's going to sort ascending.
+And I'll move in here, and I'll just be very explicit here.
+I'll just say `asc` for ascending, and let's run our application and test it out.
+
+```html
+Student{id=3, firstName='Bonita', lastName='Applebum', email='bonita@luv2code.com'}
+Student{id=1, firstName='John', lastName='Doe', email='john@luv2code.com'}
+Student{id=4, firstName='Daffy', lastName='Duck', email='daffy@luv2code.com'}
+Student{id=2, firstName='Mary', lastName='Public', email='mary@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+And excellent, so it's sorting by lastName, ascending A to Z,
+so we have `Bonita Applebum`, `Doe`, `Duck`, `Public`.
+We could also swing back in here, and modify to sort descending, `order by lastName desc`,
+descending, and let's run it one more time.
+
+```html
+Student{id=2, firstName='Mary', lastName='Public', email='mary@luv2code.com'}
+Student{id=4, firstName='Daffy', lastName='Duck', email='daffy@luv2code.com'}
+Student{id=1, firstName='John', lastName='Doe', email='john@luv2code.com'}
+Student{id=3, firstName='Bonita', lastName='Applebum', email='bonita@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+And excellent, so it's sorting by lastName descending, Z to A, `Public`, `Duck`, `Doe`, `Applebum`.
+And I can also test out the default by simply just removing desc, and now run the app and excellent.
+So it's sorting by last name, ascending A to Z.
+
+I want to do one small minor change in my _StudentDAOImpl_.
+I want to remove the order by portion of it.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    // define field for entity manager
+    private EntityManager entityManager;
+
+    // inject entity manager using constructor injection
+    @Autowired
+    public StudentDAOImpl(EntityManager theEntityManager) {
+        this.entityManager = theEntityManager;
+    }
+
+    // implement save method
+    @Override
+    @Transactional
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
+    }
+
+    @Override
+    public Student findById(Integer id) {
+        //return null;
+        return entityManager.find(Student.class, id);
+    }
+
+    @Override
+    public List<Student> findAll() {
+        // create query
+        TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student", Student.class);
+        // TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student order by lastName", Student.class);
+
+        // return query results
+        return theQuery.getResultList();
+    }
+}
+```
+
+So I just kinda remove that piece and just have `FROM Student`.
+Now, I want to add a new method to find a student by their last name.
+The first thing I'll do is I'll go through and add the method to the DAO interface.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import java.util.List;
+
+public interface StudentDAO {
+
+    void save(Student theStudent);
+
+    Student findById(Integer id);
+
+    List<Student> findAll();
+    
+    List<Student> findByLastName(String theLastName);
+}
+```
+
+We'll return a list of students, and I'll say _findByLastName_,
+then pass in a string, _theLastName_.
+And now I'll move to the DAO implementation, and I'll implement that given method.
+I have this method stub.
+Let me move in here and write some quick comments to myself.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    // define field for entity manager
+    private EntityManager entityManager;
+
+    // inject entity manager using constructor injection
+    @Autowired
+    public StudentDAOImpl(EntityManager theEntityManager) {
+        this.entityManager = theEntityManager;
+    }
+
+    // implement save method
+    @Override
+    @Transactional
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
+    }
+
+    @Override
+    public Student findById(Integer id) {
+        //return null;
+        return entityManager.find(Student.class, id);
+    }
+
+    @Override
+    public List<Student> findAll() {
+        // create query
+        TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student", Student.class);
+        // TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student order by lastName", Student.class);
+
+        // return query results
+        return theQuery.getResultList();
+    }
+
+    @Override
+    public List<Student> findByLastName(String theLastName) {
+        
+        // create query
+        
+        
+        // set query parameters
+        
+        
+        // return query results
+        return List.of();
+    }
+}
+```
+
+Here I'll just go through, and I'll create the query,
+I'll set the query parameter, and then return the query results.
+
+```java
+@Override
+public List<Student> findByLastName(String theLastName) {
+        
+    // create query
+    TypedQuery<Student> theQuery = entityManager.createQuery(
+                                        "FROM Student WHERE lastName=:theData", Student.class);
+        
+    // set query parameters
+    theQuery.setParameter("theData", theLastName);
+        
+    // return query results
+    return theQuery.getResultList();
+}
+```
+
+Find our **TypedQuery** of **Student**, and I'll make use of `entityManager.createQuery`
+and get the JPL query string, `FROM Student WHERE lastName` equals,
+I use a `:theData`, comma, `Student.class`.
+And let me knock this down to another line just so we can kind of see everything
+on one screen without having to scroll back and forth.
+And let me highlight this item here, `:theData`.
+JPQL name parameters are prefixed with a colon.
+And kind of think of this as a placeholder that we'll fill in later.
+And we'll fill it in here in this next line of set the query parameters.
+I get the name of the parameter, comma, the value.
+Again, the name parameter is `theData` and then the actual value is `theLastName`.
+That's the value that we're passing into this given method.
+The nice thing about this is the approach that we're no longer hard coding it
+like `where LastName` equals `Doe`.
+We can pass in any parameter value for it.
+And the last piece is very straightforward, right?
+We simply return `theQuery.getResultList`.
+And that's it there for the main coding here for this new method, _findByLastName_.
+Now let's swing into our main application.
+Move down here to our _commandLineRunner_.
+
+```java
+package com.luv2code.cruddemo;
+
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import java.util.List;
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	//public CommandLineRunner commandLineRunner(String[] args) {
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			// System.out.println("Hello World");
+			// createStudent(studentDAO);
+			// createMultipleStudents(studentDAO);
+			// readStudent(studentDAO);
+			// queryForStudent(studentDAO);
+			
+            queryForStudentByLastName(studentDAO);
+		};
+	}
+
+    private void queryForStudentByLastName (StudentDAO studentDAO) {
+        
+        // get a list of students
+        
+        // display list of students
+        
+    }
+
+	private void queryForStudent (StudentDAO studentDAO) {
+
+		// get a list of students
+		List<Student> theStudents = studentDAO.findAll();
+
+		// display list of students
+		for (Student tempStudent : theStudents) {
+			System.out.println(tempStudent);
+		}
+	}
+
+	private void readStudent (StudentDAO studentDAO) {
+		// create a student object
+		System.out.println("Creating new student object...");
+		Student tempStudent = new Student("Daffy", "Duck", "daffy@luv2code.com");
+
+		// save the student
+		System.out.println("Saving the student...");
+		studentDAO.save(tempStudent);
+
+		// display id of the saved student
+		int theId = tempStudent.getId();
+		System.out.println("Saved student. Generated id: " + theId);
+
+		// retrieve student based on the id: primary key
+		System.out.println("Retrieving student with id: " + theId);
+		Student myStudent = studentDAO.findById(theId);
+
+		// display student
+		System.out.println("Found the student: " + myStudent);
+	}
+
+	private void createMultipleStudents (StudentDAO studentDAO) {
+
+		// create multiple students
+		System.out.println("Creating 3 student objects...");
+		Student tempStudent1 = new Student("John", "Doe", "john@luv2code.com");
+		Student tempStudent2 = new Student("Mary", "Public", "mary@luv2code.com");
+		Student tempStudent3 = new Student("Bonita", "Applebum", "bonita@luv2code.com");
+
+		// save the student objects
+		System.out.println("Saving the students...");
+		studentDAO.save(tempStudent1);
+		studentDAO.save(tempStudent2);
+		studentDAO.save(tempStudent3);
+	}
+
+	private void createStudent (StudentDAO studentDAO) {
+
+		// create the student object
+		System.out.println("Creating new student object...");
+		Student tempStudent = new Student("Paul", "Doe", "paul@luv2code.com");
+
+		// save the student object
+		System.out.println("Saving the student...");
+		studentDAO.save(tempStudent);
+
+		// display id of the saved student
+		System.out.println("Saved student. Generated id: " + tempStudent.getId());
+	}
+}
+```
+
+We'll comment out our previous method _queryForStudents_, 
+and then we'll call this new method _queryForStudentsByLastName_.
+We're moving here into this method stub.
+Write some quick comments to ourselves, get a list of students, and then display that list of students.
+
+```java
+private void queryForStudentByLastName (StudentDAO studentDAO) {
+        
+    // get a list of students
+    List<Student> theStudent = studentDAO.findByLastName("Duck");
+    
+    // display list of students
+    for (Student tempStudent : theStudent) {
+        System.out.println(tempStudent);
+    }
+}
+```
+
+I'll set up theStudents equals `studentDAO.findByLastName` and we pass in a last name of `Duck`.
+Hopefully we'll find `Daffy Duck`.
+And then I'll simply do a list, and I'll do a print line on _tempStudent_.
+And that's the coding there for _queryForStudentsByLastName_.
+Now let's run our application and test this out.
+
+```html
+Student{id=4, firstName='Daffy', lastName='Duck', email='daffy@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+Okay, great.
+So it said student ID of four, first name `Daffy`, last name `Duck`.
+Okay, that matches.
+And now let's swing over to MySQL Workbench and verify this.
+And we can see that the student ID of four, Daffy Duck.
+Excellent, this all matches as desired.
+And let's go through and just change the last name one more time.
+Last name of `Doe`.
+Save that and run it.
+
+```html
+Student{id=1, firstName='John', lastName='Doe', email='john@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+And we get this given output, student ID of one.
+And then verifying this in our MySQL Workbench and good.
+So this all looks really good.
+We're really happy here that our query works as desired 
+using these JPQL named parameters and our `WHERE` clause.
 </div>
 
 ## [Querying Objects with JPA]()
