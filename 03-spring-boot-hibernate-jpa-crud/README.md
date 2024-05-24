@@ -1913,6 +1913,182 @@ It's making use of the primary key, the id of `1`.
 And MySQL database will handle auto incrementing of that key for any new students that we add.
 </div>
 
+### [Primary Keys]()
+<div style="text-align:justify">
+
+I wanna just investigate a bit more on the database schema here for this student table.
+Let's move to `student_tracker` and then the `student` table, 
+and then let's go ahead and view information about the table.
+So we'll simply say alter table.
+Okay, we're not gonna really alter it.
+
+![image22](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image22.png?raw=true)
+
+We're simply going to look at the database schema here for this table.
+We see that this given table has four columns.
+
+![image23](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image23.png?raw=true)
+
+ID, first name, last name, email.
+`PK` means that ID is a primary key.
+The `NN` means that it's a not null column.
+And then the `AI` means auto increment.
+So the MySQL database will handle auto increment in the primary key in managing it to make sure it's unique.
+
+```sql
+SELECT * FROM student_tracker.student;
+```
+
+And then we simply do a quick select on it, and we see that we have that one entry there.
+Now what I'd like to do here is test out the auto increment feature, 
+and we can test it out by writing some more code to create multiple students
+and add those students, and then we should see the ID column auto increment using MySQL.
+Let's go ahead and write some code to demonstrate this.
+
+```java
+package com.luv2code.cruddemo;
+
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			//createStudent(studentDAO);
+            
+            createMultipleStudents(studentDAO);
+		};
+	}
+
+	private void createStudent (StudentDAO studentDAO) {
+
+		// create the student object
+		System.out.println("Creating new student object...");
+		Student tempStudent = new Student("Paul", "Doe", "paul@luv2code.com");
+
+		// save the student object
+		System.out.println("Saving the student...");
+		studentDAO.save(tempStudent);
+
+		// display id of the saved student
+		System.out.println("Saved student. Generated id: " + tempStudent.getId());
+	}
+}
+```
+
+I'll move back to my main application here, and I'll comment out `createStudent(studentDAO)`,
+and I'll create this new method here, `createMultipleStudents(studentDAO)`.
+I'll make use of the IDE to help me generate this method, _createMultipleStudents_,
+and we'll go through, and we'll create multiple students here and then save those students using our DAO.
+
+```java
+package com.luv2code.cruddemo;
+
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			//createStudent(studentDAO);
+            
+            createMultipleStudents(studentDAO);
+		};
+	}
+
+    private void createMultipleStudents (StudentDAO studentDAO) {
+
+        // create multiple students
+        System.out.println("Creating 3 student objects...");
+        Student tempStudent1 = new Student("John", "Doe", "john@luv2code.com");
+        Student tempStudent2 = new Student("Mary", "Public", "mary@luv2code.com");
+        Student tempStudent3 = new Student("Bonita", "Applebum", "bonita@luv2code.com");
+
+        // save the student objects
+        System.out.println("Saving the students...");
+        studentDAO.save(tempStudent1);
+        studentDAO.save(tempStudent2);
+        studentDAO.save(tempStudent3);
+
+    }
+    
+	private void createStudent (StudentDAO studentDAO) {
+
+		// create the student object
+		System.out.println("Creating new student object...");
+		Student tempStudent = new Student("Paul", "Doe", "paul@luv2code.com");
+
+		// save the student object
+		System.out.println("Saving the student...");
+		studentDAO.save(tempStudent);
+
+		// display id of the saved student
+		System.out.println("Saved student. Generated id: " + tempStudent.getId());
+	}
+}
+```
+
+Let me go ahead and do a little quick copy and paste on some of our code here.
+So I'll just copy this section from our previous method, and then I'll paste it here.
+Creating three student objects, and I'll call this `tempStudent1`,
+and I'll give the student a new name, `John Doe`, update his email address
+and let me copy this line and then paste it 3 number of times.
+So I have `tempStudent2` and `tempStudent3`.
+Let's just update their information just so it's different, and we can easily see it in the database.
+`Mary Public`, and then `Bonita Applebum`.
+So we have our three students created, _John_, _Mary_, and _Bonita_.
+And then let's go ahead and write the appropriate code to save those student objects.
+Here we'll say `studentDAO.save(tempStudent1)`.
+Let me copy and paste these three numbers of times.
+Save student two and student three.
+Let's go ahead and run our application and test it out.
+
+```html
+Creating 3 student objects...
+Saving the students...
+
+Process finished with exit code 0
+```
+
+And so it said, creating three student objects, saving the students.
+And let's swing over to our MySQL Workbench.
+Let's run our query again.
+
+![image24](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image24.png?raw=true)
+
+And success.
+So we have those three new students, a total of four.
+And notice here how MySQL handles the auto increment of the ID column.
+Okay, it's done automatically in the background by the database, which is really cool.
+And that's basically it.
+So we saw an example of saving one student, and then also saving multiple students,
+and also how MySQL handles the auto increment of the ID column.
+</div>
+
+
+
 ## [Reading Objects with JPA]()
 <div style="text-align:justify">
 
