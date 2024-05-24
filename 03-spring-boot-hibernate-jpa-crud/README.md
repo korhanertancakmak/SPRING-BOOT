@@ -32,7 +32,7 @@ or you'll hear the buzzword or keyword called `ORM`.
 As a developer, all you need to do is tell **Hibernate** 
 how your Java class or object maps to the data in the database.
 
-![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image01.png?raw=true)
+![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image01.png?raw=true)
 
 In fact, you'll map your Java class to a given database table.
 In this example, on the far left we have our Java class,
@@ -60,7 +60,7 @@ It's the standard API for Object-to-Relational mapping, or ORM,
 it's only a specification, defines a set of interfaces,
 and it requires an implementation to be usable.
 
-![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image02.png?raw=true)
+![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image02.png?raw=true)
 
 Now let's take a look at some **JPA** vendor implementations.
 So we start with the **JPA Spec**,
@@ -89,7 +89,7 @@ which is a good thing.
 And the reason for this is that 
 you're coding to the actual **JPA** specification or the standard API.
 
-![image03](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image03.png?raw=true)
+![image03](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image03.png?raw=true)
 
 Let's take a look at a scenario here of swapping vendor implementations.
 We have our application, `MyBizApp`, that's the code that we're creating,
@@ -204,7 +204,7 @@ and it'll give you all the students from a given database.
 And you can also set up special wear clauses using `alike` conditions, and so on.
 I'll share examples of that later on.
 
-![image04](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image04.png?raw=true)
+![image04](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image04.png?raw=true)
 
 Alright, so the nice thing to hear is
 that I showed you a very high-level example here of using **Hibernate JPA**, 
@@ -219,7 +219,7 @@ and we'll cover all of that in the following sections.
 And then we'll wrap everything up with a small project,
 so you can actually see how all of this comes together.
 
-![image05](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image05.png?raw=true)
+![image05](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image05.png?raw=true)
 
 I'm going to discuss the relationship between **Hibernate/JPA** and **JDBC**.
 Now, a frequently asked question, how does **Hibernate/JPA** relate to **JDBC**?
@@ -289,7 +289,7 @@ and it's real simple here.
 The user ID is going to be `springstudent` and the password will be `springstudent`.
 And then we have the second file here, `02-student-tracker.sql`.
 
-![image06](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image06.png?raw=true)
+![image06](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image06.png?raw=true)
 
 This will actually create the database table for our application called **student**,
 and it'll create these four fields here:
@@ -326,7 +326,7 @@ And basically it went through and created the actual user.
 Now, if I click on the administration tab over on the left-hand side and select users and privileges,
 then we should see this new account that was just created, `springstudent`.
 
-![image07](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image07.png?raw=true)
+![image07](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image07.png?raw=true)
 
 And now a bit more about this SQL here is that we've said `CREATE USER`,
 user id `springstudent`, `IDENTIFIED BY` `springstudent`.
@@ -334,22 +334,22 @@ That's the password.
 All right, so now let's go ahead and move out or close this connection.
 And then let's go ahead and create a new connection for this `springstudent`.
 
-![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image08.png?raw=true)
+![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image08.png?raw=true)
 
 So I'll hit on the plus here for connection.
 I'll give a connection name, I'll just call it `springstudent`, and the username `springstudent`.
 Let's go ahead and click on Test Connection.
 
-![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image09.png?raw=true)
+![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image09.png?raw=true)
 
 And then we'll enter the password of `springstudent`.
 And now we have this new connection with `springstudent`.
 
-![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image10.png?raw=true)
+![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image10.png?raw=true)
 
 And that's the one that we'll use in this course.
 
-![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image11.png?raw=true)
+![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image11.png?raw=true)
 
 So let's go ahead and use this connection to go ahead and connect to MySQL.
 Let me click on the tab for **schemas**.
@@ -381,14 +381,14 @@ And behind the scenes, this basically creates the database schema for us called 
 And then it'll actually create a table for us called **student** that's going to have four columns here.
 Id first name, last name, and email.
 
-![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image12.png?raw=true)
+![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image12.png?raw=true)
 
 Let's go ahead and hit the gold lightning bolt here to execute it.
 And that looks okay.
 Over on the left-hand side, let's hit the little arrows here to refresh, or reload the schemas.
 And we should see this new schema.
 
-![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image13.png?raw=true)
+![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image13.png?raw=true)
 
 So this is great.
 So we have `student_tracker`, that's our database schema name.
@@ -507,7 +507,7 @@ And then for artifact ID, I'll call it `cruddemo`.
 Over in the dependency section, let's go ahead and add a new dependency here for the **MySQL** driver.
 And also, let's add a dependency here for a **Spring Data JPA**.
 
-![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image14.png?raw=true)
+![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image14.png?raw=true)
 
 All right, and just as a checkpoint, make sure you have these two dependencies
 as I have shown here on the screen.
@@ -974,7 +974,7 @@ I'll simply say **JPA** because we know that by default,
 For terminology, we have this term called **Entity** class,
 and that's a Java class mapped to a database table.
 
-![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image15.png?raw=true)
+![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image15.png?raw=true)
 
 And here we'll make use of this object to relational mapping.
 Again, mapping a Java class to a database table.
@@ -1381,7 +1381,7 @@ We'll make use of a student data access object.
 The data access object is responsible for interfacing with the database.
 This is a very common design pattern: `Data Access Object (DAO)`.
 
-![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image16.png?raw=true)
+![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image16.png?raw=true)
 
 Here, we have our application.
 It's going to communicate with this data access object or DAO,
@@ -1410,7 +1410,7 @@ In our scenario, our data access object needs a **JPA EntityManager**.
 Now the **JPA EntityManager**'s the main component for saving and retrieving entities.
 So we have our student DAO here.
 
-![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image17.png?raw=true)
+![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image17.png?raw=true)
 
 It's going to make use of an **EntityManager** that also has some other supporting components,
 and then communicating with the actual database.
@@ -1480,7 +1480,7 @@ If you want a `high level of abstraction`, then make use of **JpaRepository**.
 Now let's dig into this a bit and talk more about these use cases here.
 Starting with EntityManager.
 
-![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image18.png?raw=true)
+![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image18.png?raw=true)
 
 EntityManager's useful when you need low-level control over the database operations,
 and you want to write custom queries.
@@ -1610,7 +1610,7 @@ And **Spring** also provides some specialized annotations for DAOs.
 **Spring** has this `@Repository` annotation,
 that's basically a sub annotation of `@Component`.
 
-![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image19.png?raw=true)
+![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image19.png?raw=true)
 
 And so you have a normal component that we learned about earlier in the course,
 and we saw some examples of `@RESTController`, and we had this `@Repository`.
@@ -1884,7 +1884,7 @@ Once I'm connected, I'll go into the `student_tracker` database schema,
 I'll choose this table here, student, I'll run a query on this table,
 and notice here that this given database table is empty.
 
-![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image20.png?raw=true)
+![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image20.png?raw=true)
 
 There's nothing in it.
 Remember, we created this table earlier, but we haven't added any students to it.
@@ -1903,7 +1903,7 @@ Alright, so our application executed it, said,
 _hey, creating a new student, saving a student, saved a student, generated id of 1_.
 Let's swing over to our MySQL workbench and let's do a little refresh here.
 
-![image21](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-hibernate-jpa-crud/images/image21.png?raw=true)
+![image21](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image21.png?raw=true)
 
 Re-executing that query and then success.
 So here we see that we have `Paul Doe, paul@luv2code.com` and then notice the id of `1`.
