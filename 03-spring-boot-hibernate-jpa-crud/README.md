@@ -3568,11 +3568,486 @@ We retrieved the student, made some modifications to it, and then we saved it to
 ## [Deleting Objects with JPA]()
 <div style="text-align:justify">
 
+Now, we'll learn how to delete an object.
+And with our development process for **JPA CRUD** Apps, we're almost done.
+So we've covered the `create`, `read`, and `update`.
+The final item here is performing a `delete` on a given object
+and that'll cover the major steps for **CRUD** development.
 
+```java
+// retrieve the student
+int id = 1;
+Student theStudent = entityManager.find(Student.class, id);
+
+// delete the student
+entityManager.remove(theStudent);
+```
+
+To delete a student, we call this `entityManager.find`,
+pass any `id`, the primary key of that given student.
+Then we call `entityManager.remove`.
+That'll actually delete the student from the database.
+
+```java
+int numRowsDeleted = entityManager.createQuery(
+                "DELETE FROM Student WHERE lastName='Smith'")
+                .executeUpdate();
+```
+
+We can also delete multiple students based on a condition.
+Here I can say `entityManager.createQuery`,
+`DELETE FROM Student WHERE lastName` equals `Smith`.
+Here I'm basically deleting all students who have the last name of `Smith`.
+And notice here the syntax `DELETE FROM Student`,
+`Student` is the name of the **JPA** entity, the class name,
+and last name's the actual field of the **JPA** entity.
+Then I make use to this `executeUpdate` to execute this statement.
+Now, one thing to be aware of here, you're probably wondering, well, we're doing a `DELETE`.
+Why does it say `executeUpdate`?
+Well, in the **API**, the method name `Update` is simply a generic term.
+It basically means that we're **modifying** the database.
+So we could be performing an `Update`, performing a `Delete`, or whatever.
+We're simply doing something to the database.
+So don't think of this as trying to match to the actual JPQL that we're using,
+here it's just a generic term.
+We're simply **modifying** the database.
+And once this statement is executed, then it'll return the _numRowsDeleted_.
+Here, we'll say that's the _numRowsDeleted_ that were deleted.
+So you could tell the user, "_Hey, I perform this operation and I deleted X number of rows._"
+
+```java
+int numRowsDeleted = entityManager
+                            .createQuery("DELETE FROM Student")
+                            .executeUpdate();
+```
+
+Now you could also delete all the students from a database.
+Here I'll make use of this `entityManager.createQuery`, `DELETE FROM Student`.
+And notice here, there are no conditions.
+We're just going to delete all the students.
+And then I have this `.executeUpdate()`.
+Again, it'll return the number of rows that were deleted.
+
+Now, let's look at the development process for integrating this into our DAO application:
+
+1. Add the new method to the DAO interface
+2. Add the new method to the DAO implementation
+3. Update the main app.
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+
+public interface StudentDAO {
+    
+    // ...
+    
+    void delete(Integer id);
+}
+```
+
+Step 1: Adding a new method to the DAO interface.
+We have this new method here, _delete_, we pass in an Integer id.
+And then in step 2: Define the DAO implementation.
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import org.springframework.transaction.annotation.Transactional;
+// ...
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    private EntityManager entityManager;
+    // ...
+
+    @Override
+    @Transactional
+    public void delete(Integer id) {
+        // retrieve the student
+        Student theStudent = entityManager.find(Student.class, id);
+
+        // delete the student
+        entityManager.remove(theStudent);
+    }
+}
+```
+
+We add this new method here, _delete_, and `Integer id`.
+We make use of this `entityManager.find`, `Student.class` comma `id`.
+And then we also say `entiteManager.remove`, `theStudent`.
+And also we add the `@Transactional` annotation since we're performing a **delete**,
+we're actually _modifying_ the database by executing this given code.
+And then finally in step 3: Update the main application.
+
+```java
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+// ...
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	//public CommandLineRunner commandLineRunner(String[] args) {
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			// System.out.println("Hello World");
+			// createStudent(studentDAO);
+			// createMultipleStudents(studentDAO);
+			// readStudent(studentDAO);
+			// queryForStudent(studentDAO);
+			// queryForStudentByLastName(studentDAO);
+			// updateStudent(studentDAO);
+			
+            deleteStudent(studentDAO);
+		};
+	}
+
+	private void deleteStudent(StudentDAO studentDAO) {
+        // delete the student
+        int studentId = 3;
+
+        System.out.println("Deleting student id: " + studentId);
+        
+        studentDAO.delete(studentId);
+	}
+    
+    // ...
+}
+```
+
+We move here into our _commandLineRunner_ section.
+We call this method _deleteStudent_.
+And then here's the coding for _deleteStudent_.
+In this example, we have the _studentId_ of `3`, 
+and then we make use of this `studentDAO.delete(studentId)`.
+And that _delete_ method was implemented on the previous code for the given DAO.
+Now, before we run this application, let's verify that we have data in the database,
+and in particular the `studentId` of `3`.
+I'll swing over to MySQL Workbench.
+I'll just run a query here on this student table.
+
+![image32](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image32.png?raw=true)
+
+And we do have the `studentId` of `3`, `Bonita Applebum`.
+Now let's go ahead and run our application.
+
+```html
+Deleting student id: 3
+
+Process finished with exit code 0
+```
+
+And it says, hey, deleting `studentId` of `3`.
+Let's verify this in the database.
+Just run that query one more time.
+
+![image33](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image33.png?raw=true)
+
+And success.
+Notice here, `studentId` of `3` has been deleted.
+No longer there.
+So this kind of works out as desired.
+
+I'd like to also add codes to our application
+to **delete** all the students from the database.
+Let's swing back into our IDE, and we'll start off by adding a new method here
+to our **studentDAO** interface, and this is for deleting all the students.
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+
+public interface StudentDAO {
+    
+    // ...
+    
+    int deleteAll();
+}
+```
+
+I'll have this method that returns an `int` because we want to know 
+how many people we deleted from the database.
+I'll call it `deleteAll()` and that's it.
+So that's our new method here, `deleteAll()`.
+Now let's go ahead and move into our DAO implementation,
+and let's go ahead and implement this method. 
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import org.springframework.transaction.annotation.Transactional;
+// ...
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    private EntityManager entityManager;
+    // ...
+
+    @Override
+    @Transactional
+    public int deleteAll() {
+        // retrieve the student
+        int numRowsDeleted = entityManager.createQuery("DELETE FROM Student").executeUpdate();
+
+        // delete the student
+        entityManager.remove(theStudent);
+    }
+}
+```
+
+I'll add the `@Transactional` annotation since we're performing a **delete**,
+or we're **modifying** the database.
+I'll set up this integer, numRowsDeleted,
+I'll call `entityManager.createQuery` and I'll say `DELETE FROM Student`.
+And then we execute this statement.
+Now remember the method name **update** is just a generic term
+more simply **modifying** the database.
+And then we simply return the number of rows deleted and that's it.
+That's all the coding here that we need for this method.
+Now the final step here is just updating the main application.
+
+```java
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+// ...
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	//public CommandLineRunner commandLineRunner(String[] args) {
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			// System.out.println("Hello World");
+			// createStudent(studentDAO);
+			// createMultipleStudents(studentDAO);
+			// readStudent(studentDAO);
+			// queryForStudent(studentDAO);
+			// queryForStudentByLastName(studentDAO);
+			// updateStudent(studentDAO);
+            // deleteStudent(studentDAO);
+            
+            deleteAllStudent(studentDAO);
+		};
+	}
+
+	private void deleteAllStudent(StudentDAO studentDAO) {
+
+        System.out.println("Deleting all students");
+        int numRowsDeleted = studentDAO.deleteAll();
+        System.out.println("Deleted row count: " + numRowsDeleted);        
+	}
+    
+    // ...
+}
+```
+
+Just moving down to our _commandLineRunner_ section,
+let's comment out our previous line of code, and then we'll call this new method, _deleteAllStudent_.
+We'll simply generate this method stub.
+Just add a quick outline of what we're doing here, we're deleting all students.
+We know that this _deleteAll_ was going to return our integer
+as far as the number of rows deleted, so we simply make an assignment here,
+and then we call `studentDAO.deleteAll`.
+And finally, we print out how many rows were deleted.
+Now, before we run this application again, let's verify that we have data in our database.
+Let's go ahead and swing over to MySQL Workbench.
+Just do a refresh on our query.
+
+![image34](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image34.png?raw=true)
+
+So at the moment now we have three students, okay.
+Let's go ahead and run our main application
+
+```html
+Deleting all students
+Deleted row count: 3
+
+Process finished with exit code 0
+```
+
+And great, it says deleting all students,
+deleted row count equals three.
+Swing back into our MySQL Workbench and do a query again: 
+
+![image35](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image35.png?raw=true)
+
+And awesome.
+So, notice here everyone's been deleted
+and this matches up with the information presented by our application.
 </div>
 
 ## [Creating Database Tables from Java Code]()
 <div style="text-align:justify">
 
+In this section, we're going to create database tables from Java code.
+So previously we created the database tables by running an SQL script,
+and we would run that script in the MySQL Workbench.
+But there's another option here.
+**Hibernate** provides the option to auto **automagically**
+create the database tables for you.
+So it'll actually create the tables based on Java code with **JPA/Hibernate** annotations.
+And this is very useful for development and testing.
 
+![image36](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image36.png?raw=true)
+
+So basically you have your Java code with the annotations
+you run it through this **Hibernate** tool, and then it'll actually generate the SQL
+and also execute that SQL and apply it to the given database.
+So there's no need for you to write any of the SQL.
+It'll actually generate and apply it on the fly, which is really cool.
+
+```properties
+spring.jpa.hibernate.ddl-auto=create
+```
+
+So in the **Hibernate** configuration file, you'll set up `application.properties`,
+and you give a property value.
+Here we'll call it `create`. 
+So when you run your application, **Hibernate** will **drop** the tables
+and then **create** them again from scratch.
+And these are is all based on the **JPA/Hibernate** annotations that are in your Java code.
+
+```java
+@Entity
+@Table(name="student")
+public class Student {
+    
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="id")
+    private int id;
+    
+    @Column(name="first_name")
+    private String firstName;
+    
+    @Column(name="last_name")
+    private String lastName;
+    
+    @Column(name="email")
+    private String email;
+    
+    // ... constructors, getters / setters
+}
+```
+
+We have our student, and we have our **JPA/Hibernate** annotations here.
+So it'll create a table called **student**, and then we have `id`
+and then we also have all the columns.
+
+```sql
+create table student (id integer not null auto_increment, 
+                      email varchar(255),
+                      first_name varchar(255),
+                      last_name varchar(255),
+                      primary key (id))
+```
+
+So **Hibernate** will use this information to actually generate the SQL
+and execute SQL and apply it to the given database.
+So **Hibernate** will do all of this work for you behind the scenes, which is really cool.
+
+```properties
+spring.jpa.hibernate.ddl-auto=PROPERTY-VALUE
+```
+
+So there are different property values that you can set here.
+
+| Property Value | Property Description                                                                                                     |
+|----------------|--------------------------------------------------------------------------------------------------------------------------|
+| `none`         | No action will be performed                                                                                              |
+| `create-only`  | Database tables are only created                                                                                         |
+| `drop`         | Database tables are dropped                                                                                              |
+| `create`       | Database tables are dropped followed by database tables creation                                                         |
+| `create-drop`  | Database tables are dropped followed by database tables creation.<br/> On application shutdown, drop the database tables |
+| `validate`     | Validate the database tables schema                                                                                      |
+| `update`       | Update the database tables schema                                                                                        |
+
+
+So one value you can say is `none`.
+So in that case, no action will be performed.
+There's a `create-only`, so the database tables are only created.
+For `drop`, database tables are dropped.
+Now, when we say `drop`, that means that all data is lost,
+everything goes away, you lose everything.
+So for `create` option, there's the database tables are dropped,
+followed by a database table creation.
+For `create-drop`, it will drop the database tables and recreate on startup.
+So basically when your application finishes running,
+it'll actually drop the tables, so you'll have nothing at the end of the application.
+And this is primarily useful for unit testing.
+They also have the `validate` option to validate the database table schema.
+And then there's `update`.
+So if you add any new fields to your entity, it'll provide the appropriate updates
+on the given database table.
+For ease of development and testing, we'll actually use auto-configuration.
+
+```properties
+spring.jpa.hibernate.ddl-auto=create
+```
+
+So we'll make use of the property for `create`.
+And so the database tables are **dropped** first and then **created** from scratch.
+And so again, just a reminder, when database tables are **dropped**, all data is **lost**.
+But this is fine just for dev and testing.
+If you want to create the tables once and then keep the data,
+then make you so the `update` config.
+
+```properties
+spring.jpa.hibernate.ddl-auto=update
+```
+
+However, be aware this will alter the database schema based on the latest code updates.
+Be **very** careful here.
+Only use this for basic projects because you could actually change the database schema
+with this configuration, and it may affect other applications using that given database.
+
+Now also, kind of my warning here, I want to just kind of full disclosure here.
+Disclaimer, don't do this on **Production** databases.
+You don't want to **drop** your **Production** data because if you drop your **Production** data,
+all data is deleted.
+And that's a really bad position to be in as a developer
+and having to talk to your manager or your IT team and say, 
+"_Hey I dropped all the production data._"
+I understand there are backups out there and so on.
+But you simply don't want to be in that position of having to say, 
+"_I screwed up. 
+I made a problem, I deleted all the data._"
+So just be very careful here.
+And instead, for production, you should have DBAs run SQL scripts
+and let them manage the production data.
+You want to try and stay hands off as much as possible.
+
+Now, you may wonder, "`Well, what's the use case for this configuration?`"
+Well, automatic table generation is useful for database integration testing using in-memory databases.
+And it's also really good for basic hobby projects
+where you're the only developer working on it in a small isolated fashion.
+
+And so my recommendation here is in general,
+I don't recommend auto generation for enterprise, real-time projects
+because you can very easily drop production data if you're not careful.
+Instead, I recommend using SQL scripts.
+Corporate DBAs prefer SQL scripts for governance and code reviews.
+The SQL scripts can be customized and fine-tuned for very complex database designs.
+And you can also version-control these scripts.
+And finally, you can make use of these SQL scripts to work with schema migration tools
+such as **Liquibase** and **Flyway**.
+The key takeaway here, table generation is very useful for small, basic hobby projects
+that you're working with on your own.
+For real-time, real world applications, make use of SQL scripts.
+Let's test out this configuration.
 </div>
