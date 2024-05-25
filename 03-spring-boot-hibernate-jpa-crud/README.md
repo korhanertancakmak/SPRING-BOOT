@@ -3345,7 +3345,224 @@ using these JPQL named parameters and our `WHERE` clause.
 ## [Updating Objects with JPA]()
 <div style="text-align:justify">
 
+In this section, we'll learn how to update an object.
+And we're making some really good progress here with building a `CRUD` app.
+We've covered the `create`, and `read` aspect.
+Here, we'll focus on updating an object. 
 
+```java
+Student theStudent = entityManager.find(Student.class, 1);
+
+// change first name to "Scooby"
+theStudent.setFirstName("Scooby");
+
+entityManager.merge(theStudent);
+```
+
+Now, to `update` an object, we first find the object by using `entityManager.find`.
+Then we simply call a setter method on the objects to actually change their value.
+There, we go ahead and perform an `entityManager.merge`.
+So the _merge_ portion here will tell the entity manager
+to update this given object or update the entity.
+
+```java
+int numRowsUpdated = entityManager.createQuery("UPDATE Student SET lastName='Tester'").executeUpdate();
+```
+
+Now, the previous example was for updating a single object.
+You can also update multiple objects.
+Here, we're going to update the last name for all students.
+I'll make use of this `entityManager.createQuery`,
+I'll perform an `UPDATE Student`, and I'll `SET lastName='Tester'`.
+So we're basically changing the last name for everyone to have the _lastName_ of `Tester`.
+And remember here, `UPDATE Student`, `Student` is the name of the **JPA** Entity, the class name,
+and _lastName_ is the field of the **JPA** Entity.
+And then we call _executeUpdate_ to actually execute this given statement.
+And now this statement will execute, perform the work,
+and then it'll return the number of rows that were updated.
+So you could say, "_Hey, we updated five rows or updated 100 rows._"
+
+Here's the development process for adding this to our DAO:
+
+1. Add the new method to the DAO interface
+2. Add the new method to the DAO implementation
+3. Wrap it up by updating our main application
+
+Alright, starting with step 1: Add a new method to the DAO interface.
+
+```java
+import com.luv2code.cruddemo.entity.Student;
+
+public interface StudentDAO {
+    // ...
+    
+    void update(Student theStudent);
+}
+```
+
+We'll have this method here called _update_, and we'll pass in _theStudent_.
+
+```java
+package com.luv2code.cruddemo.dao;
+
+import com.luv2code.cruddemo.entity.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+// ...
+import java.util.List;
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+
+    private EntityManager entityManager;
+    // ...
+
+    @Override
+    @Transactional
+    public void update(Student theStudent) {
+        entityManager.merge(theStudent);
+    }
+}
+
+```
+
+And then in step 2: Defining the DAO implementation,
+we'll have this method here, update that takes a student,
+and it will make use of this `entityManager.merge`.
+We pass in _theStudent_.
+This will perform an update for this given student.
+Now, also notice here that we add the `@Transactional` annotation,
+since we're actually performing an update on the database.
+In the previous examples, like for all the queries and reads, 
+those were kinda read-only, so there was no need for the `@Transactional` annotation,
+but here, we're actually performing an update or a modification, 
+so here, we need to make use of the `@Transactional` annotation.
+
+```java
+package com.luv2code.cruddemo;
+
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+import java.util.List;
+// ...
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+
+			updateStudent(studentDAO);
+		};
+	}
+
+    // ...
+}
+```
+
+And then finally, here in step 3: Update our main application.
+In our section here for our _commandLineRunner_, we call this method _updateStudent_,
+and then we define the method for _updateStudent_.
+
+```java
+private void updateStudent(StudentDAO studentDAO) {
+
+    // retrieve student based on the id: primary key
+    int studentId = 1;
+    System.out.println("Getting student with id: " + studentId);
+    Student myStudent = studentDAO.findById(studentId);
+
+    // change first name to "Scooby"
+    System.out.println("Updating student...");
+    myStudent.setFirstName("Scooby");
+
+    // update the student
+    studentDAO.update(myStudent);
+
+    // display updated student
+    System.out.println("Updated student: " + myStudent);
+}
+```
+
+Inside the method, we simply retrieve the student based on their ID or their primary key,
+make use of the `studentDAO.findById`.
+We pass on the _studentId_ of `1`, and then we change the _firstName_ of the student to `Scooby`.
+Then we make use of our DAO method, `studentDAO.update`,
+and that'll call the method that we created in the previous code.
+And then finally, we print out the updated student.
+
+Now let's go ahead and run this application and test it out.
+
+```html
+Getting student with id: 1
+Updating student...
+Updated student: Student{id=1, firstName='Scooby', lastName='Doe', email='john@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+And excellent, so it says, getting student ID of `1`, updating the student,
+and then finally printing out the updated student.
+Notice here, the first name is `Scooby`.
+Now let's go ahead and swing over to MySQL Workbench and let's verify this.
+Go to my student table, do a query:
+
+![image30](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image30.png?raw=true)
+
+And success.
+Notice here, student ID of `1`, the first name is now `Scooby`,
+and this matches with the actual code output that we had from our IDE.
+Now let me swing back into my application and make a slight update here.
+
+```java
+private void updateStudent(StudentDAO studentDAO) {
+
+    // retrieve student based on the id: primary key
+    int studentId = 1;
+    System.out.println("Getting student with id: " + studentId);
+    Student myStudent = studentDAO.findById(studentId);
+    
+    // change first name to "Scooby"
+    System.out.println("Updating student...");
+    //myStudent.setFirstName("Scooby");
+
+    // change first name to "John"
+    myStudent.setFirstName("John");
+
+    // update the student
+    studentDAO.update(myStudent);
+
+    // display updated student
+    System.out.println("Updated student: " + myStudent);
+}
+```
+
+I'll change the name back to `John`.
+So just quick updates here in the code.
+Be sure to save all that stuff and run it one more time.
+
+```html
+Getting student with id: 1
+Updating student...
+Updated student: Student{id=1, firstName='John', lastName='Doe', email='john@luv2code.com'}
+
+Process finished with exit code 0
+```
+
+Here it says the first name of `John`, which is good.
+Swing back into our MySQL Workbench, run our query one more time
+
+![image31](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image31.png?raw=true)
+
+And great.
+So this kind of matches up with what we had.
+So you can see here we're successful and updating a student.
+We retrieved the student, made some modifications to it, and then we saved it to the database accordingly.
 </div>
 
 ## [Deleting Objects with JPA]()
