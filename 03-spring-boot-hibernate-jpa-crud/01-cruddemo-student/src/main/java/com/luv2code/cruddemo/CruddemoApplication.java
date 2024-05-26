@@ -22,14 +22,13 @@ public class CruddemoApplication {
 		return runner -> {
 			// System.out.println("Hello World");
 			// createStudent(studentDAO);
-			// createMultipleStudents(studentDAO);
+			createMultipleStudents(studentDAO);
 			// readStudent(studentDAO);
 			// queryForStudent(studentDAO);
 			// queryForStudentByLastName(studentDAO);
 			// updateStudent(studentDAO);
 			// deleteStudent(studentDAO);
-
-			deleteAllStudent(studentDAO);
+			// deleteAllStudent(studentDAO);
 		};
 	}
 

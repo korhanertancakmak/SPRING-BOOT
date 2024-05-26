@@ -4050,4 +4050,300 @@ The key takeaway here, table generation is very useful for small, basic hobby pr
 that you're working with on your own.
 For real-time, real world applications, make use of SQL scripts.
 Let's test out this configuration.
+
+
+The first thing I'd like to do is add some logging configs to log the SQL statements.
+This will help us out, as we see how the configurations work, and also the actual, 
+the SQL statements that are actually executed on the database.
+Very good for diagnostics, and also as an academic exercise.
+And what I'll do here is, I'll open up my `application.properties` file.
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/student_tracker
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+
+# Turn off the Spring Boot banner
+spring.main.banner-mode=off
+
+# Reduce logging level. Set logging level to warn
+logging.level.root=warn
+
+# Add loging configs to display SQL statements
+logging.level.org.hibernate.SQL=debug
+logging.level.org.hibernate.orm.jdbc.bind=trace
+```
+
+I'll add these logging configs here, to log the SQL statements.
+So there are two configs that we need to add.
+I'll set the `logging.level.org.hibernate.SQL` to `debug` to see **log SQL statements**,
+so we're basically going to get some `debug` logs here.
+And also I'll set the `logging.level.org.hibernate.orm.jdbc.bind=trace`
+to see **Log values for SQL statements**.
+This allows seeing the actual values that are being assigned for these statements.
+Let's go ahead and save this file, and let's go ahead and move over to our main application.
+
+```java
+import com.luv2code.cruddemo.dao.StudentDAO;
+import com.luv2code.cruddemo.entity.Student;
+// ...
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	//public CommandLineRunner commandLineRunner(String[] args) {
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+		return runner -> {
+			// System.out.println("Hello World");
+			// createStudent(studentDAO);
+			createMultipleStudents(studentDAO);
+			// readStudent(studentDAO);
+			// queryForStudent(studentDAO);
+			// queryForStudentByLastName(studentDAO);
+			// updateStudent(studentDAO);
+			// deleteStudent(studentDAO);
+            // deleteAllStudent(studentDAO);
+		};
+	}
+
+	// ...
+}
+```
+
+I want to make some small modifications here in the app.
+Move down to this _commandLineRunner_ section, 
+and I'll comment out the code for _deleteAllStudent_,
+and then I'll uncomment the code for _createMultipleStudents_.
+And this is the code that'll basically add three students to our database.
+Let's go ahead and run this application, and test it out real quickly.
+
+```html
+Creating 3 student objects...
+Saving the students...
+2024-05-26T15:11:46.285+03:00 DEBUG 50356 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:11:46.297+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [john@luv2code.com]
+2024-05-26T15:11:46.297+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [John]
+2024-05-26T15:11:46.297+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Doe]
+2024-05-26T15:11:46.327+03:00 DEBUG 50356 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:11:46.327+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [mary@luv2code.com]
+2024-05-26T15:11:46.327+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Mary]
+2024-05-26T15:11:46.327+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Public]
+2024-05-26T15:11:46.335+03:00 DEBUG 50356 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:11:46.336+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [bonita@luv2code.com]
+2024-05-26T15:11:46.336+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Bonita]
+2024-05-26T15:11:46.336+03:00 TRACE 50356 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Applebum]
+
+Process finished with exit code 0
+```
+
+Notice here we have some new logging statements here for debug and trace.
+Just scrolling over here, we can see the actual `insert` statement, 
+and also the values that they'll insert.
+So this is for `John Doe`, and a similar insert here for `Mary Public`.
+And then finally, my favorite, `Bonita Applebaum`.
+And so we basically just added these configs here, for logging that data.
+And let's just do a quick query here.
+
+![image37](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image37.png?raw=true)
+
+And yes, we have the data.
+Now one thing to notice here, is that we have different IDs,
+since we ran the app multiple times before, right?
+We added some items, we deleted some items, and all that good stuff.
+So that's why you see some slight differences here, on the actual ID.
+Okay, what I'd like to do now is break the app on purpose.
+I actually want to drop the table for **student**, such that it's no longer there.
+We no longer have the table, no longer have the data, and run our app, and see what happens.
+
+![image38](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image38.png?raw=true)
+
+I'll grab this **student** table, and then I'll drop the table, and I'll choose the option drop now.
+And now, if I run my query again, then,
+
+![image39](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image39.png?raw=true)
+
+If you notice, at the bottom, we have an error message,
+and it says table **student** does not exist.
+Alright, so the table's dropped.
+It no longer exists.
+Even if we do a refresh over here on the left-hand side,
+we'll see that there are no tables right now,
+we only had one table, and that one table was **student**, and we dropped that table.
+Now let's go ahead and move back into our application.
+Let's run our application, and see what happens.
+
+```html
+Creating 3 student objects...
+Saving the students...
+2024-05-26T15:20:08.512+03:00 DEBUG 48112 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:20:08.538+03:00 TRACE 48112 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [john@luv2code.com]
+2024-05-26T15:20:08.539+03:00 TRACE 48112 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [John]
+2024-05-26T15:20:08.539+03:00 TRACE 48112 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Doe]
+2024-05-26T15:20:08.563+03:00  WARN 48112 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1146, SQLState: 42S02
+2024-05-26T15:20:08.563+03:00 ERROR 48112 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : Table 'student_tracker.student' doesn't exist
+2024-05-26T15:20:08.611+03:00 ERROR 48112 --- [           main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute statement [Table 'student_tracker.student' doesn't exist] [insert into student (email,first_name,last_name) values (?,?,?)]; SQL [insert into student (email,first_name,last_name) values (?,?,?)]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:277) ~[spring-orm-6.1.8.jar:6.1.8]
+	at org.sprinframework.boot.SpringApplication.run(SpringApplication.java:1352) ~[spring-boot-3.3.0.jar:3.3.0]
+    ... 41 common frames omitted
+    at com.luv2code.cruddemo.CruddemoApplication.main(CruddemoApplication.java:16) ~[classes/:na]
+Caused by: org.hibernate.exception.SQLGrammarException: could not execute statement [Table 'student_tracker.student' doesn't exist] [insert into student (email,first_name,last_name) values (?,?,?)]
+	at org.hibernate.exception.internal.SQLExceptionTypeDelegate.convert(SQLExceptionTypeDelegate.java:66) ~[hibernate-core-6.5.2.Final.jar:6.5.2.Final]
+	at org.hiingframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-6.1.8.jar:6.1.8]
+	... 71 common frames omitted
+Caused by: java.sql.SQLSyntaxErrorException: Table 'student_tracker.student' doesn't exist
+	at com.mernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:194) ~[hibernate-core-6.5.2.Final.jar:6.5.2.Final]
+	... 65 common frames omitted
+
+
+Process finished with exit code 1
+```
+
+And it fails as expected, right?
+We have an exception, and it says table `student_tracker.student` doesn't exist.
+We dropped our table, it no longer exists.
+
+
+Now, I'd like to do is add a configuration here to auto create the table for me.
+And let's move back into our `application.properties`,
+and we'll add in this new configuration for auto create.
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/student_tracker
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+
+# Turn off the Spring Boot banner
+spring.main.banner-mode=off
+
+# Reduce logging level. Set logging level to warn
+logging.level.root=warn
+
+# Add loging configs to display SQL statements
+logging.level.org.hibernate.SQL=debug
+logging.level.org.hibernate.orm.jdbc.bind=trace
+
+# Configure JPA/Hibernate to auto create the tables
+spring.jpa.hibernate.ddl-auto=create
+```
+
+I'll give this property here `spring.jpa.hibernate.ddl-auto=create`.
+And remember, this property here will drop the table,
+and create the tables for our entity classes; every time the app is run.
+And now we run the application.
+
+```html
+2024-05-26T15:25:12.912+03:00 DEBUG 43192 --- [           main] org.hibernate.SQL                        : drop table if exists student
+2024-05-26T15:25:12.945+03:00 DEBUG 43192 --- [           main] org.hibernate.SQL                        : create table student (id integer not null auto_increment, email varchar(255), first_name varchar(255), last_name varchar(255), primary key (id)) engine=InnoDB
+Creating 3 student objects...
+Saving the students...
+2024-05-26T15:25:13.311+03:00 DEBUG 43192 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:25:13.328+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [john@luv2code.com]
+2024-05-26T15:25:13.329+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [John]
+2024-05-26T15:25:13.329+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Doe]
+2024-05-26T15:25:13.412+03:00 DEBUG 43192 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:25:13.413+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [mary@luv2code.com]
+2024-05-26T15:25:13.413+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Mary]
+2024-05-26T15:25:13.413+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Public]
+2024-05-26T15:25:13.429+03:00 DEBUG 43192 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:25:13.429+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [bonita@luv2code.com]
+2024-05-26T15:25:13.429+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Bonita]
+2024-05-26T15:25:13.429+03:00 TRACE 43192 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Applebum]
+```
+
+And let's take a look at our logs here.
+Then we see that it dropped the table, if it exists for **student**,
+and then it'll actually go through and create the table.
+I wanted it to auto-create the table for me,
+and that's the actual SQL that's being applied to the database.
+And then we can move down here, and we can see the `insert` statements that are happening
+for those three students that we're inserting.
+Let's swing back into our MySQL workbench, let's run our query again.
+
+![image40](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image40.png?raw=true)
+
+We have our data, **John**, **Mary**, and **Bonita**.
+As you can see, there was no need for us to run an SQL script.
+**JPA hibernate** actually did the work for us in the background.
+
+Now let's go ahead and run the app a couple more times.
+So I just ran it once.
+Let's run it again.
+That was two runs.
+And notice here, every time it runs it drops the table and then creates the table.
+So you lose any previous data that was out there.
+And let's verify this in our MySQL Workbench.
+Notice here we only have three students.
+Even though we ran the app multiple times, every time it would run,
+it would drop the table and create it again from scratch.
+Anyway, I just wanted you to be aware of how that are given configuration property works.
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/student_tracker
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+
+# Turn off the Spring Boot banner
+spring.main.banner-mode=off
+
+# Reduce logging level. Set logging level to warn
+logging.level.root=warn
+
+# Add loging configs to display SQL statements
+logging.level.org.hibernate.SQL=debug
+logging.level.org.hibernate.orm.jdbc.bind=trace
+
+# Configure JPA/Hibernate to auto create the tables
+# the "update" config will keep existing data in the table
+spring.jpa.hibernate.ddl-auto=update
+```
+
+Now let's go ahead and change this configuration to `update`
+because what we'd like to do is keep the previous data.
+And now let's go ahead and run our application one more time.
+
+```html
+Creating 3 student objects...
+Saving the students...
+2024-05-26T15:31:26.016+03:00 DEBUG 56484 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:31:26.028+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [john@luv2code.com]
+2024-05-26T15:31:26.028+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [John]
+2024-05-26T15:31:26.028+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Doe]
+2024-05-26T15:31:26.086+03:00 DEBUG 56484 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:31:26.087+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [mary@luv2code.com]
+2024-05-26T15:31:26.087+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Mary]
+2024-05-26T15:31:26.087+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Public]
+2024-05-26T15:31:26.094+03:00 DEBUG 56484 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2024-05-26T15:31:26.095+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [bonita@luv2code.com]
+2024-05-26T15:31:26.095+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Bonita]
+2024-05-26T15:31:26.095+03:00 TRACE 56484 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Applebum]
+
+Process finished with exit code 0
+```
+
+And now swing back over to our MySQL Workbench.
+Run our query one more time.
+
+![image41](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image41.png?raw=true)
+
+And notice here we have our old data that we added previously.
+And now here's the new data added with that most recent run.
+So it's keeping the old data and then also adding the new data.
+So it's not dropping the table, simply using the existing table and adding the data accordingly.
+And now let's run it a couple more times.
+So that's one, run it one more.
+So two more runs here.
+
+![image42](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image42.png?raw=true)
+
+And so notice here we ran it twice, so that's six people that we added 
+or six students that we added, and that's the new data that we have for our application.
+Anyway, just wanted to show you how the configuration properties work
+for automatically creating the database tables from Java Source Code.
 </div>
