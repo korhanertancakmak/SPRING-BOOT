@@ -4175,7 +4175,7 @@ Even if we do a refresh over here on the left-hand side,
 we'll see that there are no tables right now,
 we only had one table, and that one table was **student**, and we dropped that table.
 Now let's go ahead and move back into our application.
-Let's run our application, and see what happens.
+Let's run our application and see what happens.
 
 ```html
 Creating 3 student objects...
@@ -4234,7 +4234,7 @@ spring.jpa.hibernate.ddl-auto=create
 ```
 
 I'll give this property here `spring.jpa.hibernate.ddl-auto=create`.
-And remember, this property here will drop the table,
+And remember, this property here will drop the table
 and create the tables for our entity classes; every time the app is run.
 And now we run the application.
 
@@ -4276,7 +4276,7 @@ Now let's go ahead and run the app a couple more times.
 So I just ran it once.
 Let's run it again.
 That was two runs.
-And notice here, every time it runs it drops the table and then creates the table.
+And notice here, every time it runs, it drops the table and then creates the table.
 So you lose any previous data that was out there.
 And let's verify this in our MySQL Workbench.
 Notice here we only have three students.
