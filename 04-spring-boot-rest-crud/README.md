@@ -69,7 +69,7 @@ JSON stands for the `JavaScript Object Notation`.
 We'll see a small example of **JSON** here in this section set.
 And then in the following section, I'll talk a bit more about the **JSON** syntax.
 
-So a possible solutions that we can use `openweathermap.org`.
+So a possible solutions that we can use `www.openweathermap.org`.
 So they basically have weather data via an API that you can use.
 They give you documentation on how to use it.
 The data's available in **JSON**, **XML** or **HTML** format.
@@ -85,7 +85,7 @@ api.openweathermap.org/data/2.5/weather?q={city name}, {country code}
 So call this weather service.
 The API documentation gives you some information.
 So it says pass in the city name.
-So you can go to `openweathermap.org`.
+So you can go to `www.openweathermap.org`.
 You can pass in the city name, or you can pass in the actual city name, 
 comma the country code because you may have a very common city name.
 And then you'll actually get the weather report.
@@ -143,7 +143,7 @@ and then they'll respond with a list of movie results.
 And so then you can go through and choose, 
 "_Okay, I'll choose this theater over here_" or "_that theater over there_".
 But again, this movie ticket service, they're saying,
-"_Hey we're simply passing back the data._"
+"_Hey, we're simply passing back the data._"
 You can use any programming language, 
 any type of app or platform to process and render those results.
 
@@ -203,7 +203,7 @@ And the really nice thing about **JSON** is that it's `language independent`.
 So it's not just for **JavaScript**.
 In fact, you can use **JSON** with any programming language, 
 such as **Java**, **C#**, and **Python**.
-And the reason being is that, again, it's `just plain text`.
+And the reason being that, again, it's `just plain text`.
 Just plain text data that any programming language can use and read.
 
 ![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image09.png?raw=true)
@@ -225,7 +225,7 @@ So you can have numbers.
 Whenever you give a number in **JSON**, the number is with no quotes.
 You can also add strings.
 And the strings are always in double quotes.
-So here for _firstName_, `Mario`, that's the actual value. 
+So here for _firstName_, `Mario`, that's the actual value.
 That'll be in double quotes.
 You can also make use of booleans, like `true` or `false`.
 So here in this example where we have _active_, the value can be `true` or `false`.
@@ -392,6 +392,8 @@ Now, I won't personally walk you through all the installation steps.
 It's really simple, really easy to install on your computer.
 So in the following sections, I'll assume that you already have **Postman** installed,
 and then I'll show you how to use it for testing out **REST** applications.
+
+
 </div>
 
 ## [Spring Boot REST Controller]()
@@ -424,7 +426,7 @@ and then I'll show you how to use it for testing out **REST** applications.
 
 </div>
 
-## [API Design - Create Poject]()
+## [API Design - Create Project]()
 <div style="text-align:justify">
 
 
