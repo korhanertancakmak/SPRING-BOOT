@@ -195,7 +195,203 @@ we'll start to drill down a bit more, and we'll get some working examples up and
 ## [JSON-REST HTTP-Postman Basics]()
 <div style="text-align:justify">
 
+So, what exactly is **JSON**?
+As I mentioned earlier, **JSON** is the `JavaScript Object Notation`.
+It's really just a lightweight data format for storing and exchanging data.
+It's just plain text.
+And the really nice thing about **JSON** is that it's `language independent`.
+So it's not just for **JavaScript**.
+In fact, you can use **JSON** with any programming language, 
+such as **Java**, **C#**, and **Python**.
+And the reason being is that, again, it's `just plain text`.
+Just plain text data that any programming language can use and read.
 
+![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image09.png?raw=true)
+
+Now let's go ahead and look at a very simple **JSON** example.
+So here you're defining an object, okay?
+And so in the **JSON** world, you make use of curly braces to define the object.
+And then you have the object members which are simply name / value pairs.
+And the name value pairs are actually delimited by colons.
+So here in this example, I have the name, on the left-hand side with a colon,
+and then the actual value.
+And whenever you define a name in **JSON**, the name is always in double quotes.
+So whatever you have on the left-hand side of that colon will always be in double quotes.
+So let's go ahead and look at some **JSON** values.
+So remember, the JSON value is actually on the right-hand side of the colon.
+So that's the actual value.
+You can have different types of values here.
+So you can have numbers.
+Whenever you give a number in **JSON**, the number is with no quotes.
+You can also add strings.
+And the strings are always in double quotes.
+So here for _firstName_, `Mario`, that's the actual value. 
+That'll be in double quotes.
+You can also make use of booleans, like `true` or `false`.
+So here in this example where we have _active_, the value can be `true` or `false`.
+They also have support for nested **JSON** objects.
+You can also make use of arrays in **JSON**, and I have examples of that coming up.
+And then finally, you have a reference to something that points to nothing or `null`.
+So in this example here for _courses_, this given student doesn't have any courses.
+So that reference there is `null`.
+
+![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image10.png?raw=true)
+
+**Nested JSON Objects** are just like any other nested item like a nested four loop or something.
+Basically, one item inside of another.
+So in this case, we have a nested **JSON** object.
+So here for this given item, for address, it's another nested object here.
+So the address, and then we have the curly braces again to define an object in **JSON**.
+And then we have the different fields here, _street_, _city_, _state_, _zip_, _country_, and so on.
+And you can nest as many levels deep as you'd like for your given **JSON** object model.
+
+![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image11.png?raw=true)
+
+And there's also support for arrays in **JSON**.
+So in this example here, I have languages, 
+and then I simply have an array of languages that a given student is learning.
+So in **JSON**, you make use of arrays with a square bracket,
+and you simply give a comma delimited list of items here.
+So in this example, it's just a comma-delimited list of strings.
+You can have an array of any type of values out there that you'd like.
+
+Alright, so this is kind of just the basics here with **JSON**.
+In some of the following sections, we'll actually show you how to read **JSON**,
+and we'll read all the different value types like numbers, strings, booleans.
+
+Let's look at now **REST HTTP** basics.
+So the most common use of **REST** is over **HTTP**.
+So we can actually leverage the _HTTP_ methods for **CRUD** operations.
+
+| HTTP Method | CRUD Operation                           |
+|-------------|------------------------------------------|
+| POST        | Create a new entity                      |
+| GET         | Read a list of entities or single entity |
+| PUT         | Update an existing entity                |
+| DELETE      | Delete an existing entity                |
+
+So in this diagram here, or this table actually, whenever you send over a `POST` request,
+then this can translate to the **CRUD** operation to create a new entity.
+When you send over a `GET` request, this can translate to the **CRUD** operation 
+for reading a list of entities or a single entity.
+For the `PUT` method, this is for updating an existing entity.
+And then for the **HTTP** `DELETE` method, this can be used for deleting an existing entity.
+And we'll actually write the code for this in some of the following sections,
+where we'll build a **REST controller**. 
+Then we'll have support for these given **HTTP** methods,
+and it'll translate to the appropriate **CRUD** operations that will perform on our database.
+
+![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image12.png?raw=true)
+
+Now let's just kind of take a look at these **HTTP** methods that we'll send back and forth.
+So we have this idea of our **client** application, and we also have our **server** application.
+So the client's going to send over **REST** requests to a server or a **CRM REST service**.
+So we'll send over this **HTTP** request message that'll have data going across,
+and then our server can process it, and then our server will send back an actual response,
+an **HTTP** message response.
+Now let's go ahead and kind of break this down a bit,
+and see what's in the request message and also what's in the response message.
+
+![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image13.png?raw=true)
+
+Now, the actual request message has three main parts.
+It has a `request line`, `header variables`, and `message body`.
+So the **request line** has the actual **HTTP** command or method.
+So this has the `GET` method or the `POST` method or the actual `DELETE` method.
+The **header variables** have the request metadata, so additional information about this request.
+And then the **message body** has the contents of the message or the actual payload.
+So if you're adding a new entity, 
+then the actual contents of that entity will be in the message body as **JSON**,
+and we'll see examples of this coming up in some later sections.
+
+![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image14.png?raw=true)
+
+Now let's look at a response message.
+And response messages have three different areas also.
+So it has a `response line`, `header variables`, and a `message body`.
+So the **response line**, that's the actual server protocol and status code.
+So here the status code could be one of the HTTP status codes, like 200, 404 or 500.
+The **header variables**, that's the response metadata.
+So this is the actual information about the data.
+So the content type of the data, if it's **XML**, or if it's **JSON**,
+the size or length of the data.
+And then there's also there's the **message body**, so the contents of the message.
+So if you said, "_Hey, give me a list of all customers_"
+then that list of data will actually come back in the message body as either **XML** or **JSON**,
+depending on how the server's configured.
+
+| Code Range | Description   |
+|------------|---------------|
+| 100 - 199  | Informational |
+| 200 - 299  | Successful    |
+| 300 - 399  | Redirection   |
+| 400 - 499  | Client error  |
+| 500 - 599  | Server error  |
+
+Now for the **HTTP** response, you can send back a status code to give information about the status.
+So you have codes in different ranges.
+So anything in the range 100 that's for informational,
+the 200 range is for success,
+the 300 ranges are for a redirection,
+the 400 ranges are for client error,
+and then we also have the range 500 for a server error.
+Now, you've seen some of this before.
+So for the 400 series, if you had to access a secure server,
+it would send back a 401, meaning authentication required.
+And then also you've all seen the 404 error, the dreaded File `Not Found` error.
+And then in the 500 series you've seen this one also, right?
+The 500 `Internal Server Error`.
+Alright, so these are basically status codes;
+the server returns that as part of the **HTTP** response.
+
+And then we also have the idea of **MIME** content types.
+So this is basically the message format for the actual payload.
+And so it's described by a **MIME** content type.
+So what does **MIME** mean?
+Well, **MIME** stands for the `Multipurpose Internet Mail-Extension`.
+So you'll normally hear folks refer to it as **MIME**.
+So again, it simply describes the actual content or the format of the message being returned.
+You have the basic syntax for it: `type/sub-type`.
+And then here are some examples:
+
+* text/html
+* text/plain
+* application/json
+* application/xml
+
+So this is information that's returned to the client,
+and then the client can render it accordingly, or process on it accordingly.
+So some examples here, if you return back `text/html` to a web browser, 
+a web browser will render that based on the **HTML** tags.
+You pass back `text/plain`, the web browser will simply just show you the plain text in the browser.
+That's just for a web browser example.
+You can also make use of **RESTful** clients for that.
+And so in particular for **RESTful** clients, we can pass back `application/json`.
+So we can tell the client, "_Hey, we're returning **JSON** data for you._"
+Or `application/xml` saying, "_Hey, this content coming back is **XML**._"
+And again, the client can process on it accordingly.
+
+Alright, so now we also need a **Client Tool**.
+So this client tool is something that we can use 
+to send **HTTP** requests to the **REST web service / API**,
+and then it'll get the response, and we can actually view it there in the tool.
+So there are plenty of tools that are available like `Curl`, which is a command line tool, 
+`Postman`, a GUI tool, and a lot of others.
+
+So in this course, we'll make use of `Postman`.
+So **Postman** is a really popular tool used for realtime projects.
+It's basic, very easy to use, and a lot of people like to use it.
+So it's very common.
+You'll see it on a lot of projects.
+So you can actually download Postman from this website [here](https://www.getpostman.com), 
+and they also have a free developer plan.
+So it's a free piece of software that you can make use of 
+for testing out and accessing your **REST** applications.
+
+Now, I won't personally walk you through all the installation steps.
+It's really simple, really easy to install on your computer.
+So in the following sections, I'll assume that you already have **Postman** installed,
+and then I'll show you how to use it for testing out **REST** applications.
 </div>
 
 ## [Spring Boot REST Controller]()
