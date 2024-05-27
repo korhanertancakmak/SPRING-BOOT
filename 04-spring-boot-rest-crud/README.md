@@ -393,7 +393,81 @@ It's really simple, really easy to install on your computer.
 So in the following sections, I'll assume that you already have **Postman** installed,
 and then I'll show you how to use it for testing out **REST** applications.
 
+Let's go ahead and get started with **Postman**.
+Now we're simply going to use it and just play around with some of the basic features.
+So let me go ahead and fire up **Postman** and get it running on my computer.
+Now, on the first screen, they may prompt you to log in.
+It's not a requirement to log in or create an account.
+At the bottom of the screen, they have a link here that says `take me straight to the app`.
+So just go ahead and choose that one.
+And you don't have to give any user IDs and password.
+You can simply use the app as it is.
+So they'll probably take you to the main screen,
+and they'll give you like a template or launch wizard or whatever.
+We're not going to use it here.
+We're going to go ahead and use just the basic application.
+So I'll go ahead and close this window.
 
+![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image15.png?raw=true)
+
+Alright, so just a quick tour of the application.
+At the top you'll have your **HTTP** request and then at the bottom, 
+you'll have the **HTTP** response.
+So here I'll kind of start at the top with the **HTTP** request.
+You can use different **HTTP** methods.
+`GET`, `POST`, `PUT`, so on and so forth.
+We'll use some of these later on in the sections.
+You can give the extra URL.
+You can look at **authorization** items, **headers** and **body** if we're using like a `POST` and so on.
+And we'll use most of these features as we go through the course.
+
+So let's go ahead and swing back over to our browser.
+And in our browser what we'll do is we'll actually go to this website `jsonplaceholder.typicode.com`.
+Again, they have more endpoints that we can use to actually access some **REST Services**.
+And the reason I want to try this one out is because they have
+I guess more complex responses coming back with nested objects and so on.
+
+![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image16.png?raw=true)
+
+So the one item that they have here is the `/users` item.
+That's going to return a list of users.
+We can actually access this link directly 
+because most web browsers are smart enough to render **JSON** content.
+
+![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image17.png?raw=true)
+
+So we can see this long list of all the users here,
+and we're reviewing this directly in **Firefox**.
+You can do a similar thing in **Chrome** or another browser,
+but I'd like to test this out in **Postman** also.
+So I'll go ahead and just copy this URL, and then I'll swing back over to **Postman**.
+And in this new tab that we have, we'll just paste in that URL that we just set up.
+
+![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image18.png?raw=true)
+
+Right, so I have a `GET` on `/users`, and then I'll do a `SEND`.
+I'll send over this request, and then I get a response.
+So this is very similar to what we saw in the browser,
+but the nice thing about using **Postman** is that you can get additional data,
+more than what you can get in the browser.
+So here we have the status code of 200, and we see the big long list of everything that's coming back.
+And also note here, you know, we have this user, list of users.
+They also have nested objects, and we saw examples of nested objects earlier in our course
+and a nested object within a nested object.
+So you can have a lot of fun there.
+So just this big long laundry list of all the users,
+and it's set up as an array up top on line one with a square bracket.
+
+![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image19.png?raw=true)
+
+And we can also see that the headers here, all these different headers that were set by that given server.
+And again, we click the content type of `application/json`.
+And just tons of other things out there as far as additional metadata
+or headers that were sent back with this given response.
+Alright, so that's basically it as far as doing `GET` request.
+We'll use this **Postman** a lot during the next set of sections,
+and we'll check out some of the other features.
+We'll do the `PUT`, `POST` and `DELETE` for our `CRUD` operations.
 </div>
 
 ## [Spring Boot REST Controller]()
