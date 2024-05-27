@@ -473,7 +473,235 @@ We'll do the `PUT`, `POST` and `DELETE` for our `CRUD` operations.
 ## [Spring Boot REST Controller]()
 <div style="text-align:justify">
 
+In this section, we'll learn how to develop a **Spring REST Controller**.
+Alright, let's go ahead and set up a **Spring REST Hello World** example.
 
+![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image20.png?raw=true)
+
+So we'll have this **REST** client, we'll also have this **REST** service,
+and what we'll do is we'll basically make a request for a `/test/hello`.
+This **REST** service will respond with `Hello World!`
+So on the far right-hand side, we'll actually write the code here for the **REST** service.
+On the left-hand side, as far as the **REST** client, 
+we can make use of either the web browser or we can make use of **Postman**,
+and I'll show you how to use both of them.
+
+```java
+@RestController
+@RequestMapping("/test")
+public class DemoRestController {
+    
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello World!";
+    }
+}
+```
+
+Alright, so here's the basic coding here for a **Spring REST controller**.
+So we have this `@RestController`, `@RequestMapping/test`, and then `public class DemoRestController`.
+So this looks like a normal **Spring MVC(Model-View Controller) controller**.
+However, now we're making use of this `@RestController`, so this adds the **REST** support.
+So then in the actual code, we simply set up a mapping.
+So here we'll set a `@GetMapping` for `/hello`.
+We write our method, public string, _sayHello_, and then we simply return `Hello World!`.
+Basically, at this point we've defined this **RESTful** endpoint, or this path that we can access.
+We can access this **REST** endpoint by simply going to `/test/hello`.
+And now this will actually return to the client, `Hello World`, back to the actual calling program.
+
+Now, let's talk about clients here.
+So, we can test this with the **REST** client using **Postman**.
+So in **Postman** we simply drop in the URL, 
+we simply go to `http://localhost:8080/{theNameOfOurApp}/test/hello`.
+So that'll access that **REST** endpoint.
+And so at the bottom we'll actually get the response, `Hello World!`.
+So that's an example here using **Postman**.
+Now, we could also do a similar thing with the web browser.
+So in the web browser you can simply drop in the URL, `/test/hello` 
+and it'll return the response here, `Hello World!`.
+
+So you're probably wondering, "_Hmm, web browser or Postman?_"
+Well, for simple **REST** testing for `Get` requests,
+the web browser and **Postman**, they're similar.
+However, for advanced **REST** testing, like using `POST` or `PUT`, etc. 
+then **Postman** has much better support.
+So if you need to `post` **JSON** data, `set` the content type,
+`pass` over request headers, do `authentication`, then it's much easier to do this using **Postman**.
+So **Postman** is really designed out of the box as a **REST** client testing tool,
+so **Postman** has a lot of rich support here.
+For the simple stuff you can use the browser, 
+but for really advanced development you'll need to use **Postman**.
+But in the sections I'll show you how to use both of them going back and forth, browser and **Postman**.
+And then we'll kind of reserve **Postman**for some of the more advanced stuff 
+that we'll do later on in the course.
+
+So let's cover the **Spring RestController** development process.
+
+1. Add the **Maven Spring** dependency for **Spring Boot Starter Web**,
+2. Create the **Spring REST Service** using the `@RestController` annotation.
+
+```xml
+<!-- Add Spring Boot Starter Web -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <articatId>spring-boot-starter-web</articatId>
+</dependency>
+```
+
+Here's step 1: Adding the **Maven** dependency.
+In your `pom.xml` file, you'll add an entry here for the **Spring Boot Starter Web**,
+and instead of adding it manually, you can have this selected at the **Spring Initializr** website.
+On that website, When you're setting up your project, simply select the **Web** dependency.
+
+```java
+@RestController
+@RequestMapping("/test")
+public class DemoRestController {
+    
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello World!";
+    }
+}
+```
+
+So this is just like the code we saw over earlier for building in our **Spring REST service**.
+We simply write our `@RestController`, here we have `@RequestMapping("/test")`,
+and then we simply write the endpoints on the mappings here.
+So `@GetMapping("/hello")`, return `Hello World`.
+So that's basically it here for actually building out the **REST Service**.
+
+Let's open up a web browser.
+And so the first step is configuring a project at the **Spring Initializr** website.
+So let's go ahead and visit `start.spring.io` in our web browser.
+Alright, so we're at the **Spring Initializr** website.
+Here, we'll select **Maven** and **Java**.
+And then, also, as far as the **Spring Boot** version,
+I'll choose this one listed `3.3.0`.
+So choose the most recent version that they have here.
+Avoid the snapshot versions because they are **alpha/beta**.
+So just choose the latest released version.
+I guarantee you the version that you see on your computer 
+will be much different than what's recorded 
+because new versions of Spring Boot are released on a very frequent basis.
+So simply just choose the latest released version.
+Alright, so that's taken care of.
+We can move into our project metadata where we can set up our coordinates here.
+So I'll set up the group ID `com.luv2code` and artifact `demo`.
+And for dependencies here, this is where we go through 
+and basically just choose the **Spring Boot** starters 
+that we want or the actual dependencies that we want for our application.
+So here, I'll just keep it simple. 
+I'll just choose web.
+So be sure to click that option and make sure it's selected, and it appears here.
+That's for its selected dependency.
+And then, from there, just go down to the bottom 
+and download the ZIP file by clicking on `Generate` Project.
+And I can swing over to my file system, and the next step is unzipping that file.
+So I'll just move into my `Downloads` directory on my computer.
+I'll unzip it.
+Now, what I'll do is I'll move into our `dev-spring-boot` folder,
+and I'll create a new folder here.
+And I'll call it `04-spring-boot-rest-crud`.
+And I'll go ahead and move into this folder.
+And then I'll go ahead and drag and drop that `demo`down into this folder, 
+`04-spring-boot-rest-crud`.
+And then I'll simply rename this `demo` folder.
+And I'll call it `01-spring-boot-rest-crud`.
+Now, let's go ahead and open this in IntelliJ.
+
+Now, I think we can start working on writing some code here for our **REST** controller.
+So I'll move back over to the project.
+And what I want to do is actually set up a new package here for our **REST** coding.
+So I'll just grab this one package, and I'll create a new one, `.rest`.
+And so this is where I'll place my **REST** controllers.
+So I'll go ahead and create a new class here for this **REST** controller.
+And the actual name I'll give for this, I'll call it **DemoRestController**.
+
+```java
+package com.luv2code.demo.rest;
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@RestController
+@RequestMapping("/test")
+public class DemoRestController {
+
+    // add code for the "/hello" endpoint
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello World!";
+    }
+}
+```
+
+And so we'll set up that **RestController** and then `@RequestMapping`.
+So again, we're saying, hey, this is some **REST** support,
+and then we set up the mapping for it.
+Alright, so let me just write a quick comment here to myself.
+So I'm going to add code for the `/hello` endpoint.
+And basically, I'll simply just return `Hello World`.
+So I'll just set up this `@GetMapping` and give the path here, `/hello`.
+Create a method.
+It's going to return a string called _sayHello_.
+And keeping it very simple, right?
+Just return `Hello World`.
+So that's basically it as far as the coding here for this **REST** controller.
+So I have this endpoint `/hello`, and I simply return `Hello World`.
+All right, so let's go ahead and test this out and let's see it work.
+
+```html
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-05-27T17:51:51.148+03:00  INFO 88180 --- [demo] [           main] com.luv2code.demo.DemoApplication        : Starting DemoApplication using Java 21.0.2 with PID 88180 (D:\JAVA_STUDY\Github\dev-spring-boot\04-spring-boot-rest-crud\01-spring-boot-rest-crud\target\classes started by korha in D:\JAVA_STUDY\Github\dev-spring-boot\04-spring-boot-rest-crud\01-spring-boot-rest-crud)
+2024-05-27T17:51:51.150+03:00  INFO 88180 --- [demo] [           main] com.luv2code.demo.DemoApplication        : No active profile set, falling back to 1 default profile: "default"
+2024-05-27T17:51:51.841+03:00  INFO 88180 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-27T17:51:51.851+03:00  INFO 88180 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-27T17:51:51.851+03:00  INFO 88180 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-05-27T17:51:51.897+03:00  INFO 88180 --- [demo] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-27T17:51:51.898+03:00  INFO 88180 --- [demo] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 710 ms
+2024-05-27T17:51:52.138+03:00  INFO 88180 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-05-27T17:51:52.144+03:00  INFO 88180 --- [demo] [           main] com.luv2code.demo.DemoApplication        : Started DemoApplication in 1.282 seconds (process running for 1.57)
+```
+
+All we have to do is go up to this URL bar 
+and just type in `localhost:8080/test/hello` and cross your fingers.
+
+![image21](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image21.png?raw=true)
+
+There's `Hello World`.
+So that's the response here from our **REST** controller or our **REST** service.
+Alright, now let's take this URL here and let's just copy it
+because we want to put this in the **Postman**.
+So I'll just copy that whole path of that whole URL, and then I'll swing over to **Postman**.
+Then I'll just simply move up here to this section here for the `GET` request,
+and I'll just paste it in here.
+I'll hit the `Send` button over here on the far right.
+
+![image22](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image22.png?raw=true)
+
+And then, at the bottom, I get the actual response, `Hello World`.
+So again, we're using **Postman** to access this **REST** controller 
+or this **REST** service, and we're getting a response.
+And then, over on the far right, you can get the actual status code of 200,
+means that it was a successful request.
+So we kinda went back and forth here.
+So we did it with the web browser. 
+We did it with **Postman**.
+Again, like I mentioned earlier for a simple request, 
+you can go back and forth between the browser and **Postman**.
+**Postman**'s really good for a lot of advanced functionality,
+and we'll cover that later, but this is enough for now.
+So we are successful in getting our first REST service up and running!
 </div>
 
 ## [Java POJO with JSON Jackson Data Binding]()
