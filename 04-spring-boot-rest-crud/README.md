@@ -26,7 +26,7 @@ And so we need to get the weather data from an external service
 like we don't have a local database of weather information because it changes all the time, right?
 So we need to get that from an external service.
 
-![image01]()
+![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image01.png?raw=true)
 
 So looking at the application architecture, 
 we'll have this `My Weather app` that's an app that we're creating.
@@ -90,7 +90,7 @@ You can pass in the city name, or you can pass in the actual city name,
 comma the country code because you may have a very common city name.
 And then you'll actually get the weather report.
 
-![image02]()
+![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image02.png?raw=true)
 
 That's the response here.
 So the **Weather Service** is going to respond with the **JSON**.
@@ -101,7 +101,7 @@ But notice here is being passed back as **JSON**.
 So **JSON**'s really just a collection of name value pairs.
 And then your application can parse this string and then process on it accordingly.
 
-![image03]()
+![image03](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image03.png?raw=true)
 
 Now the really nice thing about making use of this approach with this **REST API** 
 or **REST web service** is that this weather service that was developed
@@ -117,6 +117,79 @@ So it doesn't really care what language that you're using.
 As long as you can process the data being passed back, then everything's okay.
 And like I mentioned earlier, that's a very good benefit.
 So it gives you flexibility on the actual implementation language.
+
+Now let's look at some other **REST** examples or scenarios 
+just to kind of help you out as far as getting your head around it.
+We could also create a **Currency Converter App**, right?
+
+![image04](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image04.png?raw=true)
+
+So we have this currency app, and then over here on the other side, 
+we have this currency service.
+And so then I could say _I need to convert **US dollars** to **Indian Rupi**_.
+You pass over the amount and then this application will actually respond with the actual value.
+Now again, this is just a demo, right?
+This value is going to actually fluctuate based on the market,
+but the key here is that, you know, we have an application that can use this external service,
+send over a request, and then get a response.
+
+![image05](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image05.png?raw=true)
+
+And then also we could look at another scenario like a **Movie Tickets App**, right?
+So we have this my movie app, and then
+there's some external service that gives you information about movie tickets in your area.
+You could say, "_Hey, I want to look at this given movie at a given location for a certain time_"
+and then they'll respond with a list of movie results.
+And so then you can go through and choose, 
+"_Okay, I'll choose this theater over here_" or "_that theater over there_".
+But again, this movie ticket service, they're saying,
+"_Hey we're simply passing back the data._"
+You can use any programming language, 
+any type of app or platform to process and render those results.
+
+![image06](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image06.png?raw=true)
+
+And then finally here, we're making it to our **Customer Relationship Manager**, the **CRM** app.
+So we have a **CRM** app, and then we have a **CRM** service.
+So basically they can access the list of customers by saying,
+"_Hey, get the customers_", and then we'll actually send back that list of customers, right?
+So instead of doing it directly in the **HTML** page or **JSP** page or webpage
+we're simply going to pass back this json data or this whatever data format we choose
+and then the **CRM** app can render it accordingly.
+So it could be a web app, it could be a mobile app or any other type of application there.
+And so **we'll actually create this code for the server in this course**.
+So we'll actually create a **CRM service** that's going to pass back customer data 
+as json, and we'll actually write all the code for that from scratch in the following sections.
+Now you're probably thinking, like
+_Well, who would ever send back customer data via a rest service?_
+Well, how about Salesforce, right?
+
+![image07](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image07.png?raw=true)
+
+That very small company called Salesforce, actually a huge company.
+They actually have a huge platform based on **CRM**,
+and they also have a **REST API** for providing customer data from a given application.
+So we're not, you know, off our rocker here, there's a very good use case for doing this.
+And so we'll kinda build out a version of this for our **CRM** application.
+
+![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image08.png?raw=true)
+
+Now, here's the common question that I get: **What do we call it?**
+Do we call it `REST API` or `RESTful API` 
+or do we call it `REST web services` or `RESTful web services`?
+Or what about `REST services`, `RESTful services`?
+Okay, so generally they all mean the same thing, alright?
+Basically, you're building an **API**, you're building a **service**,
+and you're providing an **endpoint**, 
+and you're providing data based on inputs or requests and so on.
+So that's the big idea, is that they're really all the same.
+So don't get tied up or get mixed up with; you know really trying to pin it down.
+You'll hear folks use these terms interchangeably,
+so at a very high level, they're generally all the same.
+
+Alright, so that was just a quick overview of **REST API**s, **REST services**, 
+**RESTful services** and in the following sections,
+we'll start to drill down a bit more, and we'll get some working examples up and running.
 </div>
 
 ## [JSON-REST HTTP-Postman Basics]()
