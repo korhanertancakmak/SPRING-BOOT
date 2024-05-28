@@ -1219,7 +1219,280 @@ So good job so far.
 ## [Path Variables]()
 <div style="text-align:justify">
 
+In this section, we're going to use **Spring REST** with **Path Variables**.
+And to kind of help us out with path variables,
+we'll have this new endpoint to retrieve a single student by the id.
+So we'll make a get request to `api/students/{studentId}`, and this will retrieve a single student.
+Now, the `studentId` in curly braces here, this is known as a path variable,
+such that when we actually access it via our **REST** client, we can include an actual value there.
+So we could say `/api/student/0`, that'll give us the student with id `0`, `1`, `2` and so on.
+So basically a way of parameterizing your path or the endpoint to actually accept data.
 
+![image37](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image37.png?raw=true)
+
+Now let's kinda look at this as far as the big picture here.
+So we'll have our **REST** client, and then over on the far right, we'll have our **REST** service.
+So we'll make a call `api/students/{studentId}`.
+And again, that's our path variable.
+So then it'll return that given the student.
+So here, we're just making up an example, it'll return back `Mario Rossi`.
+Now again, we'll actually write the code here for the **REST** service.
+We'll add a new request mapping for this, and in our coding will actually create a new student,
+or we'll retrieve that given student, and then pass it back.
+And just as a reminder, **Jackson**'s gonna actually convert that student object to **JSON**.
+
+![image38](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image38.png?raw=true)
+
+Alright, so let's kinda look and see how this works behind the scenes.
+So we have our **REST** client and our **REST** service.
+We'll make a request across for `api/students/{studentId}`, and the `studentId` is in curly braces.
+And then we'll have **Spring REST** along with **Jackson**,
+they'll make a call to the **REST** service.
+So in our code, we'll actually return that given student,
+and then **Jackson** will actually convert that student object or that student **POJO** to **JSON**,
+and then send it back across to the **REST** client.
+And you've kind of seen this process before, 
+but I simply wanted to show you the information again, 
+along with just using a single student object as opposed to an array list.
+
+So the development process is fairly straightforward.
+1. Add a request mapping to our spring **REST** service, 
+2. Bind the path variable to the method parameter using this new annotation called `@PathVariable`.
+And we'll see coding examples of this coming up.
+
+Actually now, we're going to refactor some code, 
+because in our previous section we had some code that wasn't exactly the best.
+So let's go ahead and look at our **StudentRestController**,
+and we'll kinda pinpoint the issue; you may have even noticed it.
+
+```java
+package com.luv2code.demo.rest;
+
+import com.luv2code.demo.entity.Student;
+import jakarta.annotation.PostConstruct;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+    
+    private List<Student> theStudents;
+    
+    // define @PostConstruct to laod the student data ... only once!
+    @PostConstruct
+    public void loadData() {
+
+        //List<Student> theStudents = new ArrayList<>();
+        theStudents = new ArrayList<>();
+
+        theStudents.add(new Student("Poornima", "Patel"));
+        theStudents.add(new Student("Mario", "Rossi"));
+        theStudents.add(new Student("Mary", "Smith"));
+    }
+    
+    // define endpoint for "/students" - return a list of students
+    @GetMapping("/students")
+    public List<Student> getStudent() {
+
+        // List<Student> theStudents = new ArrayList<>();
+        // theStudents.add(new Student("Poornima", "Patel"));
+        // theStudents.add(new Student("Mario", "Rossi"));
+        // theStudents.add(new Student("Mary", "Smith"));
+        return theStudents;
+    }
+}
+```
+
+So down here in this _getStudents_ method, we actually create the list for every request,
+and we populate it for every request.
+And that's not the best, that's not good.
+So let's go ahead and clean this up and refactor this code.
+So basically, what I'd like to do is define a field
+and then load that field with data such that we only do that work once.
+Let's start here by defining our field.
+So we'll create a field, `List<Student>`, and we'll call it _theStudents_.
+And now I'd like to actually load that student list with some data.
+And what I can do is actually make use of the `@PostConstruct` annotation 
+to load the student data.
+And remember, `@PostConstruct` is called only once when it's given bean is constructed.
+So this will be a good fit here for our given use case.
+So I'll define a method here.
+I use the `@PostConstruct` annotation.
+I'll do a `public void loadData()`.
+We can give any method name that we want, but I'll just call it _loadData_.
+So we'll create our list and then populate it with students.
+And what I'd like to do is actually use the same code that I've already created.
+So let's cut the code in _getStudents_ method and then, 
+I'll actually move up to that _loadData_ method, and I'll actually paste it here.
+Alright, so I need to make one little change here.
+I need to actually delete `List<Student>` 
+since we already have it declared above as a field.
+And it's basically that's the field up top, and then here, 
+we simply initialize it as an empty list, 
+and then we simply go through add the actual students to that list.
+This approach is much better because we only load the student data once.
+So our _getStudents_ method is very simple now.
+All we have to do is just return the list, because the data has already been loaded
+thanks to the `@PostConstruct` annotation.
+I wanna just run this again just to make sure it still works,
+just to make sure I didn't break anything.
+
+![image35](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image35.png?raw=true)
+
+And so here, we'll get all three users,
+or all three students, `Poornima`, `Mario`, and `Mary`.
+So this looks good.
+And then I also want to test it in Postman, again, 
+just to make sure it works fine over there.
+So I'm in **Postman** right now.
+I keep the same URL, hit the blue `send` button:
+
+![image36](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image36.png?raw=true)
+
+And there we go.
+All three students, `Poornima`, `Mario`, and `Mary`.
+So this is great.
+So we simply refactored the code, made use of `@PostConstruct` just to be a bit more efficient
+in our use of loading data and creating the students.
+
+Let's now go ahead and define another endpoint,
+and that's the one for retrieving a single student.
+
+```java
+package com.luv2code.demo.rest;
+
+import com.luv2code.demo.entity.Student;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+    
+    private List<Student> theStudents;
+    
+    // define @PostConstruct to laod the student data ... only once!
+    @PostConstruct
+    public void loadData() {
+
+        //List<Student> theStudents = new ArrayList<>();
+        theStudents = new ArrayList<>();
+
+        theStudents.add(new Student("Poornima", "Patel"));
+        theStudents.add(new Student("Mario", "Rossi"));
+        theStudents.add(new Student("Mary", "Smith"));
+    }
+    
+    // define endpoint for "/students" - return a list of students
+    @GetMapping("/students")
+    public List<Student> getStudent() {
+
+        // List<Student> theStudents = new ArrayList<>();
+        // theStudents.add(new Student("Poornima", "Patel"));
+        // theStudents.add(new Student("Mario", "Rossi"));
+        // theStudents.add(new Student("Mary", "Smith"));
+        return theStudents;
+    }
+
+    // define endpoint for "/student/{studentId}" - return student at index
+    @GetMapping("/students/{studentId}")
+    public Student getStudent(@PathVariable int studentId) {
+
+        // just index into the list ... keep it simple for now
+        return theStudents.get(studentId);
+    }
+}
+```
+
+So I'll write a quick comment here to myself.
+So we'll define this endpoint for `/student/{studentId}`.
+And this is for actually retrieving a single student by id.
+And here we'll keep it simple, and we'll actually return it by the index of that array list.
+So I'll set up this, `@GetMapping("/students/{studentId}")`.
+And remember the curly braces here for the `studentId` is that's an actual path variable.
+And I'll just go through and define a method here.
+_getStudent_ will return a **Student**,
+and I'll make use of this `@PathVariable` annotation to actually bind that path.
+Variable _studentId_ to our parameter here _studentId_ by default, 
+the variable names have to match up.
+So the path variable coming in up top is in the curly braces _studentId_.
+Then our method per should also be _studentId_ and that's by default.
+Now what I'm going to do here is just index into the list.
+And like I said before, I really just want to keep it simple for now.
+So that actual _studentId_ that they're passing in 
+is really just the index from the actual list.
+So I can access an element in the list by simply saying the students, 
+that's my actual list here, `theStudents.get(studentId)`.
+And you give the index, `studentId`.
+So here we simply pass in the `studentId`,
+and that'll give us that person from the actual list.
+And that's the basic coding.
+And again, we're keeping it simple for now.
+We'll get into all the fancy database stuff later on.
+I'm ready to test it and see how this works.
+Let's go ahead and run this on our server.
+And then, once it's up and running,
+then up top I give slash API slash students,
+and then I give the student ID or the index.
+So I say `localhost:8080/api/students/0`, the first element in that list.
+And it should come back as `Poornima Patel`
+because that's the first student that we added.
+
+![image39](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image39.png?raw=true)
+
+So _index_ is zero.
+If I do one, I'll get `Mario Rossi`.
+
+![image40](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image40.png?raw=true)
+
+And then if I go through and enter two, I get `Mary Smith`.
+
+![image41](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image41.png?raw=true)
+
+So this is working out as desired.
+And let me kind of copy this URL that we had before.
+So let's swing over to **Postman** and let's create a new tab here.
+And I'll just paste in that URL and I'll do `api/students/0`.
+
+![image42](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image42.png?raw=true)
+
+And again, that gives us `Poornima Patel`, because she's the first student that was added.
+And then we have `Mario` for index one and then `Mary Smith` for index two.
+This all kind of works out as planned,
+so we're able to make use of that path variable to access a single student.
+So this is great, but now you're probably wondering what if I entered some bad data?
+What will happen?
+We have this internal server error, the 500 error.
+
+![image43](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image43.png?raw=true)
+
+Let's find out why this happened.
+So let's go ahead and switch back over into our IDE, and we see this ugly stack trace.
+
+```html
+2024-05-28T17:34:32.971+03:00 ERROR 50084 --- [demo] [nio-8080-exec-8] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.IndexOutOfBoundsException: Index 9999 out of bounds for length 3] with root cause
+
+java.lang.IndexOutOfBoundsException: Index 9999 out of bounds for length 3
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:100) ~[na:na]
+	...
+    at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+```
+
+Alright, so scrolling up we see the root cause index out-of-bounds exception.
+The index of `9999` is outside the bounds of the length of three, which makes sense, right?
+But hey, don't worry about this.
+We'll cover exception handling in the next section.
+So instead of the dreaded 500, we'll actually handle that exception 
+and then provide our own custom response for that given error message 
+or that given exception condition.
 </div>
 
 ## [Exception Handling]()
