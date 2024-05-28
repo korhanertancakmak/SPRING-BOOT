@@ -704,10 +704,516 @@ and we'll cover that later, but this is enough for now.
 So we are successful in getting our first REST service up and running!
 </div>
 
-## [Java POJO with JSON Jackson Data Binding]()
+## [REST POJO with JSON Jackson Data Binding]()
 <div style="text-align:justify">
 
+In this section first, we're going to cover **Java JSON data binding**.
+Alright, so what exactly is data binding?
+**Data binding** is the process of converting **JSON** data to a **Java POJO**.
 
+![image23](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image23.png?raw=true)
+
+So we're starting over here on the left with **JSON** data, and then we have our **Java POJO**.
+And so we can use data binding to convert from **JSON** over to a **Java POJO**.
+So it'll read the contents of that **JSON** string or file
+and then populate the Java object with that given data.
+Or you can go the other way.
+You can start with the **Java POJO** 
+and then send it down to an actual **JSON** string or **JSON** file.
+Now this whole process is called **data binding**.
+Now you may hear other terms used online or see other terms used online
+such as **mapping**, **sterilization** / **deserialization**, **marshalling** / **unmarshalling**.
+It's pretty much all the same thing.
+It's just basically converting from one format to another.
+So converting from **JSON** to a **Java POJO** or going from a **Java POJO** to **JSON**.
+And remember, Java POJO is really just **plain old Java object** or any old Java class.
+Let's look at doing **JSON** data binding with **Jackson**.
+So **Spring** actually uses a **Jackson** project behind the scenes.
+So **Jackson** handles the data binding between JSON and the Java POJO.
+So **Jackson** is actually a separate project.
+There are a lot of synergies between **Jackson** and **Spring**
+but **Jackson**'s a separate project for doing data binding.
+So they have support for doing data binding with `xml`,
+support for data binding using **JSON**, and so on.
+So it's a very popular project.
+So if you do any type of **JSON** development in the Java world,
+or any **REST** development in the Java world,
+it's a very good chance you're going to run across the **Jackson** project.
+It's very popular.
+That's how we're covering it here in this course.
+
+Now, by default, **Jackson** will call the appropriate getter/setter methods
+when it handles the conversions.
+So if you're converting from **JSON** to **POJO** it'll call up given setter methods.
+When you go from **POJO** to **JSON** it'll call the getter methods.
+And let's kinda walk through this here with an example.
+
+![image24](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image24.png?raw=true)
+
+So here on the left-hand side, I have this **JSON** object 
+for `id`, `firstName`, `lastName`, and `active`.
+And then over on the right-hand side, I have this **Java POJO** for a student.
+And so what will happen here is that we'll actually do the conversion
+between **JSON** going to a **Java POJO** or starting with a **Java POJO**, 
+like a student object, and then actually sending it down to a **JSON** string.
+So **Jackson** can help us with all of this processing.
+And again, the important thing here is that
+it'll actually use the getter and setter methods for handling some of this processing.
+And we'll kind of dig into it a bit more here.
+
+So let's look at one scenario.
+So the one scenario that we'll look at here is converting **JSON** to **Java POJO**.
+So in this scenario, they'll actually call the setter methods on the **POJO**.
+So we have this **JSON** over the left-hand side,
+for `id`, `firstName`, `lastName`, and `active`,
+and then over on the right-hand side we have our **Java POJO** for a student.
+
+![image25](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image25.png?raw=true)
+
+So basically, using **Jackson**, they'll actually call the setter methods on your **POJO**.
+So again, going from **JSON** to **Java POJO**, they're going to call the setter methods.
+So they'll call set `id`, set `firstName`, set `lastName`, set `active` 
+based on whatever values that you have here in the **JSON**.
+And so **Jackson** will actually do all of this work for you 
+behind the scenes once we get everything set up.
+And we'll cover all the coding for setting this up here in this section.
+
+Alright, so let's dig in a little deeper here.
+So converting **JSON** to Java **POJO**.
+So, remember, I said it's going to call the setter methods on the **POJO**.
+
+![image26](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image26.png?raw=true)
+
+So starting over here on the left-hand side with this **JSON** object,
+then we have this **POJO**, again, plain old JAVA class **student**.
+We have some fields defined, and we have the getter setter methods.
+So the important thing here, again, is that **Jackson**'s going to call 
+the setter methods on the **POJO**.
+So for _id_, they're going to call _setId_.
+Alright, and so, **Jackson** will actually do this work for you.
+For _firstName_, it's going to call _setFirstName_.
+For _lastName_, it's going to call _setLastName_.
+And for _active_, it's going to call _setActive_.
+They basically use the name from the actual **JSON**.
+They call setters.
+They take the first character of that name, make it cap,
+and then use that to make the actual method call.
+Now, again, I really want to emphasize here.
+**Jackson** calls the setter methods.
+So it doesn't access any of the internal private fields directly on the **POJO**.
+It'll only call the given setter methods.
+So you have to make sure that you have those **setter** methods defined,
+and in this case, they have to match up accordingly for this given example.
+So hopefully you can kind of see the power of **Jackson**,
+doing all the heavy lifting for you in the background
+and handling all the data binding for your application.
+
+Now let's go the other direction.
+So here we're going to convert a Java **POJO** to **JSON**.
+And so, in this scenario, **Jackson**'s going to call the getter methods on the **POJO**.
+
+![image27](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image27.png?raw=true)
+
+Alright, so starting over on the left-hand side with this Java **POJO** for **student**.
+And then we'll actually send this data over to **JSON**, or actually, generate a **JSON** based on this.
+And so, again, **Jackson**'s going to call
+the appropriate getter methods on your **POJO**.
+And then **Jackson** will handle getting this data sent out accordingly to a **JSON** string,
+either to just a memory, or to a given file.
+Again, **Jackson** will do all this work for you.
+
+Now let's look at the **Spring** in **Jackson** support.
+So when you're building **Spring REST** applications,
+**Spring** will automatically handle the **Jackson** integration.
+So any **JSON** data that's being passed to the **REST** controller 
+is automatically converted to a **POJO**.
+And also any Java object that's being returned from a **REST** controller is converted to **JSON**
+using the **Jackson** project.
+And again, all of this happens automatically behind the scenes
+thanks to the integration between **Spring** and **Jackson**.
+
+
+Now let's create a spring **REST Service** for **students**.
+So, we're going to create this new service that's going to return a list of students.
+So basically we'll send over a get request to `/api/students`,
+and this is going to return a list of students for us.
+
+![image28](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image28.png?raw=true)
+
+Alright, so let's look at the big picture here.
+So we'll have our **REST** client, and then over on the right-hand side, 
+we'll have our **REST** service.
+We'll access this request mapping `/api/students` making a get request
+and then this will return a list of students as **JSON**.
+And then, we'll actually write the code for the service.
+And for the client, we can make use of any client in this example, a web browser or a **Postman**.
+
+Now let's talk about converting a Java **POJO** to **JSON**
+because our rest service is going to return a list of student objects, `List<Student>`
+and we need to convert that `List<Student>` to **JSON**.
+And remember, **Jackson** can actually help us out with this.
+So with the **Spring** and **Jackson** support,
+**Spring** will automatically handle the **Jackson** integration.
+Then the **JSON** data being passed to the **REST** controller 
+is automatically converted to a Java **POJO**.
+And then if a Java **POJO** is being returned from a **REST** controller,
+then it's automatically converted to **JSON**.
+And this all happens automatically behind the scenes thanks to **Spring** and **Jackson**.
+
+![image29](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image29.png?raw=true)
+
+So we're going to have this **POJO** or class called **student**.
+We'll have some very basic fields, `firstName` and `lastName`, and the appropriate setters.
+And we kind of saw this example little earlier
+in some of our earlier **Jackson** data binding examples.
+Now also, just remember here that **Jackson**'s going to call 
+the appropriate getter / setter methods for the conversion. 
+
+![image30](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image30.png?raw=true)
+
+So here we're starting with some **JSON**
+on the left-hand side, and then over on the right-hand side
+we have our Java **POJO** to read those in.
+Then we'll actually call the appropriate setter methods on the **POJO**.
+Now to send it the other way, going from Java **POJO** down to **JSON**, 
+they'll actually call the getter methods.
+And remember, **Jackson**'s going to do all of this work for us behind the scenes.
+
+![image31](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image31.png?raw=true)
+
+Now let's talk about our **Spring REST service**.
+So we're going to have our **REST** client, 
+and then we're going to have our **REST** service and again `/api/students`.
+So we'll actually write that code.
+We'll pass back a list of student objects or our **POJO**'s,
+and then we'll actually have that converted over to **JSON**.
+And again, **Jackson**'s going to handle converting that data over to a **JSON** array.
+
+![image32](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image32.png?raw=true)
+
+So here we have our **REST** client and our **REST** service.
+We make a request of `/api/students`.
+And there's **Spring REST**.
+So **Spring REST** and **Jackson**'s going to work together.
+So any request coming in if there are any **JSON** data, they'll convert it to **POJO**'s.
+But in this case, we're just simply going to that endpoint.
+Well, on our **REST** service we'll create a list of objects
+or a list of students, and we'll return those items.
+So then **Jackson** will actually handle converting that list of students to the **JSON** array.
+So remember, **Jackson** can handle 
+the conversions of **JSON** to **POJO**'s and **POJO**'s to **JSON**.
+So they'll call the appropriate methods and so on.
+And then they'll send back a **JSON** array based on that data that we passed to it.
+And that's really how it works behind the scenes.
+So a lot of good synergies between **Spring REST** and the **Jackson** project here.
+And it also makes your life really easy as a **Spring REST**s developer, 
+so you don't have to worry about any low-level **JSON** development.
+
+Let's look at our development process.
+
+1. Create a Java **POJO** class for a **student** 
+2. Create a **Spring REST** service using that at `@RestController` annotation.
+
+![image33](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image33.png?raw=true)
+
+Alright, so let's go ahead and take a look at step one.
+So step one of creating a Java **POJO** class for **Student**.
+Here above, the little **UML** diagram for it and then the Java code.
+This Java code is very simple, very straightforward.
+All we do is we define fields, we define constructors,
+and we define the getters and setters.
+So a very basic example here you've seen a lot of this coding before.
+
+![image34](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image34.png?raw=true)
+
+Now moving ahead here with step two of creating that `@RestController`.
+So here's a little diagram up in the top right as far as our **REST** client, 
+**Spring REST**, and the **REST** service.
+What we'll do is actually define this **RestController** using those annotations
+for `@RestController` and `@RequestMapping` for `/api`.
+Now, I'll go through and actually define the endpoint for `/students`.
+That basically returns a list of students here.
+Here, I'll set up the `@GetMapping` for `/students`,
+and then I define the method `public List<Student> getStudents()`.
+Inside this method, I'll create a list of students and return it to the calling program.
+So here I simply just create a new array list.
+It's empty right now, and then I just go through 
+and add three students, `Porrima`, `Mario`, and `Mary`.
+At this point, I'll just hard-code the data for now,
+but we could always integrate a database later.
+But right now, let's just kind of keep it simple just
+so we get something working, and then we can get into all the database stuff later.
+So then I go through and simply say, return the students.
+And remember here, **Jackson** will actually convert that list
+of students to the **JSON** array as it goes back to the actual **REST** client.
+And again, it all happens in the background.
+So for our method for this controller, all we do is we simply define the method, 
+write the code return our **POJO** or our Java object, 
+and then all the **JSON** conversions and so forth will happen automatically 
+thanks to **Spring REST** and **Jackson**.
+Now, we're going to write this code out, 
+and we're going to get this app running on our local computer.
+
+The first thing we need to do is actually create a package to place our **POJO** class.
+So I'll simply just do a right click in the `demo` folder,
+say create new package, and the name that I'll give for the package,
+I'll call it `.entity`.
+So this is where we'll put our actual **POJO** class.
+So here's step one.
+I need to actually create my **Java POJO** class,
+so I'm going to create a new class here.
+And this is for our **POJO** called **student**.
+So it's just a regular, plain, old Java object, or just a regular Java class.
+
+```java
+package com.luv2code.demo.rest.entity;
+
+public class Student {
+    
+    private String firstName;
+    private String lastName;
+}
+```
+
+And what I'm going to do here is define some fields here,
+so I'll define a field for _firstName_ and _lastName_.
+I'll just go ahead and define a constructor.
+
+```java
+package com.luv2code.demo.rest.entity;
+
+public class Student {
+    
+    private String firstName;
+    private String lastName;
+
+    public Student() {
+        
+    }
+
+    public Student(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+}
+```
+
+So I'll just actually write out the first one here,
+the no argument constructor, and then for the other constructor,
+I'll actually have it generate this for me,
+and just make sure that both of 'em are selected here for first name and last name.
+All right, so there we go.
+So we have this constructor for _firstName_ and _lastName_.
+
+```java
+package com.luv2code.demo.rest.entity;
+
+public class Student {
+    
+    private String firstName;
+    private String lastName;
+
+    public Student() {
+        
+    }
+
+    public Student(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+```
+
+The next thing we need to do is generate the getters and setters for these fields.
+And then make sure that these two are selected for _firstName_ and _lastName_.
+So here, all we did was create a basic **POJO** class.
+We defined some fields, constructors, and getters and setters.
+
+Alright, what we need to do now is actually go through and create our `@RestController`.
+So, I'll move down to this `rest` package, 
+and I'll create a new class for our **REST** controller.
+
+```java
+package com.luv2code.demo.rest;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+    
+}
+```
+
+And the name that I'll give for this controller, I'll call it `StudentRestController`.
+So, since I'm building a **REST** controller, I'll use that spring annotation `@RestController`.
+And I also set up the base `@RequestMapping` here, I'll call it `/api`.
+Here's the basic layout here for our student **REST** controller.
+So we have the annotations up top for the `@RESTcontroller` and `@RequestMapping`.
+Now, just a quick comment here.
+
+```java
+package com.luv2code.demo.rest;
+
+import com.luv2code.demo.entity.Student;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    // define endpoint for "/students" - return a list of students
+    @GetMapping("/students")
+    public List<Student> getStudent() {
+
+        return null;
+    }
+}
+```
+
+I'll write in the code here though.
+I need to define an endpoint for `/students`.
+So this will be for a `get` request 
+and basically what we'll do is we'll return a list of all the students that we have.
+So we can use the same process that we saw earlier with the `hello world` example.
+We simply define a `@GetMapping`.
+So here I'll give `/students`.
+I'll say `public List<Student>` because we're going to return a list of students, right?
+Call the method _getStudent_.
+And just for now, return `null`.
+
+```java
+package com.luv2code.demo.rest;
+
+import com.luv2code.demo.entity.Student;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    // define endpoint for "/students" - return a list of students
+    @GetMapping("/students")
+    public List<Student> getStudent() {
+
+        List<Student> theStudents = new ArrayList<>();
+
+        theStudents.add(new Student("Poornima", "Patel"));
+        theStudents.add(new Student("Mario", "Rossi"));
+        theStudents.add(new Student("Mary", "Smith"));
+        
+        //return null;
+        return theStudents;
+    }
+}
+```
+
+So what we're going to do is create some sample students in this method 
+that will return to the calling program.
+And for now, we'll just hard code it.
+We'll get into all the database stuff later, so don't worry.
+We'll do all the full database crud stuff in some following sections.
+For now, let's keep it simple, just to get things up and running.
+So I'll just create a new array list right here.
+It's empty at the moment for students,
+and we'll actually populate it with some student objects.
+And then I'll just add a `new Student`.
+Use that constructor that we created in a previous example, so `Poornima Patel`.
+So that is our first student.
+So let's just go ahead and copy this line and paste it a couple of times,
+and we'll just change the student name.
+Alright, so I have three students here.
+Let me update the names here.
+So `Mario Rossi` and then `Mary Smith`.
+So I'll just kind of fix up the returns here.
+So return `theStudents` as opposed to `null`,
+as we have a new object that we've just created.
+So those are the three students that we've just added for this demo.
+That's the endpoint here, and so we can actually access this endpoint by going to `/api/students`.
+And remember, **Spring** will make use of **Jackson** in the background.
+It'll take those **POJO**s and convert them to **JSON**,
+and we'll go back to the client or calling program.
+So this is good for the first cut.
+There are some minor items here and there, but don't worry, 
+we'll actually refactor this code in some later sections,
+but at least this is enough to get us started.
+
+Okay, so we have our coding completed.
+Now let's go ahead and test this out and let's run it and see how it works out.
+
+```html
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-05-28T16:18:45.591+03:00  INFO 88324 --- [demo] [           main] com.luv2code.demo.DemoApplication        : Starting DemoApplication using Java 21.0.2 with PID 88324 (D:\JAVA_STUDY\Github\dev-spring-boot\04-spring-boot-rest-crud\01-spring-boot-rest-crud\target\classes started by korha in D:\JAVA_STUDY\Github\dev-spring-boot\04-spring-boot-rest-crud\01-spring-boot-rest-crud)
+2024-05-28T16:18:45.594+03:00  INFO 88324 --- [demo] [           main] com.luv2code.demo.DemoApplication        : No active profile set, falling back to 1 default profile: "default"
+2024-05-28T16:18:46.354+03:00  INFO 88324 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-28T16:18:46.364+03:00  INFO 88324 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-28T16:18:46.364+03:00  INFO 88324 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-05-28T16:18:46.410+03:00  INFO 88324 --- [demo] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-28T16:18:46.411+03:00  INFO 88324 --- [demo] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 772 ms
+2024-05-28T16:18:46.663+03:00  INFO 88324 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-05-28T16:18:46.670+03:00  INFO 88324 --- [demo] [           main] com.luv2code.demo.DemoApplication        : Started DemoApplication in 1.387 seconds (process running for 1.668)
+```
+
+Alright, so it's up and running.
+So remember, we have to go into the URL here and do `/api/students` 
+to access that new endpoint that we just created.
+
+![image35](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image35.png?raw=true)
+
+So this is some good **JSON**.
+So we have our three students, `Poornima`, `Mario`, and `Mary`.
+Remember how **Spring REST** will actually take your actual **POJO** objects 
+and convert those **POJO** objects to **JSON** and pass it back.
+And it makes use of the **Jackson** project in the background for handling that conversion.
+So we saw how **Jackson** works, so we're good to go there.
+So let's go ahead and copy this URL from the browser here, 
+and then we'll move over to **Postman** and test it there.
+And in the actual URL section here, paste in that URL that we copied previously.
+And then we just hit the blue `send` button and then: 
+
+![image36](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image36.png?raw=true)
+
+So there we go.
+So let me kind of scroll down a bit over here.
+And here are our three students, `Poornima`, `Mario`, and `Mary`.
+So we're kind of successful.
+So we have this **REST** controller working, 
+this **REST** web service working with this new endpoint
+that we just created to get a list of students.
+So we're in good shape, and we are rocking and rolling.
+So good job so far.
 </div>
 
 ## [Path Variables]()
