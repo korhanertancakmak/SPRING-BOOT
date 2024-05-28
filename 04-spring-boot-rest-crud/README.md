@@ -1498,8 +1498,580 @@ or that given exception condition.
 ## [Exception Handling]()
 <div style="text-align:justify">
 
+In this section, we're going to cover **Spring REST Exception Handling**.
+Remember our problem in the previous section, right?
+We would pass over a bad _studentId_ of `9999`, and then we get this ugly exception, right?
 
-</div>
+```html
+{
+    "timestamp": "2024-05-28T14:34:32.978+00:00",
+    "status": 500,
+    "error": "Internal Server Error",
+    "path": "/api/students/9999"
+}
+```
+
+500, internal server error.
+We found out what the root cause was.
+It was an index out of bounds.
+What we really want is this, we want to handle the exception and return the error as **JSON**.
+
+```html
+{
+    "status": 404,
+    "message": "Student id not found - 9999",
+    "timeStamp": 15261496
+}
+```
+
+So we'd like to have a nice little **JSON** message come back,
+that has the details on the error or the exception.
+So we'd like to give the actual status code of `404`, the actual error message,
+and then maybe a timestamp as far as when this given error occurred.
+And that's what we really want, and that's what we'll actually build out in this section.
+Alright, so let's look at the big picture here.
+
+![image44](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image44.png?raw=true)
+
+So we have this **REST Client**, the **REST Service**, we make a call for `api/students/9999`.
+That's the bad data.
+It makes it into our **REST Service**, throws an exception,
+and then we'd like to actually handle for that exception.
+Then instead of that ugly **HTML** page, we'll send back the exception error message as **JSON**.
+
+So let's look at the actual development process here:
+
+1. Create a custom error response class
+2. Create a custom exception class
+3. Update our **REST** service to throw the exception if the student is not found
+4. Add an exception handler method using springs at `@ExceptionHandler` annotation
+
+Starting with step 1: we're going to create this custom error response class.
+So this class will actually be sent back to the client as **JSON**.
+We'll define this as a Java class or a **POJO**,
+and we'll just keep track of three fields here.
+We'll keep track of the **status**, the **message**, and the **timestamp**.
+And then **Jackson** will actually be responsible
+for converting this **POJO** over to **JSON** going back to the client.
+Now with this **POJO** here, you can define any custom fields that you want to track.
+Here I'm just keeping it simple by having these 
+three fields of **status**, **messaging**, and **timestamp**.
+But you can easily extend it, and easily add your own custom fields
+because just a regular **Java POJO**.
+
+```java
+public class StudentErrorResponse {
+    
+    private int status;
+    private String message;
+    private long timeStamp;
+    
+    // constructors
+    
+    // getters / setters
+}
+```
+
+Okay, so let's go ahead and look at the coding here.
+So we'll have `this StudentErrorResponse.java`.
+We'll create this class.
+We'll define those three fields for **status**, **message** and **timestamp**.
+And then from there we simply create our constructors,
+and also our getters and setters.
+And that's it.
+It's just a regular basic Java, **POJO**, or Java class here.
+
+```html
+{
+    "status": 404,
+    "message": "Student id not found - 9999",
+    "timeStamp": 1526149650271
+}
+```
+
+And again, in the bottom right, you'll see the little **JSON** portion here.
+**Jackson** will actually convert this **POJO** over 
+to the appropriate **JSON** when we send it back.
+And that's it for this example.
+Now, moving ahead to step 2 as far as creating our custom student exception,
+this custom student exception will be used by our **REST** service.
+So, in our code, if we can't find a **Student**,
+then we'll actually throw an exception.
+So, we need to define the custom student exception class.
+We'll actually call it `StudentNotFoundException`.
+
+```java
+public class StudentNotFoundException extends RuntimeException {
+    
+    public StudentNotFoundException(String message) {
+        super(message);
+    }
+}
+```
+
+Alright, so let's go ahead and define our custom student exception.
+So our class extends `RuntimeException`, and then we define a constructor here.
+And this constructor will basically make use of super,
+so just call the superclass constructor for the message.
+And that's it.
+So since we're using inheritance, 
+there's not much code we have to write here for this given exception.
+And this is a very common approach for creating exceptions.
+
+```java
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    private List<Student> theStudents;
+
+    // ...
+    
+    @GetMapping("/students/{studentId}")
+    public Student getStudent(@PathVariable int studentId) {
+
+        // check the studentId against list size
+        
+        if ((studentId >= theStudents.size()) || (studentId < 0)) {
+            throw new StudentNotFoundException("Student id not found - " + studentId);
+        }
+        
+        return theStudents.get(studentId);
+    }
+    
+    // ...
+}
+```
+
+In step 3, we're going to update the **REST** service to throw an exception.
+So here's the basic coding here for our student **REST** controller
+and the method for _getStudent_ for a given _studentId_,
+we're going to check the _studentId_ against the list size.
+So we check the _studentId_.
+If it's greater or equal to `theStudents.size` 
+or the _studentId_ is less than `0`, then we're going to throw an exception,
+and we're going to throw out custom exception **StudentNotFoundException**.
+And if we were using a database, 
+we could easily check this against database results like we could do a query, 
+see if we got any results.
+If we didn't get any results, then we could throw an exception accordingly.
+But here we're just keeping it simple by using the _studentId_ to index into our array list.
+And if this statement works out just fine
+meaning that the studentId is within the range
+then we simply return `theStudents.get`, the `studentId`.
+And that's the happy path here.
+Now at this point, we have an exception that's thrown.
+
+So again, if our bad data is coming in of `9999` we'll throw the exception.
+So that part is taken care of. 
+However, the next thing or the missing link right now 
+is the exception handler, who's going to handle the exception,
+and how will they get the appropriate **JSON** data back to the client.
+So that takes us up to Step 4, adding the exception handler method.
+So what we're going to do here is define an exception handler method 
+using this `@ExceptionHandler` annotation from **Spring**.
+This exception handler is going to return a **ResponseEntity**.
+The **ResponseEntity** is really just a wrapper for the **HTTP** response object.
+It gives you fine-grained control over specifying the actual status code,
+the actual **HTTP** headers, and also the **Response** body.
+So you have a bit more control over 
+how you send back the response to the calling program.
+
+```java
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    // ...
+    
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
+
+        StudentErrorResponse error = new StudentErrorResponse();
+        
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+        
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+}
+```
+
+So we'll actually add the exception handler method here.
+I'll kind of spec out the basic coding for it.
+So I'll make use of this annotation `@ExceptionHandler`.
+So we're saying, it's an exception handler method.
+And then we also specify the type of the response body.
+So we have **ResponseEntity** and we say in brackets **StudentErrorResponse**.
+So that's the type of data we're going to pass back in the response body.
+And then we also tell it, 
+_hey, these are the types of exceptions that we can handle for this given handler method_.
+So here I'll have **StudentNotFoundException**.
+So any **StudentNotFoundException**s that are thrown this actual handler method 
+will catch it and then work on it accordingly.
+So we're inside the method here.
+We go ahead and create our **StudentErrorResponse**.
+That's that custom POJO that we created earlier.
+And then we simply set some fields here.
+So I set the actual status of `Http.Status,Not_Found`.
+So that's basically a 404. 
+We set the actual error message based on the exception `exc.getMessage`.
+And then we also set the _timestamping_ here.
+I just use a `System.currentTimeMillis()` to give us the current timestamp.
+So that's the basic piece here as far as creating that **StudentErrorResponse**
+and then loading it with the appropriate data.
+And then, now, what I do is actually move through,
+and I return the appropriate **ResponseEntity** here.
+So I say return new **ResponseEntity**, and then I give _error_, the status code.
+So the actual first argument here, that's the actual body.
+So **error**, that's that custom **StudentErrorResponse** that we've just created.
+And then we give `HttpStatus.NOT_FOUND`.
+That's the 404 error that will return to the calling program.
+And then **Jackson** will be responsible for converting the actual body 
+to the appropriate **JSON**.
+And so we'll get this **JSON** going back to the calling program.
+And so that's the basic layout there as far as the coding.
+
+So let's create our custom error response class,
+and also we'll create our custom exception.
+So we'll start with step one of creating our custom error response class.
+And the name that I'll give for this class I'll call it **StudentErrorResponse**.
+And so remember, this is just our pojo, and we'll simply define the fields here
+for a status message and timestamp.
+
+```java
+package com.luv2code.demo.rest;
+
+public class StudentErrorResponse {
+    
+    private int status;
+    private String message;
+    private long timeStamp;
+
+    public StudentErrorResponse() {
+
+    }
+
+    public StudentErrorResponse(int status, String message, long timeStamp) {
+        this.status = status;
+        this.message = message;
+        this.timeStamp = timeStamp;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+}
+
+```
+
+This is all very basic, very straightforward.
+Alright, so those are our three fields that we have set up kind of based on our uml diagram.
+And then the next thing I'll go through and define the constructors for it.
+So I'll start by just creating a default no argument constructor,
+and then I'll just make sure I have those three fields selected there,
+or just kind of do the select all, and then we're ready to go.
+And there we go.
+So we have these two constructors, and so I may not use all, but I have them here.
+And just in case I need to use them later on in the future.
+So the next thing here is generating our getters and setters,
+and then we're ready to go with this portion of it.
+That's basically about it.
+So we have our getters and setters, we have our fields, and we have our constructors.
+So we're in pretty good shape with this **StudentErrorResponse**.
+So we can say that step one is complete, and we can move on to step number two.
+
+```java
+package com.luv2code.demo.rest;
+
+public class StudentNotFoundException extends RuntimeException {
+
+    public StudentNotFoundException(String message) {
+        super(message);
+    }
+
+    public StudentNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public StudentNotFoundException(Throwable cause) {
+        super(cause);
+    }
+}
+
+```
+
+So with step two is simply creating a custom exception class for this example.
+And so again in our `rest` package, we'll create this class here.
+Let's create a new class.
+And so this will be for our **StudentNotFoundException**, 
+and I'll say `extends runtimeException`
+**runtimeException**s from the `java.lang` package.
+And basically all I want to do here is define a constructor here 
+for this **StudentNotFoundException**, 
+I'll actually generate the constructor from the superclass.
+**Generate**, so those are three that we want.
+And again, I may not use all of them, but it's just good to have them
+in case I need to use them again in the future.
+Alright, so that's my **StudentNotFoundException**
+and I can use this in my **REST** service when it's actually time to throw an exception,
+if the _studentId_ is a bad _studentId_, or I can't find the given **Student**.
+Alright, so that's our custom student exception.
+
+So, we've already covered step one and two.
+Now we'll actually cover step three of updating our **REST** service to throw the exception
+if the student is not found.
+Okay, so let's go ahead and move over to our **REST** service here,
+our student rest controller, and we'll make those updates to throw the exception.
+So I'm in my student **REST** controller, my **REST** service.
+I'll move down to that _getStudent_ method.
+
+```java
+package com.luv2code.demo.rest;
+
+import com.luv2code.demo.entity.Student;
+import jakarta.annotation.PostConstruct;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    private List<Student> theStudents;
+
+    // define @PostConstruct to load the student data ... only once!
+    @PostConstruct
+    public void loadData() {
+
+        theStudents = new ArrayList<>();
+
+        theStudents.add(new Student("Poornima", "Patel"));
+        theStudents.add(new Student("Mario", "Rossi"));
+        theStudents.add(new Student("Mary", "Smith"));
+    }
+
+    // define endpoint for "/students" - return a list of students
+    @GetMapping("/students")
+    public List<Student> getStudent() {
+        return theStudents;
+    }
+
+    // define endpoint for "/student/{studentId}" - return student at index
+    @GetMapping("/students/{studentId}")
+    public Student getStudent(@PathVariable int studentId) {
+
+        // just index into the list ... keep it simple for now
+        
+        // check the studentId again list size
+        if ((studentId >= theStudents.size()) || (studentId < 0)) {
+            throw new StudentNotFoundException("Student id not found - " + studentId);
+        }
+        
+        return theStudents.get(studentId);
+    }
+}
+```
+
+And so this is where I want to add some logic here to check the _studentId_.
+So I'll write a quick little comment here to myself.
+So I'm going to check the _studentId_ against the list size,
+and I can do this with an `if` statement.
+So here, I'll just check to see if the _studentId_ is greater than 
+or equal to `list.size`, or if the _studentId_ is less than zero.
+If that's the case, then I'm actually going to throw an exception.
+And so when I throw the exception here, I'll throw a new **StudentNotFoundException**.
+Again, that's our custom exception class we created earlier.
+And so I'll simply give the message, "_Hey, I couldn't find a given student ID_"
+and provide the actual student ID that we couldn't find.
+So that's the basic coding there for checking that.
+So that's the logic to kind of handle that part of it.
+And then if everything's okay, we make it past that if statement,
+then we simply return `theStudents.get(studentId)`.
+So that's the happy path.
+So they pass on a valid ID or okay,
+we simply get the student and return it accordingly.
+So that kind of takes care of step three of throwing the exception.
+
+So we've covered steps one through three so far.
+Now we'll cover step four of adding an exception 
+handler using the `@ExceptionHandler` annotation.
+So with this step four of adding exception handler,
+we have the code for throwing the exception, 
+but nothing for handling the exception.
+So that's where we need to do this now.
+And we'll actually add this code in,
+our **StudentRestController** will add an exception handler for this given application, 
+and we'll make use of that `@ExceptionHandler` annotation.
+
+```java
+package com.luv2code.demo.rest;
+
+import com.luv2code.demo.entity.Student;
+import jakarta.annotation.PostConstruct;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    // ...
+
+    // Add an exception handler using @ExceptionHandler
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
+
+        // create a StudentErrorResponse
+        StudentErrorResponse error = new StudentErrorResponse();
+
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        // return ResponseEntity
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+    
+}
+```
+
+I give this `@ExceptionHandler` annotation,
+and then I'll actually write out the method signature.
+And for now, say return `null`, just to kind of give us some basics here.
+And then we can kind of focus on and drill down on some different parts of this coding.
+So remember the `@ExceptionHandler` annotation says
+"_Hey, this method's an exception handler._"
+We tell the actual response type.
+And then we also have the actual exception type as far
+as what we're going to catch.
+So here we're saying that this coding or this **ExceptionHandler** can handle
+or catch **StudentNotFoundException**s.
+So we have the basic coding stubbed out.
+Let me just write some quick comments here to myself 
+just so I know what I need to do inside this method.
+So I need to create the student error response and also return a **ResponseEntity**.
+Alright, so let me just go ahead and create a **StudentErrorResponse**.
+So I'll just call the constructor here for this **StudentErrorResponse**.
+And remember, that's the custom error response object
+that we created earlier in some of the previous sections.
+And then I'll simply go through and just set the values here.
+So I'll set the actual _status_ that's the actual **HTTP** status code of `NOT_FOUND`.
+That means 404.
+Then I set the actual _message_ for this error response 
+to be whatever the exception message is.
+So I'll say `exception.getMessage()`.
+And then finally I'll set the actual _timestamps_.
+So I'll say `error.setTimeStamp()`
+and I'll get the `System.currentTimeMillis()`.
+Alright, so that's the basic code in there for setting the appropriate values
+on this error response object.
+Okay, so now moving to this next area here,
+I need to return the **ResponseEntity**.
+So here I'm going to create a new **ResponseEntity**, and then I give the actual _error_
+which is the body of the response and then the actual status code for this response.
+So the status code will be `HttpStatus.NOT_FOUND`.
+So I give the body comma the actual status code.
+And remember, **Jackson** will be responsible for taking that **POJO** class
+and converting it to **JSON** accordingly.
+
+```html
+{
+    "status": 404,
+    "message": "Student id not found - 9999",
+    "timeStamp": 1526149650271
+}
+```
+
+So when it goes back to the client, we'll see this nice error response just
+like we have here on the screen.
+Let's go ahead and test this thing out.
+And now just go ahead and break it with this `localhost:8080/api/student/9999`:
+
+![image45](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image45.png?raw=true)
+
+Success.
+So that's the error response that we wanted.
+We wanted **JSON** error response.
+Now let's copy this url, and then let's go ahead and swing over to **Postman**,
+and just see how it works out in **Postman** for us.
+I'll move up here, and I'll simply paste in that url that I just copied.
+And then I'll just kind of hit the blue `send` button.
+
+![image46](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image46.png?raw=true)
+
+And, oh yeah, looking good.
+So down here at the bottom, we have this **JSON** response for the error.
+So, again, mission accomplished here.
+And also in the top right we have `404 not found`.
+And that's great, because that id is not found.
+And so we're giving the correct status code.
+And then you can test other bad IDs, like some really large numbers or whatever.
+You could also swing over and put in like,
+negative numbers to see how that works out for us.
+So if we enter like a negative five,
+then that should also handle accordingly with our exception handling code.
+But we're not really done.
+There are some edge cases out there and you may have discovered them already.
+If you enter some text characters
+for the student ID like `localhost:8080/api/student/sadfsdfs` or something,
+then that won't really work for our application.
+So we added some exception handling, but we didn't cover all the edge cases.
+And we can get some more details by actually looking
+at the server logs to find out what exactly happened here.
+
+```html
+2024-05-28T21:48:02.361+03:00  INFO 97036 --- [demo] [           main] com.luv2code.demo.DemoApplication        : No active profile set, falling back to 1 default profile: "default"
+2024-05-28T21:48:03.007+03:00  INFO 97036 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-28T21:48:03.016+03:00  INFO 97036 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-28T21:48:03.016+03:00  INFO 97036 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-05-28T21:48:03.060+03:00  INFO 97036 --- [demo] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-28T21:48:03.061+03:00  INFO 97036 --- [demo] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 661 ms
+2024-05-28T21:48:03.277+03:00  INFO 97036 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-05-28T21:48:03.282+03:00  INFO 97036 --- [demo] [           main] com.luv2code.demo.DemoApplication        : Started DemoApplication in 1.199 seconds (process running for 1.456)
+2024-05-28T21:48:08.713+03:00  INFO 97036 --- [demo] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-05-28T21:48:08.713+03:00  INFO 97036 --- [demo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-05-28T21:48:08.713+03:00  INFO 97036 --- [demo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-05-28T21:53:12.733+03:00  WARN 97036 --- [demo] [io-8080-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "fasdfasdfs"]
+```
+
+So this last line is a warning.
+And then we can kind of start scrolling over to the right with this error message.
+So it says fail to bind request, **MethodArgumentTypeMismatchException**.
+_Failed to convert value of type `java.lang.String` to required type `int`_.
+That weird text that we entered, you can't really convert that to an integer.
+But we didn't give a good **JSON** error response.
+So, we'll actually need to modify our code to handle for these edge cases.
+Or, kind of set up like a generic exception handler.
+So for any error that happens, we can catch it.
+And then send back that response as **JSON**.
+And we'll actually cover that in the next section.
+ </div>
 
 ## [Global Exception Handling]()
 <div style="text-align:justify">
