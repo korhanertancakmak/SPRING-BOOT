@@ -2186,7 +2186,139 @@ or any other exceptions by passing back that data as **JSON**.
 ## [Global Exception Handling]()
 <div style="text-align:justify">
 
+In this section, we'll cover `Spring REST Global Exception Handling`.
+Now, in the previous section, we added code for exception handling.
+So we had bad data coming across, we had our **REST** service that were throwing exception.
+And then inside the **REST** service, we had an exception handler
+that'll actually pass back the exception as **JSON** data.
 
+That coding works, but the exception handler code is only for the specific **REST** controller.
+The coding can't be reused by other controllers.
+And on large projects, or on realtime projects, you'll normally have multiple **REST** controllers.
+So ideally, what we need is **global** exception handlers.
+So this promotes the idea of reuse, and also helps you centralize your exception handling,
+and minimizes the amount of code that you need to duplicate 
+across multiple controllers on very large projects.
+
+So to help solve this, we can make use of this **Spring** `@ControllerAdvice`.
+The `@ControllerAdvice` annotation, it's similar to an **interceptor** or **filter**.
+So we can use it to, kind of, pre-process requests to controllers.
+We can also use it to post-process responses to handle exceptions.
+And this is perfect for making use of global exception handling.
+And if you notice, the name here, `@ControllerAdvice`, 
+this is actually realtime use of `AOP`, or aspect ordain programming.
+So if you remember from the `AOP` days, 
+we had the ideas like, before advice, and after advice, and so on.
+So here in **Spring**, they make use of an `@ControllerAdvice`.
+So this is `AOP` that you can use to, kind of, pre-process and post-process on controllers.
+
+![image49](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image49.png?raw=true)
+
+So now, with this **Spring REST** exception handling, with this advice, 
+or the `@ControllerAdvice`, we have our **REST** client, our **REST** service, 
+we make a request across to the actual service, then we'll have this controller advice,
+to, kind of, pre-process the request, and then the **REST** service will execute.
+If there is something wrong, we'll throw an exception.
+And now, instead of the exception being in the **REST** service,
+the exception handler is going to be moved out and placed in the controller advice.
+So this will give us support for global exception handling.
+So no need to write all the exception handling in each **REST** service.
+We can place it in one global location, to handle all of those requests.
+And we can do all of that, thanks to this `@ControllerAdvice`.
+
+As far as the development process: 
+
+1. Create a new `@ControllerAdvice`
+2. Refactor our **REST** service or remove the exception handling code from our **REST** service
+3. Add the exception handling code to the `@ControllerAdvice`
+
+So it's basically just taking existing code, and just, kind of, moving it around a bit,
+and placing it in a global exception handler.
+
+```java
+package com.luv2code.demo.rest;
+
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
+@ControllerAdvice
+public class StudentRestExceptionHandler {
+
+    // add exception handling code here
+
+}
+```
+
+All right, so it's step one of creating a new `@ControllerAdvice`.
+So I'll simply create this new class in the `rest` package.
+So I'll move here to the `rest` package, and I'll just say new class.
+And the name that I'll give for this class, I'll call it `StudentRestExceptionHandler`.
+And basically what I need to do here is just add the `@ControllerAdvice`.
+So that's a special annotation from the **Spring** framework.
+I'll add some quick comments here to this class just so I know what I need to do.
+So for step two, we need to kind of refactor our **Rest** service
+and remove the exception handling code.
+So I'll move over to `StudentRestController.java`.
+And basically, I want to move down to those two methods that we defined as `@ExceptionHandler`.
+So both of those methods with the annotation of `@ExceptionHandler`, 
+I want to cut both of those methods and move them to another class.
+So I'll just go ahead and cut, and then I'll move over to the `StudentRestExceptionHandler`.
+
+```java
+package com.luv2code.demo.rest;
+
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
+@ControllerAdvice
+public class StudentRestExceptionHandler {
+
+    // add exception handling code here
+
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
+
+        // create a StudentErrorResponse
+        StudentErrorResponse error = new StudentErrorResponse();
+
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        // return ResponseEntity
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    // add another exception handler ... to catch any exception (catch all)
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(Exception exc) {
+
+        // create a StudentErrorResponse
+        StudentErrorResponse error = new StudentErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        // return ResponseEntity
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+}
+```
+
+And this is the exact same code.
+So no changes are required for this code.
+You can just drop it in as it is, and use it in this `@ControllerAdvice`.
+So here's the first exception handler that we had for just handling for a `StudentNotFoundException`.
+And then the other one that we have is our catch-all for handling any type of exception,
+any type of generic exception.
+Let's go ahead and test it out by just running our application.
+Okay, it's up running.
+I'll hit the get all students, and I'll just give `9999` here, student, I found.
+That works.
+And then I'll just give some bad text data here and good.
+So this is all the same output as before.
+We simply just refactored our code to make use of the `@ControllerAdvice` for global exception handling.
+And so this is the best practice for large scale projects 
+or real time projects by making use of this `@ControllerAdvice`. 
 </div>
 
 ## [API Design - Create Project]()
