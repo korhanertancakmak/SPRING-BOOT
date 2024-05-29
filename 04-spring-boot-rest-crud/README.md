@@ -3380,9 +3380,406 @@ So we're getting the same data as before.
 Now we're using the **service** instead of using the **DAO** directly.
 </div>
 
-## [Data Access Object (DAO)]()
+## [Data Access Object (DAO): Add, Update, Delete]()
+<div style="text-align:justify">
+
+In this section, we're going to cover the **DAO** methods to find **add**, **update**, and **delete**.
+Now, before we get into the **DAO** discussion,
+I want to mention a best practice regarding the **service** layer.
+
+The best practice is to apply transactional boundaries on the **service** layer.
+It's really the **service** layer's responsibility to manage the transaction boundaries.
+What this means for our implementation code is 
+that we'll apply the `@Transactional` annotation on our service methods,
+and we'll actually remove the `@Transactional` annotation on our DAO methods if they already exist.
+So effectively here we're going to shift the `@Transactional` annotations
+from the **DAO** methods over to the **service** methods,
+and that's the best practice for managing transactions
+whenever you're making use of **service** layers and **DAO**s at the same time in the same architecture.
+
+Now, just picking back up on our development process,
+we're going to focus on the last couple of steps of adding our DAO methods
+for getting a single employee, adding a new, updating, and also deleting an existing employee.
+And so we'll focus on the **DAO** aspect of it here.
+
+```java
+@Override
+public Employee findById(int theId) {
+    
+    // get employee
+    Employee theEmployee = entityManager.find(Employee.class, theId);
+    
+    // return employee
+    return theEmployee;
+}
+```
+
+Alright, let's get started with the **DAO** of getting a single employee.
+So we'll have this method here _findById_, pass in the integer _theId_.
+We make use of this `entityManager.find`, and we give that _theId_.
+This will return _theEmployee_, and then we simply return this given employee from our method.
+
+```java
+@Override
+public Employee save(Employee theEmployee) {
+    
+    // save or update the employee
+    Employee dbEmployee = entityManager.merge(theEmployee);
+    
+    // return dbEmployee
+    return dbEmployee;
+}
+```
+
+And now the **DAO** method to add or update an employee will have this method 
+called _save_ that'll pass on _theEmployee_,
+and what we'll do is we'll make use of a save or update feature here.
+So we'll make use of this `entityManager.merge`, and we pass in `theEmployee`.
+Now, the way this _merge_ method works here is 
+that it'll perform a save or update depending on the actual id of the entity.
+If the id of the entity is equal to zero, 
+then it'll actually save or insert that given entity into the database.
+So that's like a new entry there.
+Else if the id is not equal to zero, it'll simply perform an update.
+So effectively here if id is zero, it's going to be an `insert`, else it'll be an `update`.
+And this method will return the updated employee.
+So here at the bottom here, we say return `dbEmployee`.
+So it's really important here is that you need to return the `dbEmployee`.
+This is the one that's been updated from the database,
+so it has the updated id from the actual database in the case of an `insert`.
+Alright, so make sure you return the correct one 
+when you make this given return statement,
+because effectively you want the latest version from the database, not the one that was passed in.
+Also, notice here at the top, we don't use the `@Transactional` annotation at the **DAO** layer
+because this will be handled at the **service** layer.
+So again, remember, when you're making use of **DAO**s and **service**s together, 
+the best practice is the **DAO** does not handle the `@Transactional`,
+instead, it's managed at the **service** layer.
+
+```java
+@Override
+public void deleteById(int theId) {
+    
+    // find the employee by id
+    Employee theEmployee = entityManager.find(Employee.class, theId);
+    
+    // delete the employee
+    entityManager.remove(theEmployee);
+}
+```
+
+Now, here's the DAO method for deleting an existing employee.
+So we have this method here, _deleteById_.
+We pass in `theId`.
+The first thing we do is we find the employee, and then we simply say, 
+`entityManager.remove(theEmployee)`.
+And I'd like you to delete that employee from the database.
+And a similar thing here for this _delete_,
+since we're modifying the database, we don't use `@Transactional` at the **DAO** layer,
+it'll be handled at the **service** layer.
+
+So we'll add these new methods to our **employeeDAO**.
+So I'll just go ahead and open up `EmployeeDao.java`.
+And I'll just add the other methods here, to give us our full **CRUD** support.
+And I'll just go ahead and just type them out real quickly.
+
+```java
+package com.luv2code.springboot.cruddemo.dao;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import java.util.List;
+
+public interface EmployeeDAO {
+
+    List<Employee> findAll();
+
+    Employee findById(int theId);
+
+    Employee save(Employee theEmployee);
+
+    void deleteById(int theId);
+}
+```
+
+So we can find an employee by id, and then we can save an employee,
+and then also delete an employee by id.
+Alright, so those are the three methods here, that we added for this given **DAO** interface.
+We add these methods to our **EmployeeDAO implementation**.
+</div>
+
+## [Spring Boot Service: Add, Update, Delete]()
+<div style="text-align:justify">
+
+In this section, we'll create our service in the associated methods,
+and we'll also refactor some of our code.
+Alright, so in our development process, 
+what we're going to do is focus on the methods for accessing our system, 
+and we'll do that via the **Employee Service**.
+So we'll actually create the **Service** methods for our given application architecture.
+And as I mentioned, we'll do a small bit of refactoring on some of our code too.
+Let's add the new methods to our **Service** interface.
+We can actually copy these methods from the **DAO** interface.
+Let's go ahead and do that now.
+I'll open up my **EmployeeDAO** and I'll grab these three methods here,
+`findById`, `save` and `deleteById`.
+And I'll go ahead and copy those methods.
+Now, move over to my **EmployeeService** interface, and I'll go ahead and paste those methods.
+Now, let's move to the service implementation and let's add the code for these methods.
+
+```java
+package com.luv2code.springboot.cruddemo.service;
+
+import com.luv2code.springboot.cruddemo.dao.EmployeeDAO;
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    // inject EmployeeDAO ...
+    private EmployeeDAO employeeDAO;
+
+    // set up constructor injection
+    @Autowired
+    public EmployeeServiceImpl(EmployeeDAO theEmployeeDAO) {
+        employeeDAO = theEmployeeDAO;
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        return employeeDAO.findAll();
+    }
+
+    @Override
+    public Employee findById(int theId) {
+        return employeeDAO.findById(theId);
+    }
+
+    @Transactional
+    @Override
+    public Employee save(Employee theEmployee) {
+        return employeeDAO.save(theEmployee);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(int theId) {
+        employeeDAO.deleteById(theId);
+    }
+}
+```
+
+And these service methods are really simple.
+All we're doing is simply delegating the calls to the **DAO**.
+So we're basically calling the same methods on the given **DAO**.
+It's very, very straightforward.
+We're simply delegating the calls from the **service** to the **EmployeeDAO**.
+Since we're modifying the database, we need to make use of the `@Transactional` annotation.
+Remember we're letting the **service** layer manage the transactions.
+Hence, we'll add the `@Transactional` annotation on this **service** method.
+Because remember earlier, we didn't place it on the **DAO**'s
+because we were going to let the **service** handle it for us.
+And now a similar thing on `deleteById`, since we're modifying the database,
+we need to make use of the `@Transactional` annotation,
+and we'll place it here in this method in the **service** layer.
+
+Now, we'll look at the **REST** controller methods for finding and adding an employee.
+So again, in our big development process, 
+we'll focus in on these steps here of getting a single employee by id 
+and also adding a new employee.
+This is primarily for the **REST** controller methods.
+We already did this work for the **services** and the **DAOs** already.
+
+| HTTP Method   | Endpoint                      | CRUD Action                 |
+|---------------|-------------------------------|-----------------------------|
+| `POST`        | `/api/employees`              | Create a new employee       |
+| `GET`         | `/api/employees/{employeeId}` | Read a list of employees    |
+| `GET`         | `/api/employees`              | Read a single employee      |
+| `PUT`         | `/api/employees`              | Update an existing employee |
+| `DELETE`      | `/api/employees/{employeeId}` | Delete an existing employee |
+
+Okay, so now just doing a checkpoint here on our realtime project 
+as far as the list of **API** methods.
+So we've already completed the first one here of `GET` to read a list of employees.
+Now we'll focus on actually doing a `GET` for a given employee id for a single employee
+and also doing a `POST` to create a new employee.
+
+![image63](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image63.png?raw=true)
+
+Now let's look at the application interaction 
+between our **REST** client and our **REST** controller.
+So with the **REST** client, we'll do a `GET` `/api/employees/{employeeId}`
+and it'll return that single employee in this case `David Adams`.
+
+![image64](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image64.png?raw=true)
+
+Now let's look at creating a new employee.
+So to create a new employee, we use the `POST` method
+and in the **JSON** body we give the actual information for the `firstName`, `lastName`, and `email`.
+And since this is a new employee, we're not passing over an `id` or a primary key 
+because that'll actually be generated for us on the backend by the database.
+So then we'll get the actual response back.
+So they'll basically echo the response, and they'll also include the actual new idea
+of the primary key that was generated by the database.
+
+Now a couple of things here, just as a refresher or reminder.
+So when sending **JSON** data to **Spring REST** controllers,
+we have to make sure that we send over the correct **HTTP** request header.
+And that header is the content-type of `application/json`.
+So we need to configure our **REST** client to send the correct request header 
+just so it processes the data accordingly. 
+
+Now again, as a refresher here, we're using **Postman** as our client.
+So once we have the url up for **Postman**, then we click on `Body`, 
+then we select `Raw`, and then we choose the content-type of `JSON(application/json)`.
+And based on these configs, **Postman** will automatically set the correct request header.
+
+Okay, so we're moving ahead with our development process, 
+so here we're going to focus on the **REST** controller methods 
+to get a single employee by id and also add a new employee.
+Let's go ahead and open up our `EmployeeRestController.java`.
+
+```java
+package com.luv2code.springboot.cruddemo.rest;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import com.luv2code.springboot.cruddemo.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+
+    private EmployeeService employeeService;
+
+    // quick and dirty: inject employee dao (use constructor injection)
+    @Autowired
+    public EmployeeRestController(EmployeeService theEmployeeService) {
+        employeeService = theEmployeeService;
+    }
+
+    // expose "/employees" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeService.findAll();
+    }
+
+    // add mapping for GET /employees/{employeeId}
+    @GetMapping("/employees/{employeeId}")
+    public Employee getEmployee(@PathVariable int employeeId) {
+
+        Employee theEmployee = employeeService.findById(employeeId);
+
+        if (theEmployee == null) {
+            throw new RuntimeException("Employee id not found - " + employeeId);
+        }
+
+        return theEmployee;
+    }
+}
+```
+
+And so this is step four of reading a single employee.
+So we'll make use of a get mapping, and we'll read the employee by the `employeeId`.
+So I'll set up a get mapping for `/employees/{employeeId}` as a path variable in curly brace.
+And the method signature is `getEmployee`, you take a parameter for path variable
+as `employeeId` and it returns a given **employee** object.
+And then I'll simply delegate these calls to the `employeeService`.
+So I'll make use of the `employeeService` at `findById` and I pass in the `employeeId`.
+And also I'll just add a `if-then` check here to check if it's `null`
+that means that we didn't find the employee in the database.
+And so we'll simply throw an exception here.
+And if everything's fine, we simply return the employee.
+And that's basically it there for the coding for `getEmployee` by given `employeeId`.
+Now I can actually run our application and test this out here.
+So I'll just run this as a Java application.
+Alright, so let's go ahead and swing over to our browser.
+
+![image65](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image65.png?raw=true)
+
+And I see that I have `Leslie Andrews` with id of one, `Emma Baumgarten`, id of two.
+So let's just test this out here.
+So `/1` for `Leslie`, it should return `Leslie`:
+
+![image66](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image66.png?raw=true)
+
+Success.
+This is exactly what we're looking for.
+And let's try it for ID of two.
+
+![image67](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image67.png?raw=true)
+
+And that returns `Emma`.
+So this is working.
+Now one thing I want to do is actually also test this same thing in **Postman** 
+just to see how things work over on the **Postman** side of things.
+So I have Postman open.
+I need to give the URL.
+So I'll just do a little copy and paste from my browser over here,
+swing back into **Postman** and paste that.
+Alright, so that's the id of two right now, and if I send that, we should get `Emma` coming back.
+
+![image68](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image68.png?raw=true)
+
+Great.
+So this is working just the same in **Postman** also so this is great.
+And let's just go ahead and add a new tab here and let's just get all employees,
+so I could paste that same piece and just take off the id, 
+and should give me everyone in the list.
+
+![image69](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image69.png?raw=true)
+
+Okay, great, the same thing we saw in the browser.
+So `Leslie`, `Emma`, and so on.
+Great, so we're in good shape here with that method implementation 
+for getting a single employee by id.
+</div>
+
+## [Spring Boot REST: Get Single Employee]()
 <div style="text-align:justify">
 
 
 </div>
 
+## [Spring Boot REST: Add Employee]()
+<div style="text-align:justify">
+
+
+</div>
+
+## [Spring Boot REST: Update Employee]()
+<div style="text-align:justify">
+
+
+</div>
+
+## [Spring Boot REST: Delete Employee]()
+<div style="text-align:justify">
+
+
+</div>
+
+## [Spring Boot REST: Spring Data JPA]()
+<div style="text-align:justify">
+
+
+</div>
+
+## [Spring Boot REST: Spring Data REST]()
+<div style="text-align:justify">
+
+
+</div>
+
+## [Spring Boot REST: Spring Data REST Configs and Sorting]()
+<div style="text-align:justify">
+
+
+</div>
