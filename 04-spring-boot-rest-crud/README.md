@@ -2070,7 +2070,117 @@ So, we'll actually need to modify our code to handle for these edge cases.
 Or, kind of set up like a generic exception handler.
 So for any error that happens, we can catch it.
 And then send back that response as **JSON**.
-And we'll actually cover that in the next section.
+And we'll actually cover that in the next.
+
+Let's add a generic exception handler for this issue.
+And basically we're going to set up a catch-all exception 
+to catch any of those edge cases that pop up in our application.
+So I'll just kind of move back into my **StudentRestController** here.
+
+```java
+package com.luv2code.demo.rest;
+
+import com.luv2code.demo.entity.Student;
+import jakarta.annotation.PostConstruct;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    // ...
+
+    // Add an exception handler using @ExceptionHandler
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
+
+        // create a StudentErrorResponse
+        StudentErrorResponse error = new StudentErrorResponse();
+
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        // return ResponseEntity
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+    
+    // add another exception handler ... to catch any exception (catch all)
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(Exception exc) {
+
+        // create a StudentErrorResponse
+        StudentErrorResponse error = new StudentErrorResponse();
+
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        // return ResponseEntity
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+}
+```
+
+And basically what I want to do is add a new exception handler
+or add another exception handler.
+And here again, like I mentioned, I'll do the catch-all
+for any type of exception that's being thrown.
+So I simply create the method signature very similar to what I did before.
+So I might use the `@ExceptionHandler`.
+I have the **ResponseEntity** for a **StudentErrorResponse**, 
+but for _handleException_ I'll actually specify the generic `Exception` object.
+As far as the one that we're going to handle for.
+Previously, we had _handleException_ for `StudentNotFoundException`.
+But here we're going to say _handleException_ for just the generic `Exception` object.
+So this is kinda like our catch-all for any exception that's thrown.
+Now for the actual body, I can actually copy some of that information 
+from our previous `ExceptionHandler`.
+So again, just a little copy and paste exercise,
+but the one thing I want to modify here is I actually want to change the status code.
+Because currently we have `HttpStatus.NOT_FOUND.value()`,
+but in this case it's just a bad request.
+Alright, so they're just passing over some bad data or a bad request,
+and we want to reflect that accordingly in the status code.
+So here I'll say `HttpStatus.BAD_REQUEST.value()`.
+So that's actually going to be a `400` error as opposed to a `404`.
+And here just more fine grain control over the response that we're sending.
+So I'll do a similar thing, I'll copy that request,
+and I'll also do a similar thing down here on the `ResponseEntity`.
+Making sure we cover it in both locations.
+But everything else for this coding remains the same.
+There are no major changes there.
+So again, we're just adding another `ExceptionHandler` to do the catch-all portion here.
+Okay, so let's go ahead and test this out and let's run it and see how it works out for us.
+We'll actually just use the `9999` to test that portion.
+So that part is still working, but again let's really break it by just
+entering some text values:
+
+![image47](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image47.png?raw=true)
+
+And success.
+We're getting the air packet back as **JSON** data.
+And again, let's swing over to **Postman** and do a similar thing.
+Just enter some characters again and then we hit the blue button for `send`.
+
+![image48](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image48.png?raw=true)
+
+Yeah, and good.
+Once more, we're getting this error response as **JSON**
+and in the top right it says that's a `bad request`.
+Now this message portion here it gives the details as far as what happened.
+If you'd like, you can leave it as is,
+or you can change the error message to be a bit more friendly to the user.
+In your Java code, you simply update this one line `error.setMessage`, 
+and you can give whatever plain text area that you want instead
+of giving the full exception _getMessage_ or whatever.
+So it's totally up to you as far as how you want to control and customize that portion.
+So we've handled the regular case of `StudentNotFoundException`,
+and we've also handled any other edge cases
+or any other exceptions by passing back that data as **JSON**.
  </div>
 
 ## [Global Exception Handling]()
