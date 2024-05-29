@@ -3503,7 +3503,7 @@ public interface EmployeeDAO {
 
 So we can find an employee by id, and then we can save an employee,
 and then also delete an employee by id.
-Alright, so those are the three methods here, that we added for this given **DAO** interface.
+Alright, so those are the three methods here that we added for this given **DAO** interface.
 We add these methods to our **EmployeeDAO implementation**.
 </div>
 
@@ -3520,7 +3520,7 @@ And as I mentioned, we'll do a small bit of refactoring on some of our code too.
 Let's add the new methods to our **Service** interface.
 We can actually copy these methods from the **DAO** interface.
 Let's go ahead and do that now.
-I'll open up my **EmployeeDAO** and I'll grab these three methods here,
+I'll open up my **EmployeeDAO**, and I'll grab these three methods here,
 `findById`, `save` and `deleteById`.
 And I'll go ahead and copy those methods.
 Now, move over to my **EmployeeService** interface, and I'll go ahead and paste those methods.
@@ -3635,9 +3635,13 @@ Now again, as a refresher here, we're using **Postman** as our client.
 So once we have the url up for **Postman**, then we click on `Body`, 
 then we select `Raw`, and then we choose the content-type of `JSON(application/json)`.
 And based on these configs, **Postman** will automatically set the correct request header.
+</div>
 
-Okay, so we're moving ahead with our development process, 
-so here we're going to focus on the **REST** controller methods 
+## [Spring Boot REST: Get Single Employee]()
+<div style="text-align:justify">
+
+Okay, so we're moving ahead with our development process,
+so here we're going to focus on the **REST** controller methods
 to get a single employee by id and also add a new employee.
 Let's go ahead and open up our `EmployeeRestController.java`.
 
@@ -3718,7 +3722,7 @@ And let's try it for ID of two.
 
 And that returns `Emma`.
 So this is working.
-Now one thing I want to do is actually also test this same thing in **Postman** 
+Now one thing I want to do is actually also test this same thing in **Postman**
 just to see how things work over on the **Postman** side of things.
 So I have Postman open.
 I need to give the URL.
@@ -3731,21 +3735,15 @@ Alright, so that's the id of two right now, and if I send that, we should get `E
 Great.
 So this is working just the same in **Postman** also so this is great.
 And let's just go ahead and add a new tab here and let's just get all employees,
-so I could paste that same piece and just take off the id, 
+so I could paste that same piece and just take off the id,
 and should give me everyone in the list.
 
 ![image69](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image69.png?raw=true)
 
 Okay, great, the same thing we saw in the browser.
 So `Leslie`, `Emma`, and so on.
-Great, so we're in good shape here with that method implementation 
+Great, so we're in good shape here with that method implementation
 for getting a single employee by id.
-</div>
-
-## [Spring Boot REST: Get Single Employee]()
-<div style="text-align:justify">
-
-
 </div>
 
 ## [Spring Boot REST: Add Employee]()
