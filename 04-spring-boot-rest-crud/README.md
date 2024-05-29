@@ -2403,29 +2403,981 @@ and we'll provide that employee data as **JSON** for handling the `POST` and the
 Now, let's talk about some `Anti-Patterns`.
 Don't do this, because these are **REST** anti-patterns, they're considered bad practice.
 When you actually list out your endpoints don't include the actions in the endpoint.
-For example, don't say employeesList or deleteEmployee,
-addEmployee or updateEmployee,
+For example, don't say `employeesList` or `deleteEmployee`, `addEmployee` or `updateEmployee`,
 that's not the best practice here.
-Instead, you should use the HTTP methods
-to assign the actions.
-All right, so the big thing here
-is don't include the actions
-or verbs in the actual endpoint,
-use the HTTP methods instead.
-So make use of the GET, PUT, POST, and the DELETE.
-And also just kind of a recap or refresher,
-for our given application, we're gonna have CRUD support
-and we're assigning the actions here
-based on the appropriate HTTP methods.
-And notice here how our endpoints
-we simply have the entity name or the resource name,
+Instead, you should use the **HTTP** methods to assign the actions.
+Alright, so the big thing here is don't include the actions or verbs in the actual endpoint,
+use the **HTTP** methods instead.
+So make use of the `GET`, `PUT`, `POST`, and the `DELETE`.
+And notice here how our endpoints we simply have the entity name or the resource name,
 we don't place any behavior in the actual endpoint itself,
-we pass that behavior over our action
-using the appropriate HTTP method.
-And then kind of to pull this all together,
-we'll have Employee Service,
-we'll make use of Spring REST,
-and we'll have full CRUD support for our backend database.
+we pass that behavior over our action using the appropriate **HTTP** method.
+And then, kind of to pull this all together, we'll have **Employee Service**,
+we'll make use of **Spring REST**, and we'll have full **CRUD** support for our backend database.
+
+Let's take a look at some other **API** examples.
+And so these are some **API** examples from other real-time projects.
+Just so you can see how they've designed their **API**s, and also just to see the similarities
+between what we've created and also what other larger companies are creating.
+So we'll take a look at the **API**s for **PayPal**, **GitHub**, and also **SalesForce**.
+
+![image51](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image51.png?raw=true)
+
+**PayPal** provides an invoicing **API** and you can get full details
+on this **API** at the link [here](https://developer.paypal.com/docs/api/invoicing).
+Using our **API**, you can perform **CRUD** operations on invoices.
+So here, to create an invoice, we simply use a `POST`.
+To retrieve or list invoices, we use a `GET`.
+And also to show a specific invoice, we do a `GET`, and we pass that invoice ID as a path parameter.
+And then, to update an invoice, we make use of a `PUT` method, and we again pass over that invoice ID.
+And then finally, to delete an invoice, we simply use the `DELETE` method, 
+and then we pass over the given invoice ID as a path variable.
+And that's basically it.
+So this follows what we've seen in some of our previous examples for our **CRM** application.
+
+![image52](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image52.png?raw=true)
+
+Now, let's take a look at **GitHub**.
+They provide a **GitHub Repositories API**.
+You can get full details at the link [here](https://developer.github.com/v3/repos/#repositories).
+And then using their **API**, you can create a new repository by simply using a `POST` method
+to this given endpoints `/user/repos`.
+You can delete a repository by going to `/repos/:owner/:repo`.
+Now, the `:owner` and the `:repo`, that's the same thing 
+as (`{owner}` and `{repo}`) putting curly braces around those items.
+So effectively it's a path parameter or a path variable that you can send in 
+when you actually submit that request.
+Also, you can list repositories by simply doing a `GET` on `/user/repos`.
+And then finally, you can get a specific repository by doing a `GET` on `/repos/:owner/:repo`.
+
+![image53](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image53.png?raw=true)
+
+And then finally, we can take a look at the **SalesForce REST API**.
+So SalesForce has a large number of **API**s, 
+and we'll take a look at one of them here, the **Industries REST API**.
+And this matches up very nicely with our **CRM** application
+because these are kind of in the same space.
+You can get details on this **REST API** at this link [here](https://sforce.co/2J40ALH).
+And then basically they give you different endpoints.
+So one to retrieve all individuals, you simply do a `GET` on this `/individual`.
+To retrieve one individual, you do a `GET` on `individual/{individual_id}`.
+To create an individual, we use a `POST`. 
+And then, to do an update, we use a `PUT`.
+And again, basic format.
+Now, one thing that's slightly different here with the **SalesForce API** is 
+that they didn't use the plural form of their entity or their resource instead of individuals.
+They simply called it individual, singular.
+And that's fine.
+It's a small, minor thing.
+As I mentioned earlier, the convention is to use plural, but there's no hard requirement to do that.
+So different **API**s will things slightly different,
+but overall here this kind of follows the same pattern
+and the same process that we've seen so far with **REST API**s and this is pretty cool.
+
+Upfront we kind of covered the design process for our **CRM** application.
+We also looked at some of the other **REST API**s from other real-time projects.
+Now, we'll start getting our hands dirty.
+We'll get things set up for our given **CRM REST API**, 
+and then we'll go ahead and build it out, alright?
+
+So what we'll do is we'll create this real-time project.
+We'll develop a **REST API** with **Spring Boot** that'll connect to a database.
+Alright, so let's go ahead and look at the **API** requirements
+and here's the information from the boss.
+We need to create a REST API for the employee directory,
+and REST clients should be able to: 
+
+* Get a list of employees
+* Get a single employee by ID
+* Add a new employee
+* Update an employee
+* Delete an employee
+
+And these are the basic **CRUD** operations that we'll create with our **REST API**.
+Alright, so let's break down the different **HTTP** methods here for our **REST API**.
+So we'll use the `POST` method to create a new employee.
+We'll use the `GET` method to get a list of employees,
+and we'll also use the `GET` method to read a single employee by employee ID.
+We'll use `PUT` to update an employee.
+And then, of course, we'll use the `DELETE` method to delete an employee by their given employee ID.
+And that's our basic **REST API**.
+
+Now let's look at the development process for this project:
+
+1. Set up Database Dev Environment
+2. Create a **Spring Boot** project using a **Spring initializer**
+3. Get a list of employees
+4. Get a single employee by ID
+5. Add a new employee
+6. Update an existing employee
+7. Delete an existing employee
+
+And of course, we'll break this down step by step.
+
+![image54](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image54.png?raw=true)
+
+Now let's take a quick look at our application architecture.
+So we'll start with an employee **REST** controller that'll communicate with an employee service,
+which in turn will talk to an employee **DAO** to connect to our backend database.
+
+Let's begin with setting up our database table.
+So we'll have this file called `employee.sql`.
+And so this `employee.sql` file will basically create a new database table for us called `employee`.
+And this table will have four fields:
+
+* id
+* first_name
+* last_name
+* email
+
+Also, this script will actually load the table with sample data,
+just so we have some employees to work with to get started.
+So let's go and swing over to our file system and take a look at that file.
+And I'll move into this `dev-spring-boot`.
+I'll move into this `04-spring-boot-rest-crud` directory.
+It's just a folder.
+Just has one file, `employee.sql`.
+And what we'll do is we'll actually open this file in **MySQL Workbench**.
+I'll go ahead and log into the account here using `springstudent`.
+I'll just open the **SQL** script:
+
+```sql
+CREATE DATABASE  IF NOT EXISTS `employee_directory`;
+USE `employee_directory`;
+
+--
+-- Table structure for table `employee`
+--
+
+DROP TABLE IF EXISTS `employee`;
+
+CREATE TABLE `employee` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+--
+-- Data for table `employee`
+--
+
+INSERT INTO `employee` VALUES 
+	(1,'Leslie','Andrews','leslie@luv2code.com'),
+	(2,'Emma','Baumgarten','emma@luv2code.com'),
+	(3,'Avani','Gupta','avani@luv2code.com'),
+	(4,'Yuri','Petrov','yuri@luv2code.com'),
+	(5,'Juan','Vega','juan@luv2code.com');
+```
+
+So this is a very basic file here.
+We basically just create this database called `employee_directory`.
+And then we move down, or we drop a table if it already exists,
+and we simply create the table, `employee`.
+Just `id`, `first_name`, `last_name` and `email`.
+And then for the insert, I just kind of insert some sample data here for five employees,
+just so we can have some data to play with when we start out.
+So then let's just hit the little gold lightning bolt on our toolbar 
+and that should execute the script.
+So on the bottom you should see green and yellow.
+So we can see our new schema that we just created, `employee_directory`.
+And we should have just one table here called `employee`.
+And we can do a real quick query here,
+just to select the data to see what's out there.
+
+![image55](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image55.png?raw=true)
+
+And there we go.
+So five employees that we'll start with for this project.
+
+Now we'll create a Spring Boot Project using the **Spring Initializr** website.
+Let's move over to our web browser and let's generate the **Spring Boot Project**.
+So up top here, I'll simply go to `start.spring.io`.
+And this will bring us to the **Spring Initializr** website.
+Up top, we'll keep all the basic defaults here for the **Maven** project.
+We'll keep Java, and then we'll make use of the latest version of **Spring Boot** that's there.
+And then for the group ID, I'll put in `com.luv2code.springboot`.
+And then for the actual artifact ID, I'll give `cruddemo`.
+And then I'll swing over here for our dependencies,
+so this is things for our **Maven** `pom` file.
+So the one thing we'll need is **web** because we're building a **restful web** application here.
+And then we also need to make use of **JPA** because we're doing some database work
+with **Hibernate** and **ORM**, and also **JPA** a little later.
+Then we'll add in **DevTools** to give us that automatic reloading of our application during development.
+And then finally, this one nice little thing here is that
+since we're using the **MySQL Database**, 
+we can actually reference the actual **MySQL Database Driver** right here in the initializr
+and they'll put in the appropriate entry into our `pom` file.
+So this is great, so this basically minimizes the amount of work we have to do inside our `pom` file.
+Okay, so down at the bottom here just make sure you have the appropriate items selected,
+`Web`, `JPA`, `DevTools`, and `MySQL`.
+And then just go ahead and generate the project,
+and then your web browser will download it, and you'll have this file,
+and we'll actually import this into our IDE.
+Alright, so I'll go ahead and close my browser here, and I'll just move over to my file system.
+I'll move into that downloads directory.
+And there's my `cruddemo.zip` that was just created by the **Spring Initializr** website.
+I'll go ahead and unzip this file, and then I'll just copy this folder.
+I'll just move to my `luv2code` directory, move into my `dev-spring-boot`,
+and then I'll just paste the file there.
+And again, you can paste it anywhere you'd like on your file system.
+So with the import, we have this new project here, `cruddemo`, so this is awesome.
+So it's imported into our IDE, and right now it's very bare bones, right?
+That **Spring Boot Initializr** just gives you this one `CruddemoApplication.java` file to start with.
+But don't worry, we'll add more code to this project over time.
+
+What I'd like to do is look at the `pom.xml` file, just to review what's in here.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.luv2code.springboot</groupId>
+	<artifactId>cruddemo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>cruddemo</name>
+	<description>Demo project for Spring Boot</description>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+```
+
+So we've seen a lot of this work before, right?
+We're simply using the `spring-boot-starter-parent`,
+so we can inherit the defaults for like **Maven** configs and so on.
+And here we have the actual dependencies that are listed.
+So we're adding the `spring-boot-starter-data-jpa` for **Hibernate ORM** support, 
+we're putting in `spring-boot-starter-web` for **MVC** and **REST** support.
+Also, remember here we have the `spring-boot-devtools` for that automatic reloading, 
+and we saw that in some of the previous sections.
+And then also the nice little bonus here that we have is this idea of the **MySQL connector Java**.
+So that's the **MySQL JDBC Driver** that was automatically added by that **Spring Boot Initializr** website.
+And also with **Spring Boot**, they have some built-in support for testing.
+So that's also in the given **Maven** `pom` file.
+And then just moving down here to the actual build section for the plugins.
+So we have this **Spring Boot Maven** plugin.
+And remember this is used for packaging our application and running it.
+And we did all of that work in some of the previous sections of packaging the app 
+and actually running it from **Command** line.
+So that's a good start here.
+We'll start getting into more details here of setting up our **API**.
+
+![image56](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image56.png?raw=true)
+
+Okay now looking at our application architecture, and we'll make use of the **JPA API**,
+the standard **JPA API**, and we'll focus on that.
+So we need to perform for our **CRUD** operations,
+and what we'll do is we'll build a **DAO** layer for this,
+and in this scenario we'll make use of the standard **JPA API** throughout.
+Alright, so let's go ahead and look at a **DAO** implementation.
+
+```java
+@Repository
+public class EmployeeDAOJpaImpl implements EmployeeDAO {
+
+    private EntityManager entityManager;
+
+    @Autowired
+    public EmployeeDAOJpaImpl(EntityManager theEntityManager) {
+        entityManager = theEntityManager;
+    }
+}
+```
+
+So I'll create this **EmployeeDAOJpaImpl** implements the **employeeDAO** interface.
+I'm using the same interface, so we have a consistent **API**.
+I'll make use of our field here, `private EntityManager`,
+and then I'll set up a constructor here.
+And remember that the **EntityManager** is automatically created by **Spring Boot**,
+and this is just an example here of making use of constructor injection for that **EntityManager**.
+
+```java
+@Override
+public List<Employee> findAll() {
+    
+    // create a query
+    TypedQuery<Employee> theQuery = entityManager.createQuery("from Employee", Employee.class);
+    
+    // execute query and get result list
+    List<Employee> employees = theQuery.getResultList();
+    
+    // return the results;
+    return employees;
+}
+```
+
+Okay, so let's go ahead and look at some methods here.
+So to get a list of employees using the standard **JPA API**,
+and then I go ahead and create a query, so I'll say `entityManager.createQuery`,
+make use of my JPQL from employee and I give the `employee.class`,
+I go ahead and execute the query and get the result list,
+and then finally, I return the results or return the `employees`,
+and that's basically it, and here we're using the standard **JPA API** throughout.
+This is all standard code here.
+
+So let's go and look at the development process here for our DAO.
+
+1. Update our database configs in the `application.properties`,
+2. Create the **Employee** entity
+3. Create the **DAO** interface
+4. Create the **DAO** implementation
+5. Create a **REST** controller to use the **DAO**
+
+Let's move to our IntelliJ preferences here, and we'll set up those IntelliJ configurations.
+And let's move down to the `Build, Execution, Deployment` and expand it.
+And then we'll choose `Compiler`,
+and then we'll select this check box here, `Build project automatically`.
+Let's go ahead and click on the `apply` button.
+And now let's go and select the `Advanced Settings` item.
+And then in the `Compiler` section, we'll check the box, `Allow auto-make to start`.
+And remember, these are the little IntelliJ configurations 
+that we need to do for the community edition to allow it to work with **Spring Boot DevTools**.
+
+Okay, so with our development process, 
+we'll focus on the first two steps here of updating the database configs and the app properties, 
+and also creating our **Employee** entity.
+Let's go ahead and get started with step one of updating our database configs.
+And remember, in **Spring Boot**, we have this special properties file `application.properties`,
+and that file resides in your source, `main.resources` directory.
+And so right now this file is empty, and so this is where I'll add my data source properties.
+
+```properties
+#
+# JDBC properties
+#
+spring.datasource.url=jdbc:mysql://localhost:3306/employee_directory
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+```
+
+So I'll add an entry here for the spring data source URL, and I'll give a URL to my database.
+And then we simply go through, and we add our spring data source username and also password,
+and that's the database connection information for our given user account.
+I'll just do a quick copy and paste here on this first line,
+paste it, and then just update the property name for password.
+And you may need to update this accordingly based on your local environment,
+if you have different user IDs or passwords for your local database.
+And then remember, **Spring Boot** will automatically
+create the beans for data source and entity manager, and we can inject those into our application.
+
+Okay, so let's go ahead and move to our root package, and we'll actually create a new package.
+And this package is to actually hold our entity, so I'll just say, `.entity`.
+And now I'll actually go through and create the employee entity in that package.
+So I'll just create a new class here.
+For the class, I give **Employee** as the name.
+
+```java
+package com.luv2code.springboot.cruddemo.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table
+public class Employee {
+    
+    // define fields
+    
+    // define constructors
+    
+    // define getter/setter
+    
+    // define toString
+    
+}
+```
+
+So what we need to do here is create an entity and map this entity to our given database table.
+So we make use of the `@Entity` annotation and also the actual `@Table` annotation,
+we map it to our given table, **employee**.
+And now what I'll do is I'll just write some quick comments
+to myself just so I know what I need to create in this given file.
+Alright, so basically I need to define fields, define constructors, 
+define getters and setters, and also define a two stringing method.
+
+```java
+package com.luv2code.springboot.cruddemo.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table
+public class Employee {
+    
+    // define fields
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private int id;
+    @Column(name="first_name")
+    private String firstName;
+    @Column(name="last_name")
+    private String lastName;
+    @Column(name="email")
+    private String email;
+    
+    // define constructors
+    
+    // define getter/setter
+    
+    // define toString
+    
+}
+```
+
+Let's go ahead and get down to business.
+So I'll start here with defining the fields.
+So I'll set up a field for _id_, _firstName_, _lastName_, and _email_.
+And now I need to add the annotations here for each one of the fields.
+So my id is the primary key, so I'll make use of the `@Id` and `@GeneratedValue`.
+And we've seen all this coding before.
+And now I'll make use of the `@Column` annotation to map these fields 
+to a given database column name.
+So I'll set up `first_name`,
+and I'll actually just copy this line, and then move down and paste it.
+And I'll just update the name there.
+So these actually have to be the column name,
+they have to be `first_name` and `last_name`.
+Okay, that's all the work here for defining the fields for this `Employee` entity.
+
+```java
+// define constructors
+public Employee() {
+    
+}
+
+public Employee(String firstName, String lastName, String email) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+}
+```
+
+So we can move down to this next section here of defining constructors.
+And I'll start off here by just creating a no argument constructor.
+And now I'll also create a constructor using the fields,
+so I use a source generate constructor, and I'll select all of them except _id_ 
+because _id_ is going to be automatically generated.
+So have _firstName_, _lastName_, and _email_.
+So those are the three that you should have selected for this example.
+So those are our constructors here for this `Employee` entity.
+
+```java
+// define getter/setter
+public int getId() {
+    return id;
+}
+
+public void setId(int id) {
+    this.id = id;
+}
+
+public String getFirstName() {
+    return firstName;
+}
+
+public void setFirstName(String firstName) {
+    this.firstName = firstName;
+}
+
+public String getLastName() {
+    return lastName;
+}
+
+public void setLastName(String lastName) {
+    this.lastName = lastName;
+}
+
+public String getEmail() {
+    return email;
+}
+
+public void setEmail(String email) {
+    this.email = email;
+}
+```
+
+Alright, now just more of the same, right? 
+You know how to do all this stuff, just defining the getters and setters.
+So we'll actually have the IDE to generate these for us.
+So we simply go to source, generate getters and setters, just do `select all` here.
+
+```java
+// define toString
+@Override
+public String toString() {
+    return "Employee{" +
+            "id=" + id +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            '}';
+}
+```
+
+Now let's define our `toString()` method, and again, 
+just using the IDE to generate that for us.
+There we go, we're in pretty good shape there with our `toString()` method.
+And we have everything in place here for our entity class.
+
+Now, we'll focus on steps three and four of creating the `DAO` interface and the implementation.
+So the first thing we should do is create a new package here for our `DAO`.
+And of course, the name that we'll give for the package is `DAO`.
+Okay, so there's our new `DAO` package.
+So let's go ahead and create our **DAO** interface.
+So just do a new interface.
+And the name we'll give here is `EmployeeDAO`.
+
+```java
+package com.luv2code.springboot.cruddemo.dao;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import java.util.List;
+
+public interface EmployeeDAO {
+
+    List<Employee> findAll();
+}
+```
+
+This DAO will simply have just one method. 
+Just to get things up and running,
+we'll add more functionality in some of the later sections.
+So we'll simply add this method here, `findAll()` that'll return a list of employees.
+
+```java
+package com.luv2code.springboot.cruddemo.dao;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+
+@Repository
+public class EmployeeDAOJpaImpl implements EmployeeDAO{
+
+    // define field for entity manager
+    private EntityManager entityManager;
+
+    // set up constructor injection
+    @Autowired
+    public EmployeeDAOJpaImpl(EntityManager theEntityManager) {
+        entityManager = theEntityManager;
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        return List.of();
+    }
+}
+```
+
+Alright, so with our next step here is creating the `DAO` implementation.
+So I'll move back to my `DAO` package, and I'll just create a new class named by `EmployeeDAOJpaImpl`.
+Now I need to mark this or annotate this as `@Repository`.
+So what I need to do here is to define the field for **EntityManager** 
+and also set up constructor injection.
+I'll set up the constructor injection with the `@Autowired` and an actual constructor.
+And I provide item or the beam that we're that we want to inject here
+to the **EntityManager** and simply doing assignment.
+Remember, the **EntityManager**s automatically created by **Spring Boot**,
+and we can simply inject it here into our application.
+
+```java
+@Override
+public List<Employee> findAll() {
+    
+    // create a query
+    TypedQuery<Employee> theQuery = entityManager.createQuery("from Emplyoee", Employee.class);
+    
+    // execute query and get result list
+    List<Employee> employees = theQuery.getResultList();
+    
+    // return the results
+    return employees;
+}
+```
+
+Okay, so let's go ahead and move down to this _findAll_ method,
+and I'll write some quick comments here to myself.
+And so this is kind of our basic game plan here for finding all the `employees`.
+Okay, so let's go ahead and just write the coding here for creating a query.
+So I use `entityManager.createQuery()` and I'll say `From employee`.
+Now we just go through and execute `theQuery.getResultList()`.
+And then finally, we return results or the `employees`.
+And this is basically it for using a standard **JPA API**.
+Very simple, very straightforward.
+
+So our final step here is creating our **REST** controller to use our **DAO**.
+And the first thing I want to do here is actually create a new package.
+And so this will be a package for holding our **REST** controllers.
+So we'll give the name of the package `.rest`.
+Okay, so now we have our new package.
+The next step is creating a **REST** controller to use our **DAO**.
+So I'll just create a new class here.
+And the name of the class, I'll call it `EmployeeRestController`.
+
+```java
+package com.luv2code.springboot.cruddemo.rest;
+
+import com.luv2code.springboot.cruddemo.dao.EmployeeDAO;
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+
+    private EmployeeDAO employeeDAO;
+
+    // quick and dirty: inject employee dao (use constructor injection)
+    public EmployeeRestController(EmployeeDAO theEmployeeDAO) {
+        employeeDAO = theEmployeeDAO;
+    }
+
+    // expose "/employees" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeDAO.findAll();
+    }
+}
+
+```
+
+Now I'll write some quick comments to myself.
+So we'll do a quick and dirty solution.
+We'll inject the `EmployeeDAO` directly.
+We'll refactor this later with the service layer, but for now we'll just put it in here,
+so we can run some examples.
+And then also we'll expose the employee's endpoint that'll actually return all the employees.
+We'll just give our annotations up top for `@RestController` and `@RequestMapping("/api")`.
+So the base mapping will be `/api`.
+So I'll define the field here for the `employeeDAO`.
+And now I'll set up constructor injection here to inject that `EmployeeDAO`.
+Alright, so that's our constructor then.
+We're using constructor injection here.
+Okay, so let's go ahead and write the code to return a list of employees.
+So I'll simply set up a `@GetMapping("/employees")`.
+And I simply write the code here for this `findAll` that returns a list of employees,
+and I simply delegate the call to my **DAO**.
+So I'll say `employeeDAO.findAll()`.
+And that's the basic coding there to return a list of employees.
+So that's the basic coding there for our controller.
+We simply to define the field.
+We set up constructive injection, and then we expose that endpoint to return a list of employees.
+Very simple, very straightforward.
+I think I'm ready to run it.
+So let's go ahead and move to our `CruddemoApplication`.
+That's our main spring boot application and run it as an application.
+
+```html
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-05-29T15:38:56.249+03:00  INFO 94224 --- [  restartedMain] c.l.s.cruddemo.CruddemoApplication       : Starting CruddemoApplication using Java 21.0.2 with PID 94224 (D:\JAVA_STUDY\Github\dev-spring-boot\04-spring-boot-rest-crud\02-spring-boot-rest-crud-employee\target\classes started by korha in D:\JAVA_STUDY\Github\dev-spring-boot\04-spring-boot-rest-crud\02-spring-boot-rest-crud-employee)
+2024-05-29T15:38:56.251+03:00  INFO 94224 --- [  restartedMain] c.l.s.cruddemo.CruddemoApplication       : No active profile set, falling back to 1 default profile: "default"
+2024-05-29T15:38:56.301+03:00  INFO 94224 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-29T15:38:56.302+03:00  INFO 94224 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-29T15:38:56.742+03:00  INFO 94224 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-29T15:38:56.757+03:00  INFO 94224 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 JPA repository interfaces.
+2024-05-29T15:38:57.170+03:00  INFO 94224 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-05-29T15:38:57.181+03:00  INFO 94224 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-29T15:38:57.181+03:00  INFO 94224 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-05-29T15:38:57.225+03:00  INFO 94224 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-29T15:38:57.226+03:00  INFO 94224 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 923 ms
+2024-05-29T15:38:57.408+03:00  INFO 94224 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-05-29T15:38:57.823+03:00  INFO 94224 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@18ba8b8e
+2024-05-29T15:38:57.824+03:00  INFO 94224 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-05-29T15:38:57.855+03:00  INFO 94224 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-29T15:38:57.902+03:00  INFO 94224 --- [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-05-29T15:38:57.930+03:00  INFO 94224 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-05-29T15:38:58.207+03:00  INFO 94224 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-29T15:38:58.821+03:00  INFO 94224 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-29T15:38:58.822+03:00  INFO 94224 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-29T15:38:58.915+03:00  WARN 94224 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-29T15:38:59.266+03:00  INFO 94224 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-29T15:38:59.295+03:00  INFO 94224 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-05-29T15:38:59.303+03:00  INFO 94224 --- [  restartedMain] c.l.s.cruddemo.CruddemoApplication       : Started CruddemoApplication in 3.305 seconds (process running for 3.618)
+```
+
+Excellent. 
+So our app is now up and running.
+So let's go ahead and swing over to our browser 
+and let's visit the url, `localhost:8080/api/employees`.
+
+![image57](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image57.png?raw=true)
+
+Success. 
+So we have data.
+So this is data coming from the database right now via our **REST API**.
+But again, I always like to verify this, right?
+Like to go over to the MySQLWorkbench and actually do a query on the database
+to make sure that really is the right data.
+All right, so let's go ahead and move over to our tables, our employee table,
+and just run a quick query here and verify the results.
+
+![image58](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image58.png?raw=true)
+
+And yay, this works out as desired.
+So this is the real data coming from the database.
+So at the moment now, we only have the list function running or returning all employees.
+Let's finish up the remaining **CRUD** operations.
+
+Now, we're going to define services with the `@Service` annotation.
+We're going to add a service layer. 
+This service layer will actually sit between our **Employee** controller and our **employeeDAO**.
+Now, you may wonder, what's the purpose of the service layer?
+
+![image59](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image59.png?raw=true)
+
+Well, it's actually an implementation of the **Service Facade** design pattern.
+It's an intermediate layer for your custom business logic,
+and you can also use it to integrate data from multiple sources.
+
+![image60](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image60.png?raw=true)
+
+Now, here's an example of integrating data from multiple sources.
+For example, we have our employee service, 
+and we need to pull in data about an employee from different types of data sources.
+Up top, we'll make use of the **EmployeeDAO**, which gives us the basic information,
+like the first name, last name, email address, and so on.
+We also may need to get a list of skills for an employee.
+We can make use of the **SkillsDAO**.
+And then finally, at the bottom, we need to make use of the **PayrollDAO**
+to retrieve salary information for an employee.
+And then, we'll integrate all of this together,
+so that we can give the controller a single view 
+of all the data that we've integrated and pulled together.
+
+Now, most times when you start off, you'll have just a very simple architecture.
+You'll have your employee service that simply delegates the calls to the **EmployeeDAO**.
+And this is fine, and this is a very good pattern to start with.
+So this is actually a best practice, to create a service layer and a DAO layer,
+because now once you have the basic architecture in place,
+you can easily expand and extend on it.
+And this is actually a best practice, and you'll see this in place
+on large-scale enterprise applications.
+
+![image61](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image61.png?raw=true)
+
+Alright, so we've covered the architecture stuff.
+Now, **Spring** provides the `@Service` annotation.
+It's a specialized annotation for services.
+Looking at the diagram here, we've seen some of these annotations already.
+We've already covered `@Component`, `@RestController` and `@Repository`.
+Now, the new guy on the block here is `@Service`.
+The `@Service` annotation is actually applied to the **Service implementation**.
+**Spring** will automatically register the **Service implementation** thanks to component scanning.
+Alright, now let's go ahead and look at our development process for building up employee service:
+
+1. Define the **Service** interface
+2. Define the **Service implementation**
+3. Inject the **EmployeeDAO**
+
+Starting here with step one of defining the **Service** interface, it's very simple.
+So the first thing we'll need to do is create a new package for the service.
+So I'll just start here at my root package,
+and I'll just create a brand-new package.
+And the name that I'll give for this package is `service`.
+Alright, so there's our new package.
+Now let's go ahead and create a new interface in this package.
+It's a public interface called **EmployeeService**, 
+and we have a method called _findAll_, and that's it.
+
+```java
+package com.luv2code.springboot.cruddemo.service;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import java.util.List;
+
+public interface EmployeeService {
+
+    List<Employee> findAll();
+}
+```
+
+Very simple, very straightforward.
+Now moving ahead to step two, we actually need to define the **Service implementation**.
+We'll create this class here called **EmployeeServiceImpl**
+that implements the **EmployeeService** interface.
+
+```java
+package com.luv2code.springboot.cruddemo.dao;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService{
+
+    // inject EmployeeDAO
+    private EmployeeDAO employeeDAO;
+
+    // set up constructor injection
+    @Autowired
+    public EmployeeServiceImpl(EmployeeDAO theEmployeeDAO) {
+        employeeDAO = theEmployeeDAO;
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        return employeeDAO.findAll();
+    }
+}
+```
+
+Now, note here at the top you have the `@Service` annotation.
+**Spring** will automatically register this component thanks to component scanning.
+Then we inject our DAO using constructive injection for this example.
+So that's all set up, our field and our constructor injection.
+And these service methods are really simple, 
+all we're doing is simply delegating the calls to the **DAO**.
+We're basically calling the same methods on the given **DAO**.
+
+```java
+package com.luv2code.springboot.cruddemo.rest;
+
+import com.luv2code.springboot.cruddemo.dao.EmployeeDAO;
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+
+    private EmployeeDAO employeeDAO;
+
+    // quick and dirty: inject employee dao (use constructor injection)
+    public EmployeeRestController(EmployeeDAO theEmployeeDAO) {
+        employeeDAO = theEmployeeDAO;
+    }
+
+    // expose "/employees" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeDAO.findAll();
+    }
+}
+```
+
+Alright, so let's go ahead and move into the **EmployeeRestController**,
+because we need to kind of refactor the code.
+Earlier, we had that quick and dirty solution
+and let's actually remove that quick and dirty solution.
+So, instead of the controller using the **DAO** directly,
+we're going to refactor our code where the controller will actually make use of the service.
+
+```java
+package com.luv2code.springboot.cruddemo.rest;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import com.luv2code.springboot.cruddemo.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+
+    private EmployeeService employeeService;
+
+    // quick and dirty: inject employee dao (use constructor injection)
+    @Autowired
+    public EmployeeRestController(EmployeeService theEmployeeService) {
+        employeeService = theEmployeeService;
+    }
+
+    // expose "/employees" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeService.findAll();
+    }
+}
+```
+
+So I'll just delete these lines here, for the **DAO**, 
+and I'll add in a reference here to use the **EmployeeService** to
+kind of follow our application architecture.
+And I'll update the constructor here to make use of the correct types and params coming in.
+And one last thing to fix here.
+So instead of doing the `EmployeeDAO`, we'll change it to use the `EmployeeService`.
+So that's the refactored code.
+So now our rest controllers are going to make use of our `EmployeeService`,
+and we already know behind the scenes, our **service** actually delegates the calls to the **DAO**.
+Okay, so this is good.
+So let's go ahead and run our application just so we can view the output here.
+And we'll swing over to our web browser.
+
+![image62](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image62.png?raw=true)
+
+It works out just fine.
+So we're getting the same data as before.
+Now we're using the **service** instead of using the **DAO** directly.
 </div>
 
 ## [Data Access Object (DAO)]()
