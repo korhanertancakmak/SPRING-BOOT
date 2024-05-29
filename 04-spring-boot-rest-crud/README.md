@@ -2324,7 +2324,108 @@ or real time projects by making use of this `@ControllerAdvice`.
 ## [API Design - Create Project]()
 <div style="text-align:justify">
 
+In this section, we'll cover `Spring REST API design`.
+For **REST API** design, when building a real-time project, 
+we need to wonder who will use our **API**?
+Also, we need to be aware of how they will use our **API**.
+And then we need to design the **API** based on the requirements.
 
+Alright, let's go ahead and look at the **API** design process:
+
+1. Review the **API** requirements
+2. Identify the main resource / entity
+3. Use the **HTTP** methods to assign the action on a given resource
+
+Now let's start with step one of reviewing the **API** requirements.
+And here's an email that we received from the boss,
+and it says, "_Create a **REST API** for our `Employee Directory` system._"
+Basically, what we'd like to do is allow the **REST** clients should be able to 
+
+* Get a list of employees
+* Get an employee by ID
+* Add a new employee
+* Update an employee
+* Delete an employee
+
+Effectively, we want to have full `CRUD` support here via our **REST API**.
+
+In step two, we need to identify the main resource or the main entity.
+What we want to do is look for the most prominent `noun` in the requirements document.
+For our project, the most prominent `noun` is `employee` 
+because we saw that over and over again during those requirements.
+The convention is to make use of a plural form of the resource or entity.
+Here we have `employees`.
+And for our endpoint we have `/api/employees`.
+Now, this is not a hard and fast rule, but this is the general convention used in **REST API design**.
+
+| HTTP Method  | CRUD Action                              |
+|--------------|------------------------------------------|
+| `POST`       | Create a new entity                      |
+| `GET`        | Read a list of entities or single entity |
+| `PUT`        | Update an existing entity                |
+| `DELETE`     | Delete an existing entity                |
+
+Moving ahead to step three, we need to use the **HTTP** methods to assign an action on a resource.
+Here, for our given `POST` method, we'll use that for creating a new entity.
+And then for a `GET` method, we'll use that to read a list of entities or a single entity.
+Then we'll use the `PUT` method to actually update an existing entity.
+And then we'll also use the `DELETE` method to delete an existing entity.
+Effectively, here we'll have full **CRUD** support 
+by specifying the appropriate **HTTP** method in our operation.
+And this is the actual best practice that's used for real-time projects.
+
+| HTTP Method   | Endpoint                      | CRUD Action                 |
+|---------------|-------------------------------|-----------------------------|
+| `POST`        | `/api/employees`              | Create a new employee       |
+| `GET`         | `/api/employees/{employeeId}` | Read a list of employees    |
+| `GET`         | `/api/employees`              | Read a single employee      |
+| `PUT`         | `/api/employees`              | Update an existing employee |
+| `DELETE`      | `/api/employees/{employeeId}` | Delete an existing employee |
+
+Okay, let's take a look at some **CRUD** endpoint examples for our application.
+We can use the `POST` method, and we'll send it to `/api/employees`
+and this will actually create a new employee.
+We can also use the `GET` method and send it to the same endpoint,
+and we can use that to read a list of employees.
+We can also use the `GET` method and send it to `/api/employees/{employeeId}`.
+That's the path variable or path parameter, and we'll use that to read a single employee by ID.
+We can use the `PUT` method to actually update an existing employee,
+and we can use the `DELETE` method to actually delete an employee by going to `/api/employees/{employeeId}`.
+Now, for `POST` and `PUT`, we'll need to send over the employee data. 
+We can send it over as **JSON** in the actual request message body,
+and we'll see examples of that later on in the course
+and also when we actually run our application.
+When we run our app, we'll make use of **Postman**,
+and we'll provide that employee data as **JSON** for handling the `POST` and the `PUT`.
+
+![image50](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image50.png?raw=true)
+
+Now, let's talk about some `Anti-Patterns`.
+Don't do this, because these are **REST** anti-patterns, they're considered bad practice.
+When you actually list out your endpoints don't include the actions in the endpoint.
+For example, don't say employeesList or deleteEmployee,
+addEmployee or updateEmployee,
+that's not the best practice here.
+Instead, you should use the HTTP methods
+to assign the actions.
+All right, so the big thing here
+is don't include the actions
+or verbs in the actual endpoint,
+use the HTTP methods instead.
+So make use of the GET, PUT, POST, and the DELETE.
+And also just kind of a recap or refresher,
+for our given application, we're gonna have CRUD support
+and we're assigning the actions here
+based on the appropriate HTTP methods.
+And notice here how our endpoints
+we simply have the entity name or the resource name,
+we don't place any behavior in the actual endpoint itself,
+we pass that behavior over our action
+using the appropriate HTTP method.
+And then kind of to pull this all together,
+we'll have Employee Service,
+we'll make use of Spring REST,
+and we'll have full CRUD support for our backend database.
 </div>
 
 ## [Data Access Object (DAO)]()
