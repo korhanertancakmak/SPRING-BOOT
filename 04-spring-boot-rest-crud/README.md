@@ -3859,19 +3859,758 @@ and also what we have here on the backend.
 ## [Spring Boot REST: Update Employee]()
 <div style="text-align:justify">
 
+Now, we'll look at **Rest Controller** methods for `update`.
+So we're almost done here, almost finished with the development process.
+So step six and seven of updating an existing employee,
+and also `delete` an existing employee,
+and we'll add these as our **Rest Controller** methods.
 
+| HTTP Method   | Endpoint                      | CRUD Action                 |
+|---------------|-------------------------------|-----------------------------|
+| `POST`        | `/api/employees`              | Create a new employee       |
+| `GET`         | `/api/employees/{employeeId}` | Read a list of employees    |
+| `GET`         | `/api/employees`              | Read a single employee      |
+| `PUT`         | `/api/employees`              | Update an existing employee |
+| `DELETE`      | `/api/employees/{employeeId}` | Delete an existing employee |
+
+And just as a checkpoint here, we've already covered the first three methods.
+Now we'll cover `PUT` for doing an `update`,
+and also `DELETE` for actually deleting an employee.
+
+![image72](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image72.png?raw=true)
+
+Okay, to update an employee, we'll send over a `PUT` request
+for `/api/employees` and in the body we'll have **JSON**,
+and this will actually have the id of the employee 
+to update with the updated information for that employee.
+So then our controller will send back the actual response here,
+and this response is basically just the updated information,
+and we simply echo back to the **REST** client.
+
+![image73](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image73.png?raw=true)
+
+And now look at the other scenario here of deleting an employee, 
+so we send over a `DELETE` request for `api/employees/{employeeId}`
+and then the **Rest Controller** will send back deleted employee id, 
+and they'll simply plug in that id.
+
+Okay, let's knock out the last two steps of this development process
+of adding the `update` and `delete` methods to our **Rest Controller**.
+I'll open up our employee **Rest Controller** here.
+
+```java
+package com.luv2code.springboot.cruddemo.rest;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import com.luv2code.springboot.cruddemo.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+
+    private EmployeeService employeeService;
+
+    // quick and dirty: inject employee dao (use constructor injection)
+    @Autowired
+    public EmployeeRestController(EmployeeService theEmployeeService) {
+        employeeService = theEmployeeService;
+    }
+
+    // expose "/employees" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeService.findAll();
+    }
+
+    // add mapping for GET /employees/{employeeId}
+    @GetMapping("/employees/{employeeId}")
+    public Employee getEmployee(@PathVariable int employeeId) {
+
+        Employee theEmployee = employeeService.findById(employeeId);
+
+        if (theEmployee == null) {
+            throw new RuntimeException("Employee id not found - " + employeeId);
+        }
+
+        return theEmployee;
+    }
+
+    // add mapping for POST /employees - add new employee,
+    @PostMapping("/employees")
+    public Employee addEmployee(@RequestBody Employee theEmployee) {
+
+        // also just in case they pass an id in JSON ... set id to 0
+        // this is to force a save of new item ... instead of update
+        theEmployee.setId(0);
+        Employee dbEmployee = employeeService.save(theEmployee);
+        return dbEmployee;
+    }
+
+    // add mapping for PUT /employees - update existing employee
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee theEmployee) {
+
+        Employee dbEmployee = employeeService.save(theEmployee);
+
+        return dbEmployee;
+    }
+}
+```
+
+And so this is `update` employee.
+So I'll make use of the `@PutMapping`.
+So, I have this method here, _updateEmployee_.
+I'll make use of the annotation `@RequestBody`
+because the employee data's going to come in as **JSON** in the `@RequestBody`.
+And this is a really straightforward example here.
+I simply give `employeeService.save`, just delegated off to the service.
+And that's pretty much it.
+Very straightforward for this example here.
+And this will actually handle the `update` for the given employee.
+Okay, so let's test this in **Postman**.
+I'll change the method to `PUT` because we're doing an `update`.
+And for the actual body, I'll give some updated information for a given id.
+
+```json
+{
+    "id" : 1,
+    "firstName" : "Timothy",
+    "lastName" : "Patterson",
+    "email" : "tim@luv2code.com"
+}
+```
+
+So here I want to change the ID of one, or the employee that has the ID of one,
+and give them some new information.
+So I'll just change the data.
+I'll give a different `firstName`, `lastName`, and `email` address.
+This is all should apply to `employeeId` of one.
+So an update on `employeeId` of one.
+So we have `Tim Patterson`.
+Alright, so this looks good.
+Let's go ahead and send it.
+And let's just scroll down to the bottom for the response.
+
+![image74](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image74.png?raw=true)
+
+Okay, so basically the response is just an echo of the data that we passed on.
+So that's good, but again, I always like to verify this in **MySQL Workbench**.
+So let's go in here.
+And so first, for our employee ID of one, this is our old data.
+
+![image71](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image71.png?raw=true)
+
+The old data is `Leslie Andrews`.
+But if we run the query again, we should see the new data or the updated data.
+
+![image75](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image75.png?raw=true)
+
+And success.
+So for employee ID of one, the name is now `Tim Patterson`.
+So this `update` is working as desired.
+Okay, so that's basically it here for the `update` example.
 </div>
 
 ## [Spring Boot REST: Delete Employee]()
 <div style="text-align:justify">
 
+Now look at step six to `delete` an employee.
+So we're going to delete an employee by employee id.
+So we'll set up a `@DeleteMapping` for `/employees/{employeeId}`.
 
+```java
+package com.luv2code.springboot.cruddemo.rest;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import com.luv2code.springboot.cruddemo.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+
+    private EmployeeService employeeService;
+
+    // quick and dirty: inject employee dao (use constructor injection)
+    @Autowired
+    public EmployeeRestController(EmployeeService theEmployeeService) {
+        employeeService = theEmployeeService;
+    }
+
+    // expose "/employees" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeService.findAll();
+    }
+
+    // add mapping for GET /employees/{employeeId}
+    @GetMapping("/employees/{employeeId}")
+    public Employee getEmployee(@PathVariable int employeeId) {
+
+        Employee theEmployee = employeeService.findById(employeeId);
+
+        if (theEmployee == null) {
+            throw new RuntimeException("Employee id not found - " + employeeId);
+        }
+
+        return theEmployee;
+    }
+
+    // add mapping for POST /employees - add new employee,
+    @PostMapping("/employees")
+    public Employee addEmployee(@RequestBody Employee theEmployee) {
+
+        // also just in case they pass an id in JSON ... set id to 0
+        // this is to force a save of new item ... instead of update
+        theEmployee.setId(0);
+        Employee dbEmployee = employeeService.save(theEmployee);
+        return dbEmployee;
+    }
+
+    // add mapping for PUT /employees - update existing employee
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee theEmployee) {
+
+        Employee dbEmployee = employeeService.save(theEmployee);
+
+        return dbEmployee;
+    }
+
+    // add mapping for DELETE /employees/{employeeId} - delete employee
+    @DeleteMapping("/employees/{employeeId}")
+    public String deleteEmployee(@PathVariable int employeeId) {
+
+        Employee tempEmployee = employeeService.findById(employeeId);
+
+        // throw exception if null
+        if (tempEmployee == null) {
+            throw new RuntimeException("Employee id not found - " + employeeId);
+        }
+
+        employeeService.deleteById(employeeId);
+        return "Deleted employee id - " + employeeId;
+    }
+}
+```
+
+So we have a method here, `deleteEmployee` and we simply make use of `@PathVariable`,
+and we bind that path variable to this method parameter `employeeId`.
+And first, I'll actually find the employee by id.
+So I'll check the employee here to see if they're `null`.
+If they're `null`, I'll simply throw an exception meaning that
+"_hey, this employee didn't exist in our database_".
+If everything's okay, I simply just do `employeeService.deleteById`.
+Again, just delegating it to the actual service.
+And then I just return the string as far as what I did.
+"_Hey, I deleted employee ID of blah_".
+So that's all the main coding there for deleting an employee.
+
+Okay, so moving back to the **Postman**,
+what I'll do is I'll actually duplicate this tab again, and I'll change the method to `delete`.
+And for `Body`, since we're not sending any data in the `Body`, I'll hit `none`.
+And now I simply give the employee id that I want to delete.
+So here I'll say `delete employeeId = 1` with the link, `http://localhost:8080/api/employees/1`.
+Hit send.
+
+![image76](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image76.png?raw=true)
+
+All right, success.
+So it says that `deleted employee ID of 1`.
+Alright, so let's swing over to **MySQL Workbench** and let's just do a refresh on this data.
+
+![image77](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image77.png?raw=true)
+
+Okay, excellent.
+So the employee with the ID of 1 has been deleted, so that's successful.
+Everything is working as desired.
+Let's try one more example.
+Let's delete `id = 5`.
+So on our **Postman** we'll say `http://localhost:8080/api/employees/5`, we'll do a `send`:
+
+![image78](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image78.png?raw=true)
+
+We get the response that it's been deleted successfully.
+Swing back over to **MySQL Workbench**, and just go through the drill again.
+So there's the old data, we do a refresh.
+
+![image79](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image79.png?raw=true)
+
+Employee id of 5 has been deleted successfully.
+So we took care of the `update` portion, and we also took care of the `delete` portion.
 </div>
 
 ## [Spring Boot REST: Spring Data JPA]()
 <div style="text-align:justify">
 
+In this section, we'll cover **Spring Data JPA** in **Spring Boot**.
+Now just reviewing our application architecture,
+so in previous sections we made use of the standard **JPA API**.
 
+![image80](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image80.png?raw=true)
+
+And so now we'll kind of shift over and make use of **Spring Data JPA** for our backend **DAO**.
+So we saw how to create a **DAO** for `Employee`.
+So we defined an interface for `EmployeeDAO` and then we created an `EmployeeDAOImpl` implementation,
+and we wrote all of that code.
+But now the question is what if we needed to create a **DAO** for another entity like `Customer`, 
+`Student`, `Product`, `Book`, etc.?
+Do we have to repeat all the same code again?
+Because that's a lot of work just for one entity.
+
+```java
+@Override
+public Employee findById(int theId) {
+    
+    // get data
+    Employee theData = entityManager.find(Employee.class, theId);
+    
+    // return data
+    return theData;
+}
+```
+
+One thing that you may have noticed with creating a **DAO** is that 
+there's a pattern for creating these **DAO**s.
+So looking at this one method here, `findById`, most of the code is the same.
+The only difference is the entity type and primary key.
+So here we have `Employee`, and `theId`.
+So `Employee.class` is the entity type and then `theId` is the actual type of the primary key.
+But if we wanted to use something else like product, book or customer, it's really the same thing.
+And it would feel like a copy and paste exercise to do this again and again 
+for all these other entities.
+And so there really should be an easier way.
+I wish I could tell Spring, "_Hey, create a DAO for me.
+I'll simply plug in my entity type and primary key,
+and you will give me all the basic **CRUD** features for free._"
+That's my wish.
+I hope I'm not asking you for too much but there should be a simple solution for this.
+So, I want some **CRUD** methods 
+like `findAll()`, `findById(..)`, `save(..)`, `deleteById(..)` and others.
+And I'll simply tell you my entity type of `Employee`,
+and I'll tell you the type of my primary key of `Integer` and just give me everything for free.
+And then if I have another entity type like `Customer`,
+I simply plug that in or `Product`, I'll plug that one in.
+Or here back to my `Employee`.
+I'll simply just plug in the entity type, and you'll simply give me these **CRUD** methods for free.
+
+There is a solution and it's called **Spring Data JPA**.
+It's one of the projects in the [website](https://spring.io/projects/spring-data-jpa),
+and you can use it with **Spring** and also **Spring Boot**.
+So basically you create a **DAO**, and you just plug in your entity type,
+and you also plug in your primary key 
+and then **Spring** will give you a **CRUD** implementation for free like magic.
+What do you mean here?
+Well, this will actually help us minimize our boilerplate **DAO** code.
+So we don't have to write all of that code, 
+so we can actually get more than a 70% reduction in code depending on the use case.
+If you take everything off the shelf or out of the box,
+you can actually get more of a reduction.
+If you have to do a lot of low-level customizations, well then your mileage may vary.
+But in general, you can greatly reduce the amount of code you have to write 
+by using this **Spring Data JPA**.
+
+Alright, so **Spring Data** provides an interface called **JPA Repository**, 
+and it exposes methods, some of them inherited from their parents,
+and these are **CRUD** methods that you can use.
+So it exposes `findAll()`, `findById(..)`, `save(..)`, `deleteById(..)` and others.
+And so you simply plug in your entity type and the type of your primary key,
+and then you'll magically get access to all of these CRUD methods for free
+without having to write any implementation code.
+
+So for the development process:
+
+1. Extend the **JPA Repository** interface
+2. Use the **Repository** in our application
+
+And the key thing here is that there's no need for an implementation class.
+You don't have to write an **Impl**, you don't have to write a lot of code.
+You simply extend the interface, and then you get all these **CRUD** methods for free.
+
+```java
+public interface EmployeeRepository extends JpaRepository<Emplyoee, Integer> {
+    
+    // that's it ... no need to write any code...
+}
+```
+
+So step one, extending the **JPA Repository interface**.
+So we have this employee repository extends `JpaRepository`,
+and then we simply plug in our entity type of `Emplyoee`,
+and then we plug in the type of our primary key of `Integer`.
+That's kind of it.
+There's no need to write any other code.
+That's the real work.
+So by doing that, you get these **CRUD** methods for free,
+`findAll()`, `findById(..)`, `save(..)`, `deleteById(..)` and others.
+You get all of these methods for free.
+And it's like magic, simply by extending this `JPARepository` interface.
+And again, remember, there's no need for an implementation class.
+There's no need to write **Impl** or to write a ton of code.
+This is basically it as far as the real coding here.
+And you can look at the documentation for `JPARepository` to get the full list of methods.
+So you can go to my site [here](https://www.luv2code.com/jpa-repository-javadoc),
+and I'll redirect you to the official **Spring** documentation for this interface.
+
+```java
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+    
+    private EmployeeRepository employeeRepository;
+    
+    @Autowired
+    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository) {
+        employeeRepository = theEmployeeRepository;
+    }
+    
+    @Override
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
+    }
+    
+    // ...
+}
+```
+
+Alright, so with step two of using a repository in your application,
+we basically set up our service here, our `EmployeeServiceImpl`, 
+implements `EmployeeService` and make use of our new repository 
+that we just created, `EmployeeRepository`.
+And then I'll just set up some constructor injection here.
+And then our employee service is going to make use of our `EmployeeRepository`
+and our repository makes use of **Spring Data JPA** to give us that **DAO** functionality.
+And so here's a quick example of a method here.
+So our method in our service called `findAll()`.
+What we'll do is we'll simply return `employeeRepository.findAll()`.
+So we're calling a method on our repository.
+And this is one of those magic methods that are available via the repository 
+that we get for free like magic by simply extending off of that **JPARepository** interface.
+
+![image81](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image81.png?raw=true)
+
+Now, the key thing here is that by using **Spring Data JPA**, we've minimized the boilerplate code.
+So now this is how we would write code before **Spring Data JPA**.
+We'd create our interface for our given entity, 
+and we'd write our repository or our **DAO** implementation.
+So 2 files, 30 plus lines of code.
+Actually more lines of code, but I'm just being nice here and saying 30 plus.
+But now over on the right-hand side, after **Spring Data JPA**,
+we create this interface employee repository.
+So it's one file, three lines of code.
+No need for an implementation class.
+And we get all of those **CRUD** methods for free like magic.
+It makes it very simple for us to create a repository or a **DAO** back in.
+And then over on the left-hand side, you know, we don't have to write that code anymore.
+We're done with that type of work.
+Now that we're using **Spring Data JPA**,
+our life is much easier, our life is much simpler.
+
+Now, **Spring Data JPA** has some advanced features:
+
+* Extend and add custom queries with JPQL
+* Query Domain Specific Language (query DSL)
+* Defining custom methods (low-level coding)
+
+And so I have a link [here](https://www.luv2code.com/spring-data-jpa-defining-custom-queries) 
+where you can go to get more details on some of those advanced features.
+
+
+One other thing I want to do is actually refresh our database table,
+because we added a lot of things deleted, updated, and so on.
+So let's move over to **MySQL workbench** and just log into our `springstudent` account.
+And basically, we just want to run that script that we used earlier
+as far as creating the table and inserting the sample data.
+
+```sql
+CREATE DATABASE  IF NOT EXISTS `employee_directory`;
+USE `employee_directory`;
+
+--
+-- Table structure for table `employee`
+--
+
+DROP TABLE IF EXISTS `employee`;
+
+CREATE TABLE `employee` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+--
+-- Data for table `employee`
+--
+
+INSERT INTO `employee` VALUES 
+	(1,'Leslie','Andrews','leslie@luv2code.com'),
+	(2,'Emma','Baumgarten','emma@luv2code.com'),
+	(3,'Avani','Gupta','avani@luv2code.com'),
+	(4,'Yuri','Petrov','yuri@luv2code.com'),
+	(5,'Juan','Vega','juan@luv2code.com');
+```
+
+So here it is.
+So this is all of our fresh data here, so we're good to go.
+So we have a standard baseline to work from.
+And so basically, we'll just do a copy-paste on `02-spring-boot-rest-crud-employee`,
+to create a new package, named as `03-spring-boot-rest-crud-employee-with-spring-data-jpa`.
+I'll delete `target` folder in it.
+Now, we can import the project into IntelliJ.
+So one thing I want to do is delete our old **DAO** code.
+We don't need it anymore, so I'll just go ahead and remove it and get rid of it all together.
+And don't worry, we have different copies of projects.
+So we have this code in some previous projects.
+So for this one, we'll just remove it or delete it.
+And what I'll do here with step one is to create a **Spring Data JPA Repository**.
+So that's actually a new interface.
+And so I'll give a name for this interface, I'll call it `EmployeeRepository`.
+And I'll say `extends JPARepository`.
+So make sure you choose **JpaRepository**, just the interface.
+
+```java
+package com.luv2code.springboot.cruddemo.dao;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    
+    // no need to write any code here
+}
+```
+
+So we should have our interface **EmployeeRepository** extends **JpaRepository**.
+And then for the entity type, I'll say `Employee`.
+And then for the actual primary key type, I'll give `Integer` 
+because our **Employee** class is based on an **Integer** primary key.
+So again, Entity type, Primary key.
+And that's basically it.
+There's no need to write any code.
+We get these **CRUD** methods for free, and there's no need to write an implementation class.
+It's all the beauty of **Spring Data JPA**.
+
+In step two, we need to use the **Repository** in our application.
+So here I'll move into this **EmployeeServiceImpl**,
+and I'll just kinda refactor the code from using our old **DAO** to make use
+of this new **EmployeeRepository**.
+
+```java
+package com.luv2code.springboot.cruddemo.service;
+
+// import com.luv2code.springboot.cruddemo.dao.EmployeeDAO;
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    // inject EmployeeDAO ...
+    //private EmployeeDAO employeeDAO;
+    private EmployeeRepository employeeRepository;
+
+    // set up constructor injection
+    @Autowired
+    // public EmployeeServiceImpl(EmployeeDAO theEmployeeDAO) {
+    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository) {
+        employeeRepository = theEmployeeRepository;
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        //return employeeDAO.findAll();
+        return employeeRepository.findAll();
+    }
+
+    @Override
+    public Employee findById(int theId) {
+        //return employeeDAO.findById(theId);
+        return employeeRepository.findById(theId);  // Error -> Required type: Employee Provided: Optional <com.luv2code.springboot.cruddemo.entity.Employee>
+    }
+
+    // @Transactional
+    @Override
+    public Employee save(Employee theEmployee) {
+        //return employeeDAO.save(theEmployee);
+        return employeeRepository.save(theEmployee);
+    }
+
+    // @Transactional
+    @Override
+    public void deleteById(int theId) {
+        //employeeDAO.deleteById(theId);
+        employeeRepository.deleteById(theId);
+    }
+}
+```
+
+Then, I'll kinda just rip out the `EmployeeDAO` work,
+and instead I'll replace it with `EmployeeRepository`.
+And I'll just make use of the `EmployeeRepository` that I'm passing in here.
+So I'll say `theEmployeeRepository`,
+and I'll just fix up the work here inside the constructor.
+And now, I'll just make use of this `employeeRepository` and all the other methods here.
+So instead of `employeeDAO`, we paste in `employeeRepository`,
+and I'll just kinda do a copy and paste all the way through here.
+So now we're using that `employeeRepository` on all of our methods.
+And then also another thing, we can remove the `@Transactional`
+since `JPARepository` provides this functionality out of the box.
+So no need to list it here.
+So we just took care of defining the field and handling the constructor injection
+for that `employeeRepository`.
+And now, we're simply delegating the methods off because we get those methods for free
+since we extend off of **JPA Repository** with **Spring Data**.
+Now we still have an issue on `findById()`, 
+_type mismatch can't convert optional employee to employee_, 
+and no worries, we simply have to make some adjustments here,
+and I'll kinda walk through the coding to resolve this issue.
+
+```java
+@Override
+public Employee findById(int theId) {
+    // return employeeRepository.findById(theId);  // Error -> Required type: Employee Provided: Optional <com.luv2code.springboot.cruddemo.entity.Employee>
+    Optional<Employee> result = employeeRepository.findById(theId);
+    
+    Employee theEmployee = null;
+    if (result.isPresent()) {
+        theEmployee = result.get(); 
+    } else {
+        // we didn't find the employee
+        throw new RuntimeException("Did not found employee id - " + theId);
+    }
+    return theEmployee;
+}
+```
+
+So I'll select this piece of code here,
+and I'll just kinda do a refactor and extract it as a local variable.
+And then, for the variable name, I'll call it `result`.
+That's the result of that call that we're making.
+So now, `Optional` is a different pattern.
+So instead of having the right code to check for `null`s, 
+you can make use of `Optional` to see if a given value is present.
+So I'll say `Employee theEmployee`, set it to `null`.
+So here I'll say if `result.isPresent`, so that returns `true` 
+if there's a value present, then I can actually retrieve that given value.
+So here I'll say `return_result.get`.
+And then, I'll make the assignment inside this `if` statement here.
+So I'll say `theEmployee = result.get()`.
+So that'll give us the actual value.
+And then, this is a different pattern of coding that was introduced in Java 8.
+And at the bottom I say `return theEmployee`.
+So that's kinda the basic approach here for getting the data 
+without having to explicitly check for `null`.
+So the `JPARepository` makes use of `Optional`s.
+And now, here I could say, `else`, a value wasn't present.
+Well, that meant that I couldn't find the employee by that given id.
+So, in that case, I'll simply just throw an exception.
+And I'll simply say, "_Hey, did not find employee ID of blah_".
+And so, that's the basic code in there for `findByid` using this `Optional` approach.
+And so, this is kind of a new feature, new code in it, 
+you may not have seen before, but this is introduced with the **JPARepository** of part of Java 8.
+I have a link [here](https://www.luv2code.com/java-optional-tutorial) 
+that'll give you more details on how to use `Java Optionals`.
+It's official documentation or tutorials from the **Oracle** website.
+So you can go to that link, and it'll redirect you to that official tutorial.
+So we've done all the work here.
+So we have our application, it's simply delegating the calls off to that repository, 
+and we're making use of all those magic methods that are provided by **Spring Data JPA**, 
+and that `JPARepository` interface.
+
+I'm ready to run this application and test it out.
+So I'll just go ahead and run our `CruddemoApplication` and get it up and running.
+Alright, so we can go ahead and swing over to **Postman** and just test it out here.
+So we'll run our first test of get all employees.
+
+![image82](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image82.png?raw=true)
+
+And that's successful,
+so we're getting all of our data, so we know that 
+this `JPARepository` is working just fine for get all employees.
+And we can do a similar thing here to test to get a single employee by ID,
+so I'll get employee number two.
+
+![image83](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image83.png?raw=true)
+
+Okay, great, that's for `Emma`.
+Excellent, success, success.
+And then do another test here of getting employee five, we get `Juan Vega`, that's good.
+Now let's move ahead to add a new employee, so that's the `POST` method,
+and we'll just clear out any of the previous information there,
+and we'll just add some new information for a new employee to add.
+
+```json
+{
+    "firstName" : "Natalia",
+    "lastName" : "Kublanov",
+    "email" : "natalia@luv2code.com"
+}
+```
+
+And so we'll add this new employee, `Natalia Kublanov`, and then we'll simply do a `send`.
+
+![image84](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image84.png?raw=true)
+
+So success, we have a new employee here with the ID of six.
+Swing over to our database, and just do a refresh here, and excellent.
+So we have the new employee here, `Natalia`, ID of six.
+So we know that our `JPARepository`, our `save` feature, 
+our `save` functionality is working out just fine, so that's cool.
+And then I'll swing over, and we'll test for update employee using a `PUT` method.
+So I wanna update employee ID of number one,
+and I'll just change the first name, and last name, and email for that given employee.
+
+```json
+{
+    "id" : 1,
+    "firstName" : "Evan",
+    "lastName" : "Richards",
+    "email" : "evan@luv2code.com"
+}
+```
+
+So we'll update employee ID of number one, first name will be `Evan`, 
+last name `Richards`, `evan@luv2code.com`.
+Go ahead and send this data across:
+
+![image85](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image85.png?raw=true)
+
+And we'll see that response that was our code.
+So we have `Evan Richards`, `evan@luv2code.com`, ID of one.
+Just go back to our database and just do a quick refresh here.
+Actually, just check the old data, `Leslie Andrews`, that's the old data.
+And now we do a refresh, and we should see `Evan Richards`.
+
+![image86](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image86.png?raw=true)
+
+All right, good job.
+And so now we're at our final step here of deleting an employee,
+so we choose that `DELETE` tab there.
+And for this example, we'll delete employee number four.
+Just do a `send`.
+Comes back with a response, _hey, we deleted employee ID of four_.
+We simply swing back to our database.
+This is our old data employee ID of number four, `Yuri`.
+And if we do a refresh, then we should have success here.
+
+![image87](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image87.png?raw=true)
+
+Yes, that ID number four was deleted, so the `delete` functionality is working.
+So all the major **CRUD** features are working with our **Spring Data JPA**.
+So we're able to kinda leverage this magic here
+of **Spring Data JPA** by using this interface, 
+getting all these methods for free, and minimizing all the source code.
 </div>
 
 ## [Spring Boot REST: Spring Data REST]()
