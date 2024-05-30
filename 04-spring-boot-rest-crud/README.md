@@ -4988,6 +4988,305 @@ You can also customize the **REST API** by making use of the query domain specif
 or the query **DSL**.
 For more information, 
 you can see the link [here](https://spring.io/projects/spring-data-rest), **Spring Data REST**.
+
+```sql
+CREATE DATABASE  IF NOT EXISTS `employee_directory`;
+USE `employee_directory`;
+
+--
+-- Table structure for table `employee`
+--
+
+DROP TABLE IF EXISTS `employee`;
+
+CREATE TABLE `employee` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+--
+-- Data for table `employee`
+--
+
+INSERT INTO `employee` VALUES 
+	(1,'Leslie','Andrews','leslie@luv2code.com'),
+	(2,'Emma','Baumgarten','emma@luv2code.com'),
+	(3,'Avani','Gupta','avani@luv2code.com'),
+	(4,'Yuri','Petrov','yuri@luv2code.com'),
+	(5,'Juan','Vega','juan@luv2code.com');
+```
+
+Let's get started with the first thing that is move into **MySQL Workbench**
+and just refresh our database table, just so we have some standard data to start with.
+So again, using that employee script, just go ahead and execute it
+just so it can update everything for us.
+
+After refreshing the database, We'll simply copy and paste the previous project.
+I'll name the new folder as `04-spring-boot-rest-crud-employee-with-spring-data-rest`.
+Now let's go ahead and move over to our IntelliJ preferences here,
+and we'll set up those IntelliJ configurations.
+And let's move down to the item here for `Build, Execution, Deployment`.
+Then we'll choose `Compiler`, and then we'll select this check box here,
+`Build project automatically`.
+And now let's go and select the `Advanced Settings` item.
+And then in the `Compiler` section, we'll check the box, `Allow auto-make to start`.
+And remember, these are the little IntelliJ configurations 
+that we need to do for the community edition,
+to allow it to work with **Spring Boot DevTools**.
+So I'll start by opening up the `pom.xml` file.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.luv2code.springboot</groupId>
+	<artifactId>cruddemo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>cruddemo</name>
+	<description>Demo project for Spring Boot</description>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+        <!-- Add dependency for Spring Data REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+```
+
+And so basically it's, step one is, add in a **Spring Data REST** to the `pom.xml`.
+So I'll just scroll down here in the file and write a quick little comment to myself.
+So I need to add that dependency for **Spring Data REST**.
+What I'll do is, simply copy one of the dependencies from up above,
+and simply just paste it down here and make a quick update to it.
+Alright, so that was the little copy, paste exercise,
+and now I'll simply change this entry here, this artifactId.
+I'll change `spring-boot-starter-data-jpa` to `spring-boot-starter-data-rest`.
+Be sure to reload the **Maven**.
+So that's our updated entry here for **Spring Data REST**.
+And so remember, that's it, absolutely no coding required.
+**Spring Data**'s going to scan for `JpaRepositories`
+and give us those rest endpoints for free.
+So the next thing I'll do here is delete the controller and service packages,
+because remember with our new architecture, **Spring Data REST** is going to give us
+those **REST** endpoints for free.
+So I can actually delete the code for the `EmployeeRestController`,
+and also delete the code for the `EmployeeService`.
+It's no longer required in our project.
+So I'll go ahead and delete the `rest` package.
+I'll delete the `service` package.
+Okay great, so at this point, I should simply have my entity, `Employee`,
+the `dao` package of the `EmployeeRepository` 
+and finally the main **Spring Boot** application.
+And then just remember, for **Spring Data REST** we only need three items,
+our `entity`, our `JpaRepository` and that **Maven** `pom` entry.
+And that's all we need to get those endpoints for free.
+Alright, so let's go ahead and run our application and let's test it out.
+
+![image90](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image90.png?raw=true)
+
+I'll move over to a web browser, and I'll access `localhost:8080/employees`.
+It works for us.
+So there's our data.
+So we're actually getting our list of employees,
+`Leslie Andrews`, `Emma Baumgarten`, and so on.
+So this is all coming back thanks to **Spring Data REST**,
+and also it's making use of this `HATEOAS` format
+as far as the actual data and the structure of the data as it's being passed back.
+
+![image91](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image91.png?raw=true)
+
+And also we have the meta-data here at the bottom of this given page.
+The `size`, `totalElements`, `totalPages`, `number`, and so on.
+Alright, and so we can confirm 
+that this data is really coming back using **Spring Data REST**.
+And I can even make use of some links here, `http://localhost:8080/employees/1`
+to drill down for like employee one.
+I can select this link, and it'll take me to the details here for employee one.
+
+![image92](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image92.png?raw=true)
+
+Okay, there we go.
+So **Spring Data REST** is up and running.
+So I want to play around with some other features here of **Spring Data REST**.
+So what I'll do is I'll take this [URL](http://localhost:8080/employees), 
+I'll copy it, and I'll move over to **Postman** and paste it in there.
+And check the results here in **Postman**: 
+
+![image93](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image93.png?raw=true)
+
+And the same thing.
+So we're getting the data back as desired in **Postman** also.
+
+Okay, so one thing I'd like to do is actually customize our endpoint base path
+just to kind of give us a little bit more control over that given URL.
+So I'll open up my `application.properties` file 
+and add some **Spring Data REST** properties.
+
+```properties
+#
+# JDBC properties
+#
+spring.datasource.url=jdbc:mysql://localhost:3306/employee_directory
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+
+#
+# Spring Data REST properties
+#
+spring.data.rest.base-path=/magic-api
+```
+
+So I'll give `spring.data.rest.base-path`, and I'll call it `magic-api`.
+So that's the base path for the URL that we'll have for these **Spring Data REST** endpoints.
+And then I'll simply save this file, 
+and we'll see at the bottom that it's reloading.
+And now if I swing back over to **Postman**, then I can access this information.
+So first off, if I simply use the existing `/employees`,
+it's going to give me a 404 of not found.
+That's because we've actually changed the actual base path.
+So here I have to say `magic-api/employees`,
+and that's based on that information from that configuration file.
+So now when I hit `send`, 
+
+![image94](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image94.png?raw=true)
+
+I'll actually get the data back as desired.
+So it's using our `magic-api`.
+You can use any base path that you want here.
+So now let's go ahead and play around with posting or adding a new employee.
+So I'll select the tab here for post.
+Make sure that you update your URL for `magic-api`.
+And then for the body, you may already have some existing data here.
+
+```json
+{
+    "firstName" : "Natalia",
+    "lastName" : "Kublanov",
+    "email" : "natalia@luv2code.com"
+}
+```
+
+You can keep it the same, or you can change it.
+I'll go ahead and keep mine as is for `Natalia`, and I'll simply `send` that across.
+And then just scrolling down to the bottom, we'll see that we have success.
+It added that new employee, `Natalia`, and she has the ID of six.
+So the employee ID will show up in the `HATEOAS` meta-data section.
+Just swinging over to my database real quick, and just doing a quick refresh here.
+
+![image95](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image95.png?raw=true)
+
+And so we see that `Natalia` is the new entry here of ID six.
+So this looks pretty good.
+Now we'll also go through and using a put to actually update an employee.
+And make sure you update your URL here for `magic-api`.
+So let's perform an update on employee ID equals four.
+And one thing that's different here is that 
+**Spring Data REST** only uses the id on the URL.
+So don't pass the id in the **JSON** body like we did before.
+Only place the id on the URL.
+If you place the id in the body, it'll simply ignore it.
+It'll only use the id on the URL.
+Alright, so I'll select body over here, and I can give some new updated information.
+
+```json
+{
+    "firstName" : "Pappa",
+    "lastName" : "Ray",
+    "email" : "pappa@luv2code.com"
+}
+```
+
+First name of `Pappa`, last name of `Ray`, just again, making this up.
+And then, once we send this across, then we should update employee ID of four
+with this new data that we provided here.
+It'll show us that update for ID four.
+And if we just swing over to our database, we can see our old data of ID four was `Yuri`.
+And I simply do a refresh here:
+
+![image96](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image96.png?raw=true)
+
+And I'll see the first name of `Pappa`, last name `Ray`.
+That's the data that we just sent across,
+so it successfully updated given employee ID of four.
+Alright, so swinging back into **Postman**, I'll go through and delete an employee.
+So I'm in queues of `delete`.
+And again, just make sure you update your URL here, `magic-api/employees/4`.
+So we're going to delete employee number four.
+Just do a `send`.
+Alright, so we have a success here.
+With **Spring Data REST**, there's no data in the response body.
+They simply give you a status code of 204.
+So that means that it was successful, no content.
+So this is fine, we're good to go here.
+So swinging back to our database, we see that ID equals four, `Pappa Ray`, 
+that's our old data.
+Simply go through and do a refresh:
+
+![image97](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image97.png?raw=true)
+
+And we'll see that given employee was deleted successfully.
+So `id = 4` was deleted.
+Alright, so that kind of covers all the **CRUD** stuff.
+So we know that **Spring Data REST** is working out just fine
+for our **CRUD** operations with our given database.
+And again, we simply added this functionality
+by putting in the **Maven** dependency here for `spring-boot-starter-data-rest`.
+And again, no coding required.
+And in fact, we actually went through and deleted some code.
+So this minimized the boilerplate code.
+So we removed all the **REST** controllers and all the service samples, 
+got rid of all that stuff, and we simply made use of the **Maven** entry,
+and that will give us those **REST** endpoints for free.
 </div>
 
 ## [Spring Boot REST: Spring Data REST Configs and Sorting]()
