@@ -5292,5 +5292,111 @@ and that will give us those **REST** endpoints for free.
 ## [Spring Boot REST: Spring Data REST Configs and Sorting]()
 <div style="text-align:justify">
 
+In this section, we'll cover **Spring Data REST**configuration, pagination, and sorting.
+By default, **Spring Data REST** will create endpoints based on the entity type.
+So the simple pluralized form is the first character of the entity type is lowercase,
+and then **Spring Data REST** will simply add an `s` to the entity.
+
+```java
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    
+}
+```
+
+So in this example here with `EmployeeRepository extends JpaRepository`,
+the entity type is `Employee`, so it'll have a `/employees`,
+and that's a very simple, most basic format.
+
+So the **Spring Data REST** pluralized form is very simple.
+Like I mentioned earlier, it simply adds an `s` to the entity.
+But the English language is very complex, 
+and **Spring Data REST** does not handle any of these special cases like:
+
+| Singular | Plural  |
+|----------|---------|
+| Goose    | Geese   |
+| Person   | People  |
+| Syllabus | Syllabi |
+| ...      | ...     |
+
+In that part, **Spring Data REST** just falls apart.
+So this is a problem, **Spring Data REST** does not handle complex pluralized forms.
+So in this case, you need to manually specify a plural name.
+Also, what if we wanted to expose a different resource name?
+So instead of `/employees`, we wanted to use something like `/members`?
+
+Here's the actual solution.
+So we can specify the plural name or path with an annotation.
+
+```java
+@RepositoryRestResource(path="members")
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+
+}
+```
+
+For our `EmployeeRepository`, we make use of this new annotation here called
+`@RepositoryRestResource`, and then we give a `path`.
+So in this example, I have `path="members"` 
+so then we'll have the actual endpoint URL of `localhost:8080/members`.
+So instead of using `/employees` it'll now make use of `/members`.
+
+And then in regard to pagination, by default, 
+**Spring Data REST** will return the first 20 elements.
+So the page size is 20, and then you can navigate
+to different pages of data using different query params.
+
+```html
+http://localhost:8080/employees?page=0
+
+http://localhost:8080/employees?page=1
+
+...
+```
+
+So here I could say, "_give me `localhost/employees?page=0` or page 1_" and so on.
+And the pages are actually zero-based, so the first page starting at `page = 0`.
+
+| Name                                 | Description                                   |
+|--------------------------------------|-----------------------------------------------|
+| `spring.data.rest.base-path`         | Base path used to expose repository resources |
+| `spring.data.rest.default-page-size` | Default size of pages                         |
+| `spring.data.rest.max-page-size`     | Maximum size of pages                         |
+| ...                                  | ...                                           |
+
+
+Now **Spring Data REST** has the following properties that we can set in `application.properties`.
+So one of them we've seen already, `spring.data.rest.base-path`,
+that's the actual base path for the repository resources.
+We can also set the default page size, and we can also set the max page size.
+There are more properties that are available.
+Simply go [here](https://luv2code.com/spring-boot-props),
+it'll take you to the official spring docs 
+and simply scan that list for `spring.data.rest.*` properties.
+
+```properties
+spring.data.rest.base-path=/magic-api
+spring.data.rest.default-page-size=50
+```
+
+Okay, so here's an example of a sample configuration
+that we can set in our `application.properties`.
+So here I have `spring.data.rest.base-path=/magic-api`.
+And so this will basically give us the endpoint `/magic-api/employees`.
+And then we can also set the `default-page-size=50`
+so it's going to return 50 elements per page.
+
+Now in terms of sorting, we can sort by the property names of the entity.
+So in our employee example, we have `firstName`, `lastName`, and `email`.
+To sort by `lastName`, and the ascending is the default,
+I could say `/employees?sort=lastName`.
+I could also sort by `firstName`, descending, 
+so I have `/employees?sort-firstName,desc` for descending.
+I could also sort by `lastName`, then `firstName`, ascending.
+So here I have `/employees?sort=lastName,firstName,asc`,
+and I actually don't need the `asc` here, it's the default,
+but I just listed it here just to be explicit,
+just to show you an example of using that in the actual query param.
+
 
 </div>
