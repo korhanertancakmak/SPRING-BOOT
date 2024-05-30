@@ -4616,7 +4616,378 @@ getting all these methods for free, and minimizing all the source code.
 ## [Spring Boot REST: Spring Data REST]()
 <div style="text-align:justify">
 
+In this section, we'll cover **Spring Data REST** in **Spring Boot**.
+Earlier, we saw the magic of **Spring Data JPA**.
+So we had our entity type of `Employee` and our primary key of `Integer`.
+We plugged that in, and it'll give us those methods for free
+for finding, saving, deleting, and so on.
+And this really helped to eliminate the boilerplate codes.
+The coding after **Spring Data JPA** made it really easy.
 
+And I wonder like, "_Hmm, can this same thing apply to REST APIs?_"
+So here's the problem.
+We saw how to create a **REST API** for `Employee`.
+
+```java
+package com.luv2code.springboot.cruddemo.rest;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import com.luv2code.springboot.cruddemo.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+
+    private EmployeeService employeeService;
+
+    // quick and dirty: inject employee dao (use constructor injection)
+    @Autowired
+    public EmployeeRestController(EmployeeService theEmployeeService) {
+        employeeService = theEmployeeService;
+    }
+
+    // expose "/employees" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeService.findAll();
+    }
+
+    // add mapping for GET /employees/{employeeId}
+    @GetMapping("/employees/{employeeId}")
+    public Employee getEmployee(@PathVariable int employeeId) {
+
+        Employee theEmployee = employeeService.findById(employeeId);
+
+        if (theEmployee == null) {
+            throw new RuntimeException("Employee id not found - " + employeeId);
+        }
+
+        return theEmployee;
+    }
+
+    // add mapping for POST /employees - add new employee,
+    @PostMapping("/employees")
+    public Employee addEmployee(@RequestBody Employee theEmployee) {
+
+        // also just in case they pass an id in JSON ... set id to 0
+        // this is to force a save of new item ... instead of update
+        theEmployee.setId(0);
+        Employee dbEmployee = employeeService.save(theEmployee);
+        return dbEmployee;
+    }
+
+    // add mapping for PUT /employees - update existing employee
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee theEmployee) {
+
+        Employee dbEmployee = employeeService.save(theEmployee);
+
+        return dbEmployee;
+    }
+
+    // add mapping for DELETE /employees/{employeeId} - delete employee
+    @DeleteMapping("/employees/{employeeId}")
+    public String deleteEmployee(@PathVariable int employeeId) {
+
+        Employee tempEmployee = employeeService.findById(employeeId);
+
+        // throw exception if null
+        if (tempEmployee == null) {
+            throw new RuntimeException("Employee id not found - " + employeeId);
+        }
+
+        employeeService.deleteById(employeeId);
+        return "Deleted employee id - " + employeeId;
+    }
+}
+```
+
+We would set up our `EmployeeRestController`, inject a `@Service`:
+
+```java
+package com.luv2code.springboot.cruddemo.service;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import java.util.List;
+
+public interface EmployeeService {
+
+    List<Employee> findAll();
+
+    Employee findById(int theId);
+
+    Employee save(Employee theEmployee);
+
+    void deleteById(int theId);
+}
+```
+
+Set up the `@GetMapping`, `@PostMapping`s, and so on.
+
+```java
+package com.luv2code.springboot.cruddemo.service;
+
+import com.luv2code.springboot.cruddemo.dao.EmployeeRepository;
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    // inject EmployeeDAO ...
+    private EmployeeRepository employeeRepository;
+
+    // set up constructor injection
+    @Autowired
+    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository) {
+        employeeRepository = theEmployeeRepository;
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
+    }
+
+    @Override
+    public Employee findById(int theId) {
+        // return employeeRepository.findById(theId);
+        Optional<Employee> result = employeeRepository.findById(theId);
+
+        Employee theEmployee = null;
+        if (result.isPresent()) {
+            theEmployee = result.get();
+        } else {
+            // we didn't find the employee
+            throw new RuntimeException("Did not found employee id - " + theId);
+        }
+        return theEmployee;
+    }
+
+    @Override
+    public Employee save(Employee theEmployee) {
+        return employeeRepository.save(theEmployee);
+    }
+
+    @Override
+    public void deleteById(int theId) {
+        employeeRepository.deleteById(theId);
+    }
+}
+```
+
+We'd set up our `Service` interface, our `@Service` implementation,
+and then we also had our application architecture.
+
+![image88](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image88.png?raw=true)
+
+We had our `RESTController`, our `Service`, our `Repository`.
+And that worked fine and all.
+But what if I needed to create a **REST API** for another entity 
+like `Customer`, `Student`, `Product` or `Book`?
+Would I have to go back and repeat all the same code again?
+And I don't want to do that over and over again for each entity.
+
+I wish we could tell **Spring**, "_Hey, create a **REST API** for me,
+use my existing **JPARepository**, my entity and primary key,
+and give all the basic **REST API CRUD** features for free._"
+
+So **Spring Data REST** is the solution.
+It's a separate **Spring** project.
+You can use it with regular **Spring** or **Spring Boot**.
+It leverages your existing **JPARepository**, and **Spring** will give you 
+a **REST CRUD Implementation** for free. 
+And the nice thing here is that it helps to minimize boilerplate **REST** code.
+And in fact, there's no new coding required to get set up with this **Spring Data REST**.
+
+| HTTP Method | Endpoint                  | CRUD Action                  |
+|-------------|---------------------------|------------------------------|
+| `POST`      | `/employees`              | Create a new employee        |
+| `GET`       | `/employees`              | Read a list of employees     |
+| `GET`       | `/employees/{employeeId}` | Read a single employees      |
+| `PUT`       | `/employees/{employeeId}` | Update an existing employees |
+| `DELETE`    | `/employees/{employeeId}` | Delete an existing employees |
+
+So **Spring Data REST** will expose these endpoints for free.
+So you'll have methods to `POST` to create a new employee.
+`GET` to retrieve, `PUT` for update, and `DELETE` for, of course, deleting an existing employee.
+And you get all of these **REST** endpoints for free
+when you make use of **Spring Data REST**.
+
+So you may wonder: how does it work in the background?
+Well, **Spring Data REST** will actually scan your project for `JpaRepository` sub interfaces.
+It'll expose the **REST API** for each entity type for your `JpaRepository`.
+So in this example here, I have this `EmployeeRepository`:
+
+```java
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    
+}
+```
+
+Extends `JpaRepository` entity, got this entity type of `Employee`,
+it will actually expose an employee's endpoint.
+So a bit more on the endpoint here.
+It will create the endpoints based on an entity type.
+It'll make use of the simple pluralized form, 
+meaning it'll take the first character of the entity type,
+that's lowercase, and then it'll simply add an `s` to the end of the entity.
+So in this case, we have this `EmployeeRepository`.
+The entity type is `Employee` in brackets, and then it'll create a `/employees` endpoint.
+And so that's the basic approach for how they'll expose these **REST** endpoints.
+Now I'll talk more about the pluralized form later in some later sections,
+and also how you can kind of customize it.
+But for now, we'll kind of take this out of the box.
+
+Alright, so let's look at the actual development process:
+
+1. Add a **Spring Data REST** to your **Maven** `pom` file, 
+
+And that's it.
+There's absolutely no coding required.
+You simply make a **Maven** `pom` entry, and you get these endpoints for free.
+So a bit more here on step one is adding it to your `pom` file.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-rest</artifactId>
+</dependency>
+```
+
+So you simply give a dependency here,
+and you give a reference for `spring-boot-starter-data-rest`, and that's it.
+No coding required.
+**Spring Data REST** will scan for `JpaRepositories` and expose endpoints.
+And so you'll get these endpoints for free,
+based on the various entity types in your `JpaRepositories`.
+
+So for **Spring Data REST**, you only need three items:
+
+1. Your entity type of `Employee`
+2. `JpaRepository` : `EmployeeRepository extends JpaRepository`
+3. The **Maven** `pom` dependency for `spring-boot-starter-data-rest`.
+
+So the first two items, we already have those.
+The only new item here is number three, the **Maven** `pom` dependency, and then that's it.
+Now some changes to our application architecture here.
+
+![image89](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image89.png?raw=true)
+
+So before we had: 
+
+* Employee REST Controller
+* Employee Service 
+* Repository on the backend
+
+And now, after we're using **Spring Data REST**,
+they'll give us a `/employees` endpoint for free.
+So there's no additional coding required to get this given **REST** endpoint.
+So in our original architecture up top,
+we can delete the code from our **Employee REST Controller** and also delete the **Employee Service**.
+We no longer need that code, because **Spring Data REST** will provide 
+that functionality for us for free.
+
+Now with minimizing the boilerplate code.
+So before **Spring Data REST**, we had our `RESTController`, we had our `EmployeeService`,
+we had our `ServiceImplementation`, so about three files and 100 plus lines of code.
+And then after **Spring Data REST**, you're going to love this.
+No coding required. 
+Just give a **Maven** `pom` entry.
+**Spring Data REST** will scan for those repositories, 
+and automatically expose those endpoints for free.
+You can easily see that we no longer need their original code on the left-hand side,
+because **Spring Data REST** will give us all of that functionality for free.
+
+The **Spring Data REST** endpoints are `HATEOAS` compliant.
+So what is `HATEOAS`?
+It's the `Hypermedia As The Engine Of Application State`.
+Basically, hypermedia-driven sites that provide information to access our **REST** interfaces.
+And so really, you can just think of this as metadata for the **REST** data
+that's coming back from these given **REST API**s.
+You can read more about `HATEOAS` at this link [here](https://spring.io/projects/spring-hateoas),
+but I'll actually go through some quick examples
+to show you the basics of how this `HATEOAS` works.
+
+**Spring Data REST** responses make use of `HATEOAS`.
+So for example, a **REST** response from **Get** `/employee/3` to get a single employee.
+Then it'll return this **JSON** data as a response.
+
+```json
+{
+    "firstName" : "Avani",
+    "lastName" : "Gupta",
+    "email" : "avani@luv2code.com",
+    "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/employees/3"
+        },
+        "employee" : {
+          "href" : "http://localhost:8080/employee/3"
+        }
+    }
+}
+```
+
+So up top we'll actually have our content or our real data, like our `Employee` data,
+`firstName`, `lastName`, `email` for given `Employee`.
+And then at the bottom, we actually have response metadata.
+So this metadata here basically has links to the actual entry or the data.
+So this is for `employeeId` of number three.
+Just a way of describing the data or linking to the data.
+
+Now for a collection, the metadata includes the page size,
+the total number of elements, the pages, and so on.
+So if I wanted to get a list of employees by doing **GET** `/employees`,
+then the **JSON** response will be this piece of information here.
+
+```json
+{
+    "_embedded" : {
+        "employee" : [
+           {
+                "firstName" : "Leslie",
+                ...
+           },
+           ...
+        ]
+    },
+    "page" : {
+        "size" : 20,
+        "totalElements" : 5,
+        "totalPaages" : 1,
+        "number" : 0
+    }
+}
+```
+
+And up top, we have embedded a **JSON** array of employees for all the different employees there.
+And then down at the bottom, we have metadata about the page or information about the page.
+So the size of the page, this total number of elements, pages, number, and so on.
+And I'll talk more about configuring the page sizes a little bit later.
+
+So for details on `HATEOAS`, 
+see the link [here](https://spring.io/projects/spring-hateoas).
+`HATEOAS` also makes use of the `Hypertext Application Language` data format or `HAL`,
+and that's the actual format of the **JSON** data that's being returned in the response.
+So, if you'd like to get more information on `HAL`,
+you can see the link [here](https://en.wikipedia.org/wiki/Hypertext_Application_Language) 
+at the Wikipedia website.
+
+**Spring Data REST** also has some advanced features.
+So there's support for a pagination, sorting and searching.
+You can also extend and add custom queries with **JPQL**.
+You can also customize the **REST API** by making use of the query domain specific language 
+or the query **DSL**.
+For more information, 
+you can see the link [here](https://spring.io/projects/spring-data-rest), **Spring Data REST**.
 </div>
 
 ## [Spring Boot REST: Spring Data REST Configs and Sorting]()
