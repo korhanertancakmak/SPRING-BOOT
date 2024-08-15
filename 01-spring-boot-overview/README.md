@@ -1213,7 +1213,7 @@ And so now we'll actually explore the project structure, because remember,
 I said we'll actually cover all of those files that are created,
 so we'll do that in this section.
 
-<div style="margin: 0 auto; width: fit-content;">
+<div align="center">
   <table>
     <thead>
       <tr>
@@ -1626,7 +1626,7 @@ and we'll also have starter **thymeleaf**.
 And so it'll do all this for us automatically
 by making use of that **Spring Initializr** website.
 
-<div style="margin: 0 auto; width: fit-content;">
+<div align="center">
   <table>
     <thead>
       <tr>
@@ -2264,7 +2264,7 @@ So, anything following `info.` will be used as part of this given **JSON** objec
 And you can customize it, you can add as many details here
 as you'd like for this given info for your application.
 
-<div style="margin: 0 auto; width: fit-content;">
+<div align="center">
   <table>
     <thead>
       <tr>
