@@ -51,7 +51,7 @@ and we'll cover all of that during this course.
 Now Spring Boot provides the **Spring initializer**.
 So this is a website for quickly creating a starter spring project.
 
-![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true)
+<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true" alt="image01" style="display:block; margin: 0 auto;" />
 
 Basically, you go to this website at [start.spring.io](https://start.spring.io/).
 You select your dependencies, 
@@ -104,7 +104,7 @@ So you can deploy a WAR file to an external server like Tomcat, JBoss,
 or WebSphere, and it can work just like you would use it in the past.
 All right, so here we have this Tomcat server.
 
-![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image02.png?raw=true)
+<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image02.png?raw=true" alt="image02" style="display:block; margin: 0 auto;" />
 
 Let's say it's deployed somewhere on your corporate network.
 Then you could take your Spring Boot app, and then 
