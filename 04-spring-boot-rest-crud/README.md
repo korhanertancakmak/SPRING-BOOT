@@ -5398,5 +5398,312 @@ and I actually don't need the `asc` here, it's the default,
 but I just listed it here just to be explicit,
 just to show you an example of using that in the actual query param.
 
+Let's move into IntelliJ, and we'll work with **Configuration**, **Pagination** and **Sorting**.
+So the first thing I want to do is go through,
+and just do the housekeeping stuff, stop any apps that are already running.
+And I'll do here is configuration.
+So, I'm going to change the **REST** resource path.
+So, instead of employees, I want to change it to something else.
+So I'll open up my `EmployeeRepository`, and I'll add a new annotation here.
 
+```java
+package com.luv2code.springboot.cruddemo.dao;
+
+import com.luv2code.springboot.cruddemo.entity.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+@RepositoryRestResource(path="members")
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+
+    // no need to write any code here
+}
+```
+
+So I'll give this `@RepositoryRestResource(path="members")`.
+So **Spring Data Rest**,
+instead of exposing `/employees`, it'll expose `/members` for this given **REST** repository.
+So I'll go ahead and run my application and test it out.
+So I'll kind of move into **Postman**, and I'll duplicate one of these tabs here.
+So I have this tab `magic-api/employees`.
+Now if I do a `send`, I'm going to get a `404 Not Found` because we changed the path.
+So we really should make use of `magic-api/members` 
+because that's what we set up in our annotation.
+And so now when I do a `send`:
+
+![image98](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image98.png?raw=true)
+
+Then everything works out successfully for us.
+So that just shows you how you can change the actual endpoint for this given repository.
+And what I'll do is I'll actually kind of just remove `@RepositoryRestResource(path="members")`,
+or comment it out because I want to go back to making use of my `/employees` here.
+So I'll simply comment out this code for right now.
+And then I'll just do quick verification on it.
+Over here, so I'll close off that tab,
+and I'll go back to my normal `magic-api/employees`.
+And cool, so this is working as desired before, so this is good.
+Now let me scroll down here a bit.
+
+![image99](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image99.png?raw=true)
+
+And so down at the bottom, for this given collection, we'll see information about the page.
+So this is **Meta-data** about the page.
+So the size, this total number of elements, pages, page number, and so on.
+And what I want to do here is kind of move over and actually change the default page size.
+
+```properties
+#
+# JDBC properties
+#
+spring.datasource.url=jdbc:mysql://localhost:3306/employee_directory
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+
+#
+# Spring Data REST properties
+#
+spring.data.rest.base-path=/magic-api
+spring.data.rest.default-page-size = 3
+```
+
+So I'll set up this property here, `spring.data.rest.default-page-size = 3`.
+That means, for every request, we'll only get a page size of three.
+
+![image100](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image100.png?raw=true)
+
+So we know our database has five elements.
+So our page size right now is three.
+We have five elements in the database.
+So that means that we have a total of two pages.
+You know, kind of do the little division there.
+So we have two pages.
+And then one thing that's important here the actual the page numbers are zero-based.
+So the first page is zero, the second page is one.
+So I'll go ahead and select the link 
+[here](http://localhost:8080/magic-api/employees?page=1&size=3)
+to go to the next page.
+So this will open up a new **Postman** tab for me, prepopulated.
+And I'll simply do a `send` here.
+And this will give me information on the next page.
+
+![image101](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image101.png?raw=true)
+
+So I'll have the remaining two elements here for `Juan Vega` and `Natalia Kublanov`.
+Because we have five elements, but the page size is three, so we get two pages.
+So I'll swing back into change the default page size, and I'll change it to 20.
+
+```properties
+#
+# JDBC properties
+#
+spring.datasource.url=jdbc:mysql://localhost:3306/employee_directory
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+
+#
+# Spring Data REST properties
+#
+spring.data.rest.base-path=/magic-api
+spring.data.rest.default-page-size = 20
+```
+
+Just do a save. 
+It'll reload everything for me.
+I'll just swing over to **Postman** real quick and just do a `send` on a list of employees
+and just to make sure I get everybody back.
+
+So next we'll look at sorting.
+So here I'll sort by the last name.
+So I basically give `http://localhost:8080/magic-api/employees?sort=lastName`.
+So `sort=lastName`.
+So it's going to sort by last name and the ascending order.
+So I'll do a `send`.
+And so I get the data back sorted by last name ascending.
+
+```json
+{
+    "_embedded": {
+        "employees": [
+            {
+                "firstName": "Leslie",
+                "lastName": "Andrews",
+                "email": "leslie@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/1"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/1"
+                    }
+                }
+            },
+            {
+                "firstName": "Emma",
+                "lastName": "Baumgarten",
+                "email": "emma@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/2"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/2"
+                    }
+                }
+            },
+            {
+                "firstName": "Avani",
+                "lastName": "Gupta",
+                "email": "avani@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/3"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/3"
+                    }
+                }
+            },
+            {
+                "firstName": "Natalia",
+                "lastName": "Kublanov",
+                "email": "natalia@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/6"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/6"
+                    }
+                }
+            },
+            {
+                "firstName": "Juan",
+                "lastName": "Vega",
+                "email": "juan@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/5"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/5"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/magic-api/employees?page=0&size=20&sort=lastName,asc"
+        },
+        "profile": {
+            "href": "http://localhost:8080/magic-api/profile/employees"
+        }
+    },
+    "page": {
+        "size": 20,
+        "totalElements": 5,
+        "totalPages": 1,
+        "number": 0
+    }
+}
+```
+
+So here we have `Leslie Andrews`, `Baumgarten`, `Gupta`, `Kublanov`, `Vega`.
+Again, sorting by last name, ascending.
+
+Now let's go ahead and switch it up here.
+And let's sort by last name descending.
+So I simply give a comma, `,desc` for descending.
+Then I hit a `send` over here, and now we get it sorted by last name and a descending fashion.
+
+```json
+{
+    "_embedded": {
+        "employees": [
+            {
+                "firstName": "Juan",
+                "lastName": "Vega",
+                "email": "juan@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/5"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/5"
+                    }
+                }
+            },
+            {
+                "firstName": "Natalia",
+                "lastName": "Kublanov",
+                "email": "natalia@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/6"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/6"
+                    }
+                }
+            },
+            {
+                "firstName": "Avani",
+                "lastName": "Gupta",
+                "email": "avani@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/3"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/3"
+                    }
+                }
+            },
+            {
+                "firstName": "Emma",
+                "lastName": "Baumgarten",
+                "email": "emma@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/2"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/2"
+                    }
+                }
+            },
+            {
+                "firstName": "Leslie",
+                "lastName": "Andrews",
+                "email": "leslie@luv2code.com",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/magic-api/employees/1"
+                    },
+                    "employee": {
+                        "href": "http://localhost:8080/magic-api/employees/1"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/magic-api/employees?page=0&size=20&sort=lastName,desc"
+        },
+        "profile": {
+            "href": "http://localhost:8080/magic-api/profile/employees"
+        }
+    },
+    "page": {
+        "size": 20,
+        "totalElements": 5,
+        "totalPages": 1,
+        "number": 0
+    }
+}
+```
+
+So `Vega`, `Kublanov`, `Gupta`, `Baumgarten` and `Andrews`.
+Very simple and straightforward.
 </div>
