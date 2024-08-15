@@ -1051,7 +1051,7 @@ and then the **version** could be the actual house number.
 So some specific coordinates on how to find your house.
 And we use a similar thing here in the **Maven** world to identify a project.
 
-<div style="margin: 0 auto; width: fit-content;">
+<div align="center">
   <table>
     <thead>
       <tr>
