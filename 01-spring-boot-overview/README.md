@@ -51,7 +51,9 @@ and we'll cover all of that during this course.
 Now Spring Boot provides the **Spring initializer**.
 So this is a website for quickly creating a starter spring project.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true" alt="image01" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true" alt="image01" />
+</p>
 
 Basically, you go to this website at [start.spring.io](https://start.spring.io/).
 You select your dependencies, 
@@ -104,7 +106,9 @@ So you can deploy a WAR file to an external server like Tomcat, JBoss,
 or WebSphere, and it can work just like you would use it in the past.
 All right, so here we have this Tomcat server.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image02.png?raw=true" alt="image02" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image02.png?raw=true" alt="image02" />
+</p>
 
 Let's say it's deployed somewhere on your corporate network.
 Then you could take your Spring Boot app, and then 
@@ -209,7 +213,9 @@ and then we'll actually unzip that file.
 And then finally, we'll import that Maven project into our IDE.
 All right, so let's go ahead and dive in and let's get started.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image03.png?raw=true" alt="image03" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image03.png?raw=true" alt="image03" />
+</p>
 
 Okay, so let's go ahead and open up a web browser.
 And so, the first step is configuring a project
@@ -232,7 +238,9 @@ So I'll set up the group ID, `com.luv2code.springboot.demo`.
 And as far as the artifact ID, this is the actual name of my application,
 so I'll just call it `mycoolapp`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image05.png?raw=true" alt="image05" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image05.png?raw=true" alt="image05" />
+</p>
 
 And for dependencies here, this is where we go through 
 and basically just choose the Spring Boot starters that we want
@@ -247,7 +255,9 @@ and it appears here as far as the selected dependency.
 And then from there, go down to the bottom and download the zip file 
 by clicking on generate project.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image06.png?raw=true" alt="image06" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image06.png?raw=true" alt="image06" />
+</p>
 
 So in the bottom corner there of your browser, 
 you'll see that the file was downloaded.
@@ -266,7 +276,9 @@ Again, this could be any location on your file system.
 Inside here, we have this `Pom` file and some other files and source and so on.
 And we'll talk more about this in a bit.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image07.png?raw=true" alt="image07" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image07.png?raw=true" alt="image07" />
+</p>
 
 Okay, so let's go ahead and swing over to your favorite IDE.
 So I'll just import this Maven project.
@@ -282,7 +294,9 @@ So Maven is finished downloading the internet.
 And so now I have this `mycoolapp` as my Maven project here,
 and there are a number of files that are in this project.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image08.png?raw=true" alt="image08" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image08.png?raw=true" alt="image08" />
+</p>
 
 So we have the pom xml, that's the Maven file.
 We have some MavenW files.
@@ -493,7 +507,9 @@ All right, let me kind of take a look at my console real quickly.
 All right, so everything is started, up and running, that's great.
 I'll swing over to my web browser. And open a page `localhost:8080`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image09.png?raw=true" alt="image09" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image09.png?raw=true" alt="image09" />
+</p>
 
 This is awesome.
 Our REST controller is up and running.
@@ -527,7 +543,9 @@ of helper classes to make it easier,
 and again to minimize all the boilerplate code.
 And, we'll see some examples of that a little later in the course.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image10.png?raw=true" alt="image10" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image10.png?raw=true" alt="image10" />
+</p>
 
 Now, this is kind of the big picture here of the **Spring framework**.
 And, this is kinda like the **core** framework.
@@ -561,7 +579,9 @@ And, we'll see the examples of this primarily
 when we get into some transaction work,
 but some other areas, too, we'll play around with it a bit.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image11.png?raw=true" alt="image11" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image11.png?raw=true" alt="image11" />
+</p>
 
 So then moving forward here,
 let's take a look at the data access section or integration.
@@ -593,7 +613,9 @@ and pretty much anything you want, it's very flexible.
 And a lot of other projects in the world or on the web
 make use of the **Spring transaction manager**.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image12.png?raw=true" alt="image12" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image12.png?raw=true" alt="image12" />
+</p>
 
 This is basically the home for the **Spring MVC framework**.
 All right, so you can build web applications using the **Spring Core**,
@@ -613,7 +635,9 @@ Think of it as like a way of doing like remote procedure calls,
 or RPC or also doing distributed computing.
 So that's available also in this web module.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image13.png?raw=true" alt="image13" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image13.png?raw=true" alt="image13" />
+</p>
 
 Also, there's this other item here, instrumentation.
 So basically Spring has a lot of sophisticated fancy technology behind the scenes,
@@ -630,7 +654,9 @@ to know that behind the scenes it's making use of some really cool technology,
 such as **AOP** code weaving by code manipulation, and so on.
 So that's what you get in the instrumentation model.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image14.png?raw=true" alt="image14" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image14.png?raw=true" alt="image14" />
+</p>
 
 Spring has support for **TDD** (test-driven development),
 so the framework includes mock objects 
@@ -719,8 +745,10 @@ you may need additional JAR files like **Spring** JAR files,
 **Hibernate** JAR files, so on and so forth.
 And one approach is to simply download those JAR files from each project website,
 and then you'll manually add those JAR files to your build path or your class path.
-  
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image15.png?raw=true" alt="image15" style="display:block; margin: 0 auto;" />
+
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image15.png?raw=true" alt="image15" />
+</p>
 
 So here's how my project would work without **Maven**.
 So I have my super cool app, 
@@ -749,7 +777,9 @@ they'll go out on town, purchase everything for you,
 and bring it back for you to make use of,
 which is really cool, I think. 
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image16.png?raw=true" alt="image16" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image16.png?raw=true" alt="image16" />
+</p>
 
 So here's how our project would work with **Maven**.
 So there's a **Maven Central Repository** that's remote, it's on the internet.
@@ -769,7 +799,9 @@ and then I can continue on coding
 once **Maven**'s pulled everything down for me.
 So let's go ahead and dive in.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image17.png?raw=true" alt="image17" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image17.png?raw=true" alt="image17" />
+</p>
 
 So this is how Maven works behind the scenes.
 Using **Maven**, you have a project configuration file that **Maven** will read.
@@ -818,7 +850,9 @@ So Maven solves this problem by providing a standard directory structure
 that you can use on your project.
 So here's the directory structure.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image18.png?raw=true" alt="image18" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image18.png?raw=true" alt="image18" />
+</p>
 
 So **my-super-cool-app**, at the root of the directory
 I'll have this `pom.xml` file that's the **Maven** configuration file, your shopping list.
@@ -839,7 +873,9 @@ And finally, there's a **target** directory.
 So this is the actual destination directory for your compiled code,
 and also any artifacts that **Maven** will generate.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image19.png?raw=true" alt="image19" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image19.png?raw=true" alt="image19" />
+</p>
 
 Alright, so let's go ahead and kind of look at an example 
 using some of our coding from before.
@@ -850,7 +886,9 @@ Under `src/main/java`.
 You have your package structure and then your `.java` source code.
 So that's where that code will show up in your **Maven** project structure.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image20.png?raw=true" alt="image20" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image20.png?raw=true" alt="image20" />
+</p>
 
 And if you're working on a web project,
 then you'll actually place your web assets
@@ -862,7 +900,9 @@ Alright, now, what are the benefits of the standard directory structure?
 Well, for new developers joining a project,
 they can easily find code, properties files, unit tests, web files, and so on.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image21.png?raw=true" alt="image21" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image21.png?raw=true" alt="image21" />
+</p>
 
 This is crucial, especially on a real world, or real-time projects.
 You can quickly join a project and know where files are located.
@@ -906,7 +946,9 @@ So we'll start with a discussion of the **POM File**,
 and then we'll also take a look at **Project Coordinates**
 and how we can use it in our **pom File**.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image22.png?raw=true" alt="image22" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image22.png?raw=true" alt="image22" />
+</p>
 
 Alright, so starting here with the **POM File**.
 The **POM File** is your **Project Object Model** file.
@@ -917,7 +959,9 @@ This is where you tell **Maven**,
 go out and find those for us._"
 And this **POM File** is always located in the root of your **Maven** project.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image23.png?raw=true" alt="image23" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image23.png?raw=true" alt="image23" />
+</p>
 
 Now, let's look at the **POM File Structure**.
 So basically, you'll have the project metadata,
@@ -934,7 +978,9 @@ And then also, you'll have a list of plugins.
 So these are like additional custom tasks to run.
 So you can use this for generating like JUnit test reports and so on.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image24.png?raw=true" alt="image24" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image24.png?raw=true" alt="image24" />
+</p>
 
 Alright, so let's go ahead and look at a simple POM File.
 So here's the file that starts with project, modelVersion.
@@ -1202,7 +1248,9 @@ And then under `src/test/java`,
 that's where you can place your unit testing code.
 So **Spring Boot** makes use of the **Maven** standard directory structure.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image25.png?raw=true" alt="image25" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image25.png?raw=true" alt="image25" />
+</p>
 
 Now, there were some other files here that were a bit interesting here.
 You may have seen these `mvnw` files, and you probably wondered, 
@@ -1495,7 +1543,9 @@ And so also, no more need for searching or hunting for the right dependency.
 Simply use a starter and you're ready to go.
 So, you know, let's look at an example with **Spring MVC**.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image26.png?raw=true" alt="image26" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image26.png?raw=true" alt="image26" />
+</p>
 
 So right, so building a traditional **Spring MVC** app,
 you normally would need to add 
@@ -1635,7 +1685,9 @@ So most IDEs have a dependency management
 or view feature and this is much easier to navigate.
 I'll actually show you how to do this with Eclipse and IntelliJ.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image27.png?raw=true" alt="image27" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image27.png?raw=true" alt="image27" />
+</p>
 
 Okay, so for Eclipse users, basically you open up the `pom.xml` file,
 and then you select the tab for **dependency hierarchy** at the bottom, 
@@ -1648,7 +1700,9 @@ So that's kind of the basic approach that you can use
 to kind of explore the starters to see what's in there,
 to see what's available.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image28.png?raw=true" alt="image28" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image28.png?raw=true" alt="image28" />
+</p>
 
 For the IntelliJ users you simply use the menu option,
 `view > tool windows > Maven projects > expand dependencies`.
@@ -1818,13 +1872,17 @@ Now, as I mentioned with IntelliJ Community Edition,
 it does not support **DevTools** by default.
 We have to make some additional configurations.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image29.png?raw=true" alt="image29" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image29.png?raw=true" alt="image29" />
+</p>
 
 What we'll do is we'll select the menu of 
 `Preferences > Build, Execution, Deployment > Compiler`,
 and then we'll check the box to `Build Project Automatically`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image30.png?raw=true" alt="image30" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image30.png?raw=true" alt="image30" />
+</p>
 
 We need to do one additional setting here.
 We'll select the menu item `Preferences > Advanced Settings`,
@@ -1885,7 +1943,9 @@ And now, it'll start opening up.
 It'll synchronize, resolve Maven dependencies, and all that good stuff.
 So at this point, we have our **02-dev-tools** project open.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image31.png?raw=true" alt="image31" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image31.png?raw=true" alt="image31" />
+</p>
 
 Now, let's go ahead and move over to our IntelliJ **preferences** here,
 and we'll set up those IntelliJ configurations.
@@ -1896,7 +1956,9 @@ And then we'll select this check box here,
 Alright, so that looks pretty good.
 Let's go ahead and click on the Apply button.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image32.png?raw=true" alt="image32" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image32.png?raw=true" alt="image32" />
+</p>
 
 And now, let's go and select the **Advanced Settings** item.
 And then, in the **Compiler** section,
@@ -2036,7 +2098,9 @@ So this is great.
 So now, I should be able to swing over to my browser here,
 and I should be able to access this new endpoint.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image33.png?raw=true" alt="image33" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image33.png?raw=true" alt="image33" />
+</p>
 
 So I'll just go to `localhost:8080/workout`.
 That's the new one that we just added.
@@ -2139,7 +2203,9 @@ So, the health endpoint, or `/health`, checks the status of your application.
 This is normally used by monitoring apps to see if your application is up or down.
 So, here's a little screenshot of our given application, `/actuator/health`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image34.png?raw=true" alt="image34" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image34.png?raw=true" alt="image34" />
+</p>
 
 Right now the status is up.
 Now, this health status is customizable,
@@ -2165,7 +2231,9 @@ Now, let's take a look at the info endpoint.
 So, `/info` gives you information about your application.
 So, the default is that it's actually empty.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image35.png?raw=true" alt="image35" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image35.png?raw=true" alt="image35" />
+</p>
 
 So, if you access this endpoint, you'll get this empty **JSON** object, which is nothing.
 You're like, huh, that's not too useful.
@@ -2184,7 +2252,9 @@ And that's our actual info for our given `/info` endpoint.
 Now, anything starting with `info.` as for the property name, 
 then that'll be used by this `/info` endpoint.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image36.png?raw=true" alt="image36" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image36.png?raw=true" alt="image36" />
+</p>
 
 So, here's a little screenshot here, so I have `actuator/info`, 
 and it'll send back a **JSON** object that has the information 
@@ -2258,7 +2328,9 @@ Now, once we have that set up to get a list of beans for a given application,
 then we can go to `localhost/actuator/beans`, and it'll give us an actual dump, 
 or a JSON, of all the beans that are registered with this **Spring Application** context.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image37.png?raw=true" alt="image37" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image37.png?raw=true" alt="image37" />
+</p>
 
 So this is pretty cool, but, and hold on here,
 you're probably wondering; what about security?
@@ -2531,7 +2603,9 @@ And then one thing to notice here in the console,
 we have more endpoints that we can take a look at and play around with, cool.
 So swinging back to our web browser, let's test this out.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image38.png?raw=true" alt="image38" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image38.png?raw=true" alt="image38" />
+</p>
 
 So I'll go to `/actuator/beans` and good.
 So this is a list of all the Spring beans that are registered with our application.
@@ -2540,14 +2614,18 @@ And also any beans that you've created with `@Component`.
 So this is good for debugging your given application 
 to see if a given beans been created or if it's being used in your app.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image39.png?raw=true" alt="image39" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image39.png?raw=true" alt="image39" />
+</p>
 
 Also, let's take a look at another endpoint here `/actuator/threaddump`.
 So this will give us a list of all threads that are running in our application.
 And this is perfect for analyzing and profiling your application's performance
 if you're looking for any bottlenecks or anything.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image40.png?raw=true" alt="image40" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image40.png?raw=true" alt="image40" />
+</p>
 
 And then another endpoint we can take a look at is `/actuator/mappings`.
 So this will give us a list of all the request mappings for your given application.
@@ -2753,7 +2831,9 @@ But for now we'll just kind of make use of the default security password here.
 Okay, so let's go ahead and verify the security on the actuator endpoints 
 for `localhost:8080/actuator/mappings`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image41.png?raw=true" alt="image41" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image41.png?raw=true" alt="image41" />
+</p>
 
 Oh yeah, this is good.
 So we have security, so we try to access mappings,
@@ -2766,7 +2846,9 @@ So I'll just kind of copy that information from the console,
 swing over here to the dialogue and then just kind of paste it on the login page.
 And now go ahead and log in.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image42.png?raw=true" alt="image42" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image42.png?raw=true" alt="image42" />
+</p>
 
 Oh yeah, so this is great.
 So now the system's actually prompting us for userId and password.
@@ -2817,14 +2899,18 @@ They're not even available anywhere.
 So move over here to `localhost:8080/actuator/health`.
 Just do a reload on this page.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image43.png?raw=true" alt="image43" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image43.png?raw=true" alt="image43" />
+</p>
 
 And we get 404, the white label error.
 And that's good because we actually disabled,
 the `/health` endpoint or excluded that given endpoint.
 Now let's do a similar thing for info.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image44.png?raw=true" alt="image44" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image44.png?raw=true" alt="image44" />
+</p>
 
 So `actuator/info`, again, we get this error page,
 and that's fine again because we disabled the info endpoint.
@@ -3004,7 +3090,9 @@ This is a requirement that we need to have in place
 before we can actually run the **Spring Boot** apps from the command line.
 First, type this command, `java --version`, and then you should get this output here.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image45.png?raw=true" alt="image45" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image45.png?raw=true" alt="image45" />
+</p>
 
 Then you're okay and **Java** is installed properly.
 However, if this entry is missing, then **Java** is not installed properly.
@@ -3017,12 +3105,16 @@ But the important thing is that you have to have **Java**
 installed properly before you can proceed.
 Next, type `echo %JAVA_HOME%`, and hit Enter.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image46.png?raw=true" alt="image46" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image46.png?raw=true" alt="image46" />
+</p>
 
 This means I don't have edited environment variables.
 So, I should open `Edit environment variables for your account` from `settings`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image47.png?raw=true" alt="image47" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image47.png?raw=true" alt="image47" />
+</p>
 
 This will bring up this dialogue here.
 And what we'll do is we'll create a new environment variable for java home.
@@ -3034,7 +3126,9 @@ to actually browse to where our jdk directory is on my file system.
 It's in `C:\Users\korha\.jdks` directory.
 I'll select the latest jdk version, which is `openjdk-21.0.2` for now. 
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image48.png?raw=true" alt="image48" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image48.png?raw=true" alt="image48" />
+</p>
 
 Now, we're going to edit the environment for the path 
 to include a reference to our jdk path.
@@ -3043,7 +3137,9 @@ and I'll choose `Edit`.
 I'll click again, `New` button.
 And I'll type `%JAVA_HOME%\bin`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image49.png?raw=true" alt="image49" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image49.png?raw=true" alt="image49" />
+</p>
 
 So this will actually refer to the other environment variable
 that we created earlier using the percents `%`s,
@@ -3056,14 +3152,18 @@ Let's go ahead verify the environment variable.
 I'll open the command prompt window.
 And I'll type `echo %JAVA_HOME%`, and hit Enter.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image50.png?raw=true" alt="image50" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image50.png?raw=true" alt="image50" />
+</p>
 
 Alright, so Java's installed properly,
 we can go ahead and clear this screen.
 And now what I want to do is move into our project directory on the command line.
 First, I'll type `d:`, and then simply hit `Enter`:
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image51.png?raw=true" alt="image51" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image51.png?raw=true" alt="image51" />
+</p>
 
 What I'll do next is I'll actually move up to the explorer window here,
 and I'll just copy this directory path, 
@@ -3072,13 +3172,17 @@ I'll type `cd`, space, and then I'll paste this directory path by clicking right
 And then simply hit `Enter`, 
 and now you should be in that directory `05-command-line-demo`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image52.png?raw=true" alt="image52" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image52.png?raw=true" alt="image52" />
+</p>
 
 Now let's go ahead and package the app using the `mvnw package command`.
 I'll type in `mvnw package`,
 and **Maven** will go off and do its work:
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image53.png?raw=true" alt="image53" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image53.png?raw=true" alt="image53" />
+</p>
 
 And a lot of work in the background, eventually you'll see build success.
 And also the important thing here is that
@@ -3090,24 +3194,32 @@ I'll type `java -jar target\mycoolapp-0.0.1-SNAPSHOT.jar`
 and then this will actually start up our **Spring Boot** app.
 So here we can see that our **Spring Boot** app is up and running.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image54.png?raw=true" alt="image54" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image54.png?raw=true" alt="image54" />
+</p>
 
 Now let's test this out.
 Let's go ahead and open up our browser,
 and then we'll go to `localhost:8080`:
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image55.png?raw=true" alt="image55" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image55.png?raw=true" alt="image55" />
+</p>
 
 And that'll give us our hello world, which is great.
 Let's also test out some of our other end points that we have here.
 We have a `/workout`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image56.png?raw=true" alt="image56" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image56.png?raw=true" alt="image56" />
+</p>
 
 Okay, that's good.
 And then we also have our other one, `/fortune`.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image57.png?raw=true" alt="image57" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image57.png?raw=true" alt="image57" />
+</p>
 
 So this is great, so we see that our application is up 
 and running, and it's running from the command line.
@@ -3116,7 +3228,9 @@ Now let me swing back over to my command prompt window
 and stop my application by simply doing `Control + C`.
 Alright, so the app is stopped; it's not running now.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image58.png?raw=true" alt="image58" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image58.png?raw=true" alt="image58" />
+</p>
 
 And what I'd like to do now is actually run the app
 using the **Spring Boot Maven plugin**.
@@ -3125,7 +3239,9 @@ We don't really have to give the full JAR files.
 **Spring Boot** will figure all that out for us.
 So here I can say `mvnw spring-boot:run`
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image59.png?raw=true" alt="image59" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image59.png?raw=true" alt="image59" />
+</p>
 
 It kind of goes through the same process, and now again, our application is up and running.
 And I can confirm this by just simply going over
@@ -3363,7 +3479,9 @@ All right, so that looks good so far, and I guess we can go ahead and run it rig
 Let's go ahead and test this out.
 So just run it as a Java application.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image60.png?raw=true" alt="image60" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image60.png?raw=true" alt="image60" />
+</p>
 
 Alright, so our app is up and running.
 Let's swing over to our web browser here, and let's access team info.
@@ -3600,7 +3718,9 @@ because no one's listening on `8080` at the moment, they're only listening on `6
 So we need to update this URL to use the correct port.
 So now I give `localhost:6060`:
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image61.png?raw=true" alt="image61" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image61.png?raw=true" alt="image61" />
+</p>
 
 Things work out just fine because we're using the
 correct port number and that's based on the configurations from our `application.properties` file.
@@ -3670,7 +3790,9 @@ Okay, so let's go ahead and test this out.
 Let's go ahead and swing over to our browser 
 and see how this works out for us.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image62.png?raw=true" alt="image62" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image62.png?raw=true" alt="image62" />
+</p>
 
 So now if I simply use the existing `6060/teamInfo`
 that I'd URL does not work anymore, so we should get a 404.
@@ -3679,7 +3801,9 @@ So we need to prefix that with `/mycoolapp/teamInfo`.
 And again, this is all based on the configuration
 that we have in our `application.properties` file.
 
-<img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image63.png?raw=true" alt="image63" style="display:block; margin: 0 auto;" />
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image63.png?raw=true" alt="image63" />
+</p>
 
 So that works.
 And again, we're just kind of connecting the dots here.
