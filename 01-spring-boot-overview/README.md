@@ -223,13 +223,9 @@ And then also, as far as the Spring Boot version.
 I'll choose the most recent version that they have here.
 Avoid the snapshot versions because they are an alpha or beta versions.
 
-<table>
-  <tr>
-    <td align="center">
-      <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true" alt="image01" />
-    </td>
-  </tr>
-</table>
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true" alt="image01" />
+</div>
 
 
 We can move into our project metadata where we can set up our coordinates here.
