@@ -10,7 +10,9 @@ It's the approach of outsourcing the construction and management of objects.
 So instead of us manually creating the objects ourselves,
 we'll outsource this to another entity.
 
-![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image01.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image01.png?raw=true" alt="image01">
+</p>
 
 Now let's look at a coding scenario.
 So here's our application, and we have a **CricketCoach** 
@@ -22,7 +24,9 @@ such as baseball, hockey, tennis, gymnastics, etc.
 We'd like for this app to be configurable.
 We can easily ask a coach for a workout, and they'll give us a given response.
 
-![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image02.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image02.png?raw=true" alt="image02">
+</p>
 
 Now, let's look at the ideal solution.
 So we have our application.
@@ -149,7 +153,9 @@ Let's go ahead, inject this **CricketCoach** as a dependency_
 for this given example.
 And so that's an example here of auto wiring.
 
-![image03](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image03.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image03.png?raw=true" alt="image03">
+</p>
 
 Now, let's look at another example application here.
 So we have our **Web Browser**, we have this **DemoController**, 
@@ -308,7 +314,9 @@ and we're going to go to **Springs Initializer** website at `start.spring.io`.
 So once we're here at the website,
 let's go ahead and set up some of our project settings here.
 
-![image04](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image04.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image04.png?raw=true" alt="image04">
+</p>
 
 In the project section, be sure to choose **Maven** for the project type.
 For language, choose **Java**.
@@ -479,7 +487,9 @@ And let's run our spring boot application.
 Okay, so we have our Spring application.
 It's up and running.
 
-![image05](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image05.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image05.png?raw=true" alt="image05">
+</p>
 
 Let's go ahead and swing over to a web browser.
 And let's go ahead and visit this URL here,
@@ -529,7 +539,9 @@ and, the automatic reload is working.
 And then I can go back to the browser,
 do a reload on this page, and I'll see that new message.
 
-![image06](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image06.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image06.png?raw=true" alt="image06">
+</p>
 
 Okay, good.
 
@@ -551,7 +563,9 @@ public class CricketCoach implements Coach{
 
 Just test it one more time just for sanity's sake.
 
-![image07](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image07.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image07.png?raw=true" alt="image07">
+</p>
 
 Okay, excellent.
 And I'll just go ahead and put it back to the original text that I had,
@@ -674,11 +688,28 @@ this annotation is composed of the following annotations:
 So, a bit more here in these annotations.
 The `@SpringBootApplication` is composed of the following annotations:
 
-| Annotation                 | Description                                                                            |
-|----------------------------|----------------------------------------------------------------------------------------|
-| `@EnableAutoConfiguration` | Enables Spring Boot's auto-configuration support                                       |
-| `@ComponentScan`           | Enables component scanning of current package<br/> Also recursively scans sub-packages |
-| `@Configuration`           | Able to register extra beans with `@Bean` <br/> or import other configuration classes  |
+<table align="center">
+    <thead>
+        <tr>
+            <th>Annotation</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>@EnableAutoConfiguration</code></td>
+            <td>Enables Spring Boot's auto-configuration support</td>
+        </tr>
+        <tr>
+            <td><code>@ComponentScan</code></td>
+            <td>Enables component scanning of current package<br/> Also recursively scans sub-packages</td>
+        </tr>
+        <tr>
+            <td><code>@Configuration</code></td>
+            <td>Able to register extra beans with <code>@Bean</code> <br/> or import other configuration classes</td>
+        </tr>
+    </tbody>
+</table>
 
 `@EnableAutoConfiguration` enables **Spring Boot**'s autoconfiguration support,
 `@ComponentScan` enables component scanning of the current package 
@@ -720,7 +751,9 @@ This implicitly defines a base search package that you can make use of.
 So it allows you to leverage default component scanning
 without having to explicitly referencing the base package name.
 
-![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image08.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image08.png?raw=true" alt="image08">
+</p>
 
 So here's a diagram to kind of pull this together.
 We have our **Main Spring Boot** application class.
@@ -731,7 +764,9 @@ and then it scans everything in core `com.luv2code.springcoredemo` package, and 
 So basically it starts scanning at the **Main Spring Boot application** class level
 and then all sub-packages underneath that.
 
-![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image09.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image09.png?raw=true" alt="image09">
+</p>
 
 Now, a common pitfall when you're making use of Spring Boot, 
 you may say, _Hey, I'm going to use different packages
@@ -802,7 +837,9 @@ So I can rebuild on the project because I had some old compiled code from one of
 Now let's go ahead and swing over to our web browser
 and open up our endpoint `localhost:8080/dailyworkout`.
 
-![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image10.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image10.png?raw=true" alt="image10">
+</p>
 
 And everything loads up for us a-ok.
 So our app works because we simply just moved those subpackages of our main **Spring Boot** application.
@@ -1116,7 +1153,9 @@ Now let's go ahead and run our application.
 And our application is up and running.
 Just swing over to our browser, and we go to our `localhost:8080/dailyworkout`.
 
-![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image11.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image11.png?raw=true" alt="image11">
+</p>
 
 And our app's going to work the same.
 We're going to get the output here for this **CricketCoach** `practice fast bowling for 15 minutes`.
@@ -1144,7 +1183,9 @@ Just do a quick save on it should reload for us.
 And then swinging back over into our browser reloading, we should see the new output.
 So that's our recent update that we have here.
 
-![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image12.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image12.png?raw=true" alt="image12">
+</p>
 
 And now what I'd like to do in our **DemoController** is actually making a modification.
 So instead of using a traditional setter method, I want to just give it any method name here.
@@ -1311,7 +1352,9 @@ But if we have multiple implementations, which one,
 like what algorithm will **Spring** use to determine
 which **Coach** that it should implement?
 
-![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image13.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image13.png?raw=true" alt="image13">
+</p>
 
 So, here's a diagram here of our multiple **Coach** implementations.
 So, we have **Coach**, **CricketCoach**, **BaseballCoach**, **TrackCoach**, **TennisCoach**, etc.
@@ -1668,7 +1711,9 @@ So, we kind of resolved the whole ambiguity issue,
 and I can go over to my browser `localhost8080/dailyworkout`,
 and I should get a baseball workout.
 
-![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image14.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image14.png?raw=true" alt="image14">
+</p>
 
 Great. 
 So it says, `Hey, spend 30 minutes in batting practice`.
@@ -1680,14 +1725,18 @@ So instead of **baseballCoach**, I'd like to modify to make use of **trackCoach*
 and it should reload the new version for me out there
 and just do a reload on the browser over here and run a hard 5k.
 
-![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image15.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image15.png?raw=true" alt="image15">
+</p>
 
 Great.
 So this is good.
 And then, just to kind of set everything back to what we originally had, 
 we'll make use of this **cricketCoach** as part of the `@Qualifier` here. 
 
-![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image16.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image16.png?raw=true" alt="image16">
+</p>
 
 It makes sure that we actually load the **cricketCoach** implementation
 `practice our fast bowling for 15 minutes`.
@@ -1958,7 +2007,9 @@ because we're making use of the `@Primary` annotation.
 Swing over into my web browser.
 Go to `localhost:8080/dailyworkout`, and I should get a track workout.
 
-![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image15.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image15.png?raw=true" alt="image15">
+</p>
 
 Excellent.
 Run a hard 5K because we're making use of that **TrackCoach** because it's `@Primary`.
@@ -2318,7 +2369,9 @@ Now let's go ahead and run the application
 just to make sure everything still works as desired.
 Accessing this endpoint `localhost:8080/dailyworkout`:
 
-![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image16.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image16.png?raw=true" alt="image16">
+</p>
 
 And we're getting the **TrackCoach** workout
 `practice our fast bowling for 15 minutes`.
@@ -2904,7 +2957,9 @@ Okay, so our application is up and running.
 Open up our browser.
 Just go to this `localhost:8080/check`.
 
-![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image17.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image17.png?raw=true" alt="image17">
+</p>
 
 Alright, great.
 So we're checking to see if this is the same bean.
@@ -2983,7 +3038,9 @@ and so they won't point to the same.
 So this should return false for us.
 So now browser, move over here and do a reload: 
 
-![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image18.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image18.png?raw=true" alt="image18">
+</p>
 
 And excellent false.
 So again, we're checking to see if it's the same bean,
@@ -2999,7 +3056,9 @@ Alright, so this kind of works out as desired.
 In this section, we'll cover **Bean Lifecycle Methods**.
 Here's a high-level view of the bean lifecycle.
 
-![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image19.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image19.png?raw=true" alt="image19">
+</p>
 
 When the **Spring** containers started beans are instantiated, 
 dependencies are injected, internal **Spring** processing occurs, 
@@ -3801,7 +3860,9 @@ So that **SwimCoach** was injected into our Controller.
 And then we can verify this by swinging over to our web browser 
 and then going to `localhost:8080/dailyworkout`:
 
-![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image20.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image20.png?raw=true" alt="image20">
+</p>
 
 And "`Swim 1000 meters as a warm up`".
 So that comes from our actual **SwimCoach**, based on its configuration.
@@ -3874,7 +3935,9 @@ So we make use of our custom bean id `aquatic`.
 Alright, everything should kind of reload there for us.
 And now if I swing back over to my browser and do a reload:
 
-![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image20.png?raw=true)
+<p align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image21.png?raw=true" alt="image21">
+</p>
 
 Then everything still works as desired.
 So we're still injecting that _swimCoach_
