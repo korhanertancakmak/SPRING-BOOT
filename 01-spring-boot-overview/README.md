@@ -224,7 +224,7 @@ I'll choose the most recent version that they have here.
 Avoid the snapshot versions because they are an alpha or beta versions.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image01.png?raw=true" alt="image01" />
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/01-spring-boot-overview/images/image04.png?raw=true" alt="image01" />
 </div>
 
 
