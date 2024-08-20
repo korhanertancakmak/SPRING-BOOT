@@ -299,7 +299,9 @@ and it's real simple here.
 The user ID is going to be `springstudent` and the password will be `springstudent`.
 And then we have the second file here, `02-student-tracker.sql`.
 
-![image06](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image06.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image06.png?raw=true" alt="image06">
+</div>
 
 This will actually create the database table for our application called **student**,
 and it'll create these four fields here:
@@ -336,7 +338,9 @@ And basically it went through and created the actual user.
 Now, if I click on the administration tab over on the left-hand side and select users and privileges,
 then we should see this new account that was just created, `springstudent`.
 
-![image07](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image07.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image07.png?raw=true" alt="image07">
+</div>
 
 And now a bit more about this SQL here is that we've said `CREATE USER`,
 user id `springstudent`, `IDENTIFIED BY` `springstudent`.
@@ -344,22 +348,30 @@ That's the password.
 All right, so now let's go ahead and move out or close this connection.
 And then let's go ahead and create a new connection for this `springstudent`.
 
-![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image08.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image08.png?raw=true" alt="image08">
+</div>
 
 So I'll hit on the plus here for connection.
 I'll give a connection name, I'll just call it `springstudent`, and the username `springstudent`.
 Let's go ahead and click on Test Connection.
 
-![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image09.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image09.png?raw=true" alt="image09">
+</div>
 
 And then we'll enter the password of `springstudent`.
 And now we have this new connection with `springstudent`.
 
-![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image10.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image10.png?raw=true" alt="image10">
+</div>
 
 And that's the one that we'll use in this course.
 
-![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image11.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image11.png?raw=true" alt="image11">
+</div>
 
 So let's go ahead and use this connection to go ahead and connect to MySQL.
 Let me click on the tab for **schemas**.
@@ -391,14 +403,18 @@ And behind the scenes, this basically creates the database schema for us called 
 And then it'll actually create a table for us called **student** that's going to have four columns here.
 Id first name, last name, and email.
 
-![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image12.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image12.png?raw=true" alt="image12">
+</div>
 
 Let's go ahead and hit the gold lightning bolt here to execute it.
 And that looks okay.
 Over on the left-hand side, let's hit the little arrows here to refresh, or reload the schemas.
 And we should see this new schema.
 
-![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image13.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image13.png?raw=true" alt="image13">
+</div>
 
 So this is great.
 So we have `student_tracker`, that's our database schema name.
@@ -517,7 +533,9 @@ And then for artifact ID, I'll call it `cruddemo`.
 Over in the dependency section, let's go ahead and add a new dependency here for the **MySQL** driver.
 And also, let's add a dependency here for a **Spring Data JPA**.
 
-![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image14.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image14.png?raw=true" alt="image14">
+</div>
 
 All right, and just as a checkpoint, make sure you have these two dependencies
 as I have shown here on the screen.
@@ -984,7 +1002,9 @@ I'll simply say **JPA** because we know that by default,
 For terminology, we have this term called **Entity** class,
 and that's a Java class mapped to a database table.
 
-![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image15.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image15.png?raw=true" alt="image15">
+</div>
 
 And here we'll make use of this object to relational mapping.
 Again, mapping a Java class to a database table.
@@ -1391,7 +1411,9 @@ We'll make use of a student data access object.
 The data access object is responsible for interfacing with the database.
 This is a very common design pattern: `Data Access Object (DAO)`.
 
-![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image16.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image16.png?raw=true" alt="image16">
+</div>
 
 Here, we have our application.
 It's going to communicate with this data access object or DAO,
@@ -1420,7 +1442,9 @@ In our scenario, our data access object needs a **JPA EntityManager**.
 Now the **JPA EntityManager**'s the main component for saving and retrieving entities.
 So we have our student DAO here.
 
-![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image17.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image17.png?raw=true" alt="image17">
+</div>
 
 It's going to make use of an **EntityManager** that also has some other supporting components,
 and then communicating with the actual database.
@@ -1490,7 +1514,9 @@ If you want a `high level of abstraction`, then make use of **JpaRepository**.
 Now let's dig into this a bit and talk more about these use cases here.
 Starting with EntityManager.
 
-![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image18.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image18.png?raw=true" alt="image18">
+</div>
 
 EntityManager's useful when you need low-level control over the database operations,
 and you want to write custom queries.
@@ -1620,7 +1646,9 @@ And **Spring** also provides some specialized annotations for DAOs.
 **Spring** has this `@Repository` annotation,
 that's basically a sub annotation of `@Component`.
 
-![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image19.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image19.png?raw=true" alt="image19">
+</div>
 
 And so you have a normal component that we learned about earlier in the course,
 and we saw some examples of `@RESTController`, and we had this `@Repository`.
@@ -1894,7 +1922,9 @@ Once I'm connected, I'll go into the `student_tracker` database schema,
 I'll choose this table here, student, I'll run a query on this table,
 and notice here that this given database table is empty.
 
-![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image20.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image20.png?raw=true" alt="image20">
+</div>
 
 There's nothing in it.
 Remember, we created this table earlier, but we haven't added any students to it.
@@ -1913,7 +1943,9 @@ Alright, so our application executed it, said,
 _hey, creating a new student, saving a student, saved a student, generated id of 1_.
 Let's swing over to our MySQL workbench and let's do a little refresh here.
 
-![image21](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image21.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image21.png?raw=true" alt="image21">
+</div>
 
 Re-executing that query and then success.
 So here we see that we have `Paul Doe, paul@luv2code.com` and then notice the id of `1`.
@@ -1932,12 +1964,16 @@ and then let's go ahead and view information about the table.
 So we'll simply say alter table.
 Okay, we're not gonna really alter it.
 
-![image22](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image22.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image22.png?raw=true" alt="image22">
+</div>
 
 We're simply going to look at the database schema here for this table.
 We see that this given table has four columns.
 
-![image23](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image23.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image23.png?raw=true" alt="image23">
+</div>
 
 ID, first name, last name, email.
 `PK` means that ID is a primary key.
@@ -2086,7 +2122,9 @@ And so it said, creating three student objects, saving the students.
 And let's swing over to our MySQL Workbench.
 Let's run our query again.
 
-![image24](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image24.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image24.png?raw=true" alt="image24">
+</div>
 
 And success.
 So we have those three new students, a total of four.
@@ -2106,7 +2144,9 @@ For example, I don't want to start the increment at number 1,
 I'd like to start it at a different number like 1,000, 5,000 or 20,000. 
 How can I do that?_"
 
-![image25](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image25.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image25.png?raw=true" alt="image25">
+</div>
 
 What we can do is open up a new SQL window here.
 We can write some code to alter the start of the auto increment.
@@ -2118,7 +2158,9 @@ We run our application again,
 so we're going to add those three student objects.
 We swing back to our application, we run that query one more time and get the latest.
 
-![image26](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image26.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image26.png?raw=true" alt="image26">
+</div>
 
 And now, notice here we have three new entries at the bottom: _John_, _Mary_, and _Bonita_.
 But now these entries have IDs starting at 3000.
@@ -2137,14 +2179,18 @@ and reset the auto increment to start at 1.
 Here I give "`TRUNCATE student_tracker.student`".
 Let's execute this, and then refresh the query.
 
-![image27](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image27.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image27.png?raw=true" alt="image27">
+</div>
 
 Notice here that the data's been removed from the database and behind the scenes;
 the auto increment is set up to start at 1.
 Let's swing back over to our application, let's run our application again.
 And let's run our query one more time in my MySQL Workbench.
 
-![image28](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image28.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image28.png?raw=true" alt="image28">
+</div>
 
 And then we see that we have those three students, but here the auto increment value
 has been reset to 1, and it starts there: 1, 2, and 3.
@@ -2468,7 +2514,9 @@ saving, saved, the ID of four, and it prints out that student that it retrieved 
 And I always like to verify this in the database.
 Move over to MySQL Workbench and then just do a query on that student table and success.
 
-![image29](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image29.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image29.png?raw=true" alt="image29">
+</div>
 
 So we see that `Daffy Duck` here is in the list of students for this given database.
 </div>
@@ -3522,7 +3570,9 @@ Notice here, the first name is `Scooby`.
 Now let's go ahead and swing over to MySQL Workbench and let's verify this.
 Go to my student table, do a query:
 
-![image30](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image30.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image30.png?raw=true" alt="image30">
+</div>
 
 And success.
 Notice here, student ID of `1`, the first name is now `Scooby`,
@@ -3567,7 +3617,9 @@ Process finished with exit code 0
 Here it says the first name of `John`, which is good.
 Swing back into our MySQL Workbench, run our query one more time
 
-![image31](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image31.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image31.png?raw=true" alt="image31">
+</div>
 
 And great.
 So this kind of matches up with what we had.
@@ -3744,7 +3796,9 @@ and in particular the `studentId` of `3`.
 I'll swing over to MySQL Workbench.
 I'll just run a query here on this student table.
 
-![image32](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image32.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image32.png?raw=true" alt="image32">
+</div>
 
 And we do have the `studentId` of `3`, `Bonita Applebum`.
 Now let's go ahead and run our application.
@@ -3759,7 +3813,9 @@ And it says, hey, deleting `studentId` of `3`.
 Let's verify this in the database.
 Just run that query one more time.
 
-![image33](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image33.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image33.png?raw=true" alt="image33">
+</div>
 
 And success.
 Notice here, `studentId` of `3` has been deleted.
@@ -3878,7 +3934,9 @@ Now, before we run this application again, let's verify that we have data in our
 Let's go ahead and swing over to MySQL Workbench.
 Just do a refresh on our query.
 
-![image34](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image34.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image34.png?raw=true" alt="image34">
+</div>
 
 So at the moment now we have three students, okay.
 Let's go ahead and run our main application
@@ -3894,7 +3952,9 @@ And great, it says deleting all students,
 deleted row count equals three.
 Swing back into our MySQL Workbench and do a query again: 
 
-![image35](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image35.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image35.png?raw=true" alt="image35">
+</div>
 
 And awesome.
 So, notice here everyone's been deleted
@@ -3913,7 +3973,9 @@ create the database tables for you.
 So it'll actually create the tables based on Java code with **JPA/Hibernate** annotations.
 And this is very useful for development and testing.
 
-![image36](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image36.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image36.png?raw=true" alt="image36">
+</div>
 
 So basically you have your Java code with the annotations
 you run it through this **Hibernate** tool, and then it'll actually generate the SQL
@@ -4159,7 +4221,9 @@ And then finally, my favorite, `Bonita Applebaum`.
 And so we basically just added these configs here, for logging that data.
 And let's just do a quick query here.
 
-![image37](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image37.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image37.png?raw=true" alt="image37">
+</div>
 
 And yes, we have the data.
 Now one thing to notice here, is that we have different IDs,
@@ -4170,12 +4234,16 @@ Okay, what I'd like to do now is break the app on purpose.
 I actually want to drop the table for **student**, such that it's no longer there.
 We no longer have the table, no longer have the data, and run our app, and see what happens.
 
-![image38](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image38.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image38.png?raw=true" alt="image38">
+</div>
 
 I'll grab this **student** table, and then I'll drop the table, and I'll choose the option drop now.
 And now, if I run my query again, then,
 
-![image39](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image39.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image39.png?raw=true" alt="image39">
+</div>
 
 If you notice, at the bottom, we have an error message,
 and it says table **student** does not exist.
@@ -4276,7 +4344,9 @@ And then we can move down here, and we can see the `insert` statements that are 
 for those three students that we're inserting.
 Let's swing back into our MySQL workbench, let's run our query again.
 
-![image40](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image40.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image40.png?raw=true" alt="image40">
+</div>
 
 We have our data, **John**, **Mary**, and **Bonita**.
 As you can see, there was no need for us to run an SQL script.
@@ -4340,7 +4410,9 @@ Process finished with exit code 0
 And now swing back over to our MySQL Workbench.
 Run our query one more time.
 
-![image41](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image41.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image41.png?raw=true" alt="image41">
+</div>
 
 And notice here we have our old data that we added previously.
 And now here's the new data added with that most recent run.
@@ -4350,7 +4422,9 @@ And now let's run it a couple more times.
 So that's one, run it one more.
 So two more runs here.
 
-![image42](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image42.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image42.png?raw=true" alt="image42">
+</div>
 
 And so notice here we ran it twice, so that's six people that we added 
 or six students that we added, and that's the new data that we have for our application.
