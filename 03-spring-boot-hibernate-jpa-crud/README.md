@@ -1292,15 +1292,6 @@ Don't include _id_ because we're not going to use that for creating the items.
 We can also go through and generate our getter and setter methods.
 
 ```java
-}
-
-```
-
-And then for generating the getter and setter methods,
-be sure to choose all of your fields, _id_, _firstName_, _lastName_, and _email_.
-And then finally, we'll have our IDE generate a _toString_ method for us.
-
-```java
 package com.luv2code.cruddemo.entity;
 
 import jakarta.persistence.*;
@@ -1372,6 +1363,9 @@ public class Student {
 }
 ```
 
+And then for generating the getter and setter methods,
+be sure to choose all of your fields, _id_, _firstName_, _lastName_, and _email_.
+And then finally, we'll have our IDE generate a _toString_ method for us. 
 And we'll go ahead and select all of those fields here
 and then allow it to generate it for us.
 Now, one thing to be aware of is that, if you're an advanced developer, 
