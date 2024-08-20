@@ -32,7 +32,9 @@ or you'll hear the buzzword or keyword called `ORM`.
 As a developer, all you need to do is tell **Hibernate** 
 how your Java class or object maps to the data in the database.
 
-![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image01.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image01.png?raw=true" alt="image01">
+</div>
 
 In fact, you'll map your Java class to a given database table.
 In this example, on the far left we have our Java class,
@@ -60,7 +62,9 @@ It's the standard API for Object-to-Relational mapping, or ORM,
 it's only a specification, defines a set of interfaces,
 and it requires an implementation to be usable.
 
-![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image02.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image02.png?raw=true" alt="image02">
+</div>
 
 Now let's take a look at some **JPA** vendor implementations.
 So we start with the **JPA Spec**,
@@ -89,7 +93,9 @@ which is a good thing.
 And the reason for this is that 
 you're coding to the actual **JPA** specification or the standard API.
 
-![image03](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image03.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image03.png?raw=true" alt="image03">
+</div>
 
 Let's take a look at a scenario here of swapping vendor implementations.
 We have our application, `MyBizApp`, that's the code that we're creating,
@@ -204,7 +210,9 @@ and it'll give you all the students from a given database.
 And you can also set up special wear clauses using `alike` conditions, and so on.
 I'll share examples of that later on.
 
-![image04](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image04.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image04.png?raw=true" alt="image04">
+</div>
 
 Alright, so the nice thing to hear is
 that I showed you a very high-level example here of using **Hibernate JPA**, 
@@ -219,7 +227,9 @@ and we'll cover all of that in the following sections.
 And then we'll wrap everything up with a small project,
 so you can actually see how all of this comes together.
 
-![image05](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image05.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/03-spring-boot-hibernate-jpa-crud/images/image05.png?raw=true" alt="image05">
+</div>
 
 I'm going to discuss the relationship between **Hibernate/JPA** and **JDBC**.
 Now, a frequently asked question, how does **Hibernate/JPA** relate to **JDBC**?

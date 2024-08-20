@@ -2701,14 +2701,40 @@ Now, we could also explicitly specify the bean scope,
 so in our class **CricketCoach**, we could make use of `@Scope` annotation,
 and then we give `ConfigurableBeanFactory.SCOPE_SINGLETON`.
 
-| Scope              | Description                                                 |
-|--------------------|-------------------------------------------------------------|
-| <b>singleton</b>   | Create a single shared instance of the bean. Default scope. |
-| <b>prototype</b>   | Creates a new bean instance for each container request.     |
-| <b>request</b>     | Scoped to an HTTP web request. Only used for web apps.      |
-| <b>session</b>     | Scoped to an HTTP web request. Only used for web apps.      |
-| <b>application</b> | Scoped to a web app ServletContext. Only used for web apps. |
-| <b>websocket</b>   | Scoped to a web socket. Only used for web apps.             |
+<table align="center">
+  <thead>
+    <tr>
+      <th>Scope</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>singleton</b></td>
+      <td>Create a single shared instance of the bean. Default scope.</td>
+    </tr>
+    <tr>
+      <td><b>prototype</b></td>
+      <td>Creates a new bean instance for each container request.</td>
+    </tr>
+    <tr>
+      <td><b>request</b></td>
+      <td>Scoped to an HTTP web request. Only used for web apps.</td>
+    </tr>
+    <tr>
+      <td><b>session</b></td>
+      <td>Scoped to an HTTP web request. Only used for web apps.</td>
+    </tr>
+    <tr>
+      <td><b>application</b></td>
+      <td>Scoped to a web app ServletContext. Only used for web apps.</td>
+    </tr>
+    <tr>
+      <td><b>websocket</b></td>
+      <td>Scoped to a web socket. Only used for web apps.</td>
+    </tr>
+  </tbody>
+</table>
 
 There are additional **Spring** bean scopes.
 We already saw the first one here for the **singleton** scope.
@@ -3936,7 +3962,7 @@ Alright, everything should kind of reload there for us.
 And now if I swing back over to my browser and do a reload:
 
 <p align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image21.png?raw=true" alt="image21">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/02-spring-boot-spring-core/images/image20.png?raw=true" alt="image20">
 </p>
 
 Then everything still works as desired.
