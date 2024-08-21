@@ -2588,7 +2588,7 @@ TypedQuery<Student> theQuery = entityManager.createQuery(
 List<Student> students = theQuery.getResultList();
 ```
 
-We could also retrieve students using the like predicate.
+We could also retrieve students using the `LIKE` predicate.
 In this example, I want to get a list of all the students whose email ends in `luv2code.com`.
 I used a percent in this scenario to say let's match on anything that ends with `luv2code.com`.
 
