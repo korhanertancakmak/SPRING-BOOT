@@ -26,7 +26,9 @@ And so we need to get the weather data from an external service
 like we don't have a local database of weather information because it changes all the time, right?
 So we need to get that from an external service.
 
-![image01](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image01.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image01.png?raw=true" alt="image01">
+</div>
 
 So looking at the application architecture, 
 we'll have this `My Weather app` that's an app that we're creating.
@@ -90,7 +92,9 @@ You can pass in the city name, or you can pass in the actual city name,
 comma the country code because you may have a very common city name.
 And then you'll actually get the weather report.
 
-![image02](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image02.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image02.png?raw=true" alt="image02">
+</div>
 
 That's the response here.
 So the **Weather Service** is going to respond with the **JSON**.
@@ -101,7 +105,9 @@ But notice here is being passed back as **JSON**.
 So **JSON**'s really just a collection of name value pairs.
 And then your application can parse this string and then process on it accordingly.
 
-![image03](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image03.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image03.png?raw=true" alt="image03">
+</div>
 
 Now the really nice thing about making use of this approach with this **REST API** 
 or **REST web service** is that this weather service that was developed
@@ -122,7 +128,9 @@ Now let's look at some other **REST** examples or scenarios
 just to kind of help you out as far as getting your head around it.
 We could also create a **Currency Converter App**, right?
 
-![image04](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image04.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image04.png?raw=true" alt="image04">
+</div>
 
 So we have this currency app, and then over here on the other side, 
 we have this currency service.
@@ -133,7 +141,9 @@ This value is going to actually fluctuate based on the market,
 but the key here is that, you know, we have an application that can use this external service,
 send over a request, and then get a response.
 
-![image05](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image05.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image05.png?raw=true" alt="image05">
+</div>
 
 And then also we could look at another scenario like a **Movie Tickets App**, right?
 So we have this my movie app, and then
@@ -147,7 +157,9 @@ But again, this movie ticket service, they're saying,
 You can use any programming language, 
 any type of app or platform to process and render those results.
 
-![image06](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image06.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image06.png?raw=true" alt="image06">
+</div>
 
 And then finally here, we're making it to our **Customer Relationship Manager**, the **CRM** app.
 So we have a **CRM** app, and then we have a **CRM** service.
@@ -164,7 +176,9 @@ Now you're probably thinking, like
 _Well, who would ever send back customer data via a rest service?_
 Well, how about Salesforce, right?
 
-![image07](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image07.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image07.png?raw=true" alt="image07">
+</div>
 
 That very small company called Salesforce, actually a huge company.
 They actually have a huge platform based on **CRM**,
@@ -172,7 +186,9 @@ and they also have a **REST API** for providing customer data from a given appli
 So we're not, you know, off our rocker here, there's a very good use case for doing this.
 And so we'll kinda build out a version of this for our **CRM** application.
 
-![image08](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image08.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image08.png?raw=true" alt="image08">
+</div>
 
 Now, here's the common question that I get: **What do we call it?**
 Do we call it `REST API` or `RESTful API` 
@@ -206,7 +222,9 @@ such as **Java**, **C#**, and **Python**.
 And the reason being that, again, it's `just plain text`.
 Just plain text data that any programming language can use and read.
 
-![image09](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image09.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image09.png?raw=true" alt="image09">
+</div>
 
 Now let's go ahead and look at a very simple **JSON** example.
 So here you're defining an object, okay?
@@ -235,7 +253,9 @@ And then finally, you have a reference to something that points to nothing or `n
 So in this example here for _courses_, this given student doesn't have any courses.
 So that reference there is `null`.
 
-![image10](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image10.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image10.png?raw=true" alt="image10">
+</div>
 
 **Nested JSON Objects** are just like any other nested item like a nested four loop or something.
 Basically, one item inside of another.
@@ -245,7 +265,9 @@ So the address, and then we have the curly braces again to define an object in *
 And then we have the different fields here, _street_, _city_, _state_, _zip_, _country_, and so on.
 And you can nest as many levels deep as you'd like for your given **JSON** object model.
 
-![image11](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image11.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image11.png?raw=true" alt="image11">
+</div>
 
 And there's also support for arrays in **JSON**.
 So in this example here, I have languages, 
@@ -281,7 +303,9 @@ where we'll build a **REST controller**.
 Then we'll have support for these given **HTTP** methods,
 and it'll translate to the appropriate **CRUD** operations that will perform on our database.
 
-![image12](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image12.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image12.png?raw=true" alt="image12">
+</div>
 
 Now let's just kind of take a look at these **HTTP** methods that we'll send back and forth.
 So we have this idea of our **client** application, and we also have our **server** application.
@@ -292,7 +316,9 @@ an **HTTP** message response.
 Now let's go ahead and kind of break this down a bit,
 and see what's in the request message and also what's in the response message.
 
-![image13](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image13.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image13.png?raw=true" alt="image13">
+</div>
 
 Now, the actual request message has three main parts.
 It has a `request line`, `header variables`, and `message body`.
@@ -304,7 +330,9 @@ So if you're adding a new entity,
 then the actual contents of that entity will be in the message body as **JSON**,
 and we'll see examples of this coming up in some later sections.
 
-![image14](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image14.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image14.png?raw=true" alt="image14">
+</div>
 
 Now let's look at a response message.
 And response messages have three different areas also.
@@ -408,7 +436,9 @@ We're not going to use it here.
 We're going to go ahead and use just the basic application.
 So I'll go ahead and close this window.
 
-![image15](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image15.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image15.png?raw=true" alt="image15">
+</div>
 
 Alright, so just a quick tour of the application.
 At the top you'll have your **HTTP** request and then at the bottom, 
@@ -427,14 +457,18 @@ Again, they have more endpoints that we can use to actually access some **REST S
 And the reason I want to try this one out is because they have
 I guess more complex responses coming back with nested objects and so on.
 
-![image16](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image16.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image16.png?raw=true" alt="image16">
+</div>
 
 So the one item that they have here is the `/users` item.
 That's going to return a list of users.
 We can actually access this link directly 
 because most web browsers are smart enough to render **JSON** content.
 
-![image17](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image17.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image17.png?raw=true" alt="image17">
+</div>
 
 So we can see this long list of all the users here,
 and we're reviewing this directly in **Firefox**.
@@ -443,7 +477,9 @@ but I'd like to test this out in **Postman** also.
 So I'll go ahead and just copy this URL, and then I'll swing back over to **Postman**.
 And in this new tab that we have, we'll just paste in that URL that we just set up.
 
-![image18](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image18.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image18.png?raw=true" alt="image18">
+</div>
 
 Right, so I have a `GET` on `/users`, and then I'll do a `SEND`.
 I'll send over this request, and then I get a response.
@@ -458,7 +494,9 @@ So you can have a lot of fun there.
 So just this big long laundry list of all the users,
 and it's set up as an array up top on line one with a square bracket.
 
-![image19](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image19.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image19.png?raw=true" alt="image19">
+</div>
 
 And we can also see that the headers here, all these different headers that were set by that given server.
 And again, we click the content type of `application/json`.
@@ -476,7 +514,9 @@ We'll do the `PUT`, `POST` and `DELETE` for our `CRUD` operations.
 In this section, we'll learn how to develop a **Spring REST Controller**.
 Alright, let's go ahead and set up a **Spring REST Hello World** example.
 
-![image20](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image20.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image20.png?raw=true" alt="image20">
+</div>
 
 So we'll have this **REST** client, we'll also have this **REST** service,
 and what we'll do is we'll basically make a request for a `/test/hello`.
@@ -676,7 +716,9 @@ All right, so let's go ahead and test this out and let's see it work.
 All we have to do is go up to this URL bar 
 and just type in `localhost:8080/test/hello` and cross your fingers.
 
-![image21](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image21.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image21.png?raw=true" alt="image21">
+</div>
 
 There's `Hello World`.
 So that's the response here from our **REST** controller or our **REST** service.
@@ -687,7 +729,9 @@ Then I'll just simply move up here to this section here for the `GET` request,
 and I'll just paste it in here.
 I'll hit the `Send` button over here on the far right.
 
-![image22](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image22.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image22.png?raw=true" alt="image22">
+</div>
 
 And then, at the bottom, I get the actual response, `Hello World`.
 So again, we're using **Postman** to access this **REST** controller 
@@ -711,7 +755,9 @@ In this section first, we're going to cover **Java JSON data binding**.
 Alright, so what exactly is data binding?
 **Data binding** is the process of converting **JSON** data to a **Java POJO**.
 
-![image23](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image23.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image23.png?raw=true" alt="image23">
+</div>
 
 So we're starting over here on the left with **JSON** data, and then we have our **Java POJO**.
 And so we can use data binding to convert from **JSON** over to a **Java POJO**.
@@ -748,7 +794,9 @@ So if you're converting from **JSON** to **POJO** it'll call up given setter met
 When you go from **POJO** to **JSON** it'll call the getter methods.
 And let's kinda walk through this here with an example.
 
-![image24](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image24.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image24.png?raw=true" alt="image24">
+</div>
 
 So here on the left-hand side, I have this **JSON** object 
 for `id`, `firstName`, `lastName`, and `active`.
@@ -768,7 +816,9 @@ So we have this **JSON** over the left-hand side,
 for `id`, `firstName`, `lastName`, and `active`,
 and then over on the right-hand side we have our **Java POJO** for a student.
 
-![image25](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image25.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image25.png?raw=true" alt="image25">
+</div>
 
 So basically, using **Jackson**, they'll actually call the setter methods on your **POJO**.
 So again, going from **JSON** to **Java POJO**, they're going to call the setter methods.
@@ -782,7 +832,9 @@ Alright, so let's dig in a little deeper here.
 So converting **JSON** to Java **POJO**.
 So, remember, I said it's going to call the setter methods on the **POJO**.
 
-![image26](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image26.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image26.png?raw=true" alt="image26">
+</div>
 
 So starting over here on the left-hand side with this **JSON** object,
 then we have this **POJO**, again, plain old JAVA class **student**.
@@ -812,7 +864,9 @@ Now let's go the other direction.
 So here we're going to convert a Java **POJO** to **JSON**.
 And so, in this scenario, **Jackson**'s going to call the getter methods on the **POJO**.
 
-![image27](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image27.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image27.png?raw=true" alt="image27">
+</div>
 
 Alright, so starting over on the left-hand side with this Java **POJO** for **student**.
 And then we'll actually send this data over to **JSON**, or actually, generate a **JSON** based on this.
@@ -838,7 +892,9 @@ So, we're going to create this new service that's going to return a list of stud
 So basically we'll send over a get request to `/api/students`,
 and this is going to return a list of students for us.
 
-![image28](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image28.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image28.png?raw=true" alt="image28">
+</div>
 
 Alright, so let's look at the big picture here.
 So we'll have our **REST** client, and then over on the right-hand side, 
@@ -860,7 +916,9 @@ And then if a Java **POJO** is being returned from a **REST** controller,
 then it's automatically converted to **JSON**.
 And this all happens automatically behind the scenes thanks to **Spring** and **Jackson**.
 
-![image29](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image29.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image29.png?raw=true" alt="image29">
+</div>
 
 So we're going to have this **POJO** or class called **student**.
 We'll have some very basic fields, `firstName` and `lastName`, and the appropriate setters.
@@ -869,7 +927,9 @@ in some of our earlier **Jackson** data binding examples.
 Now also, just remember here that **Jackson**'s going to call 
 the appropriate getter / setter methods for the conversion. 
 
-![image30](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image30.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image30.png?raw=true" alt="image30">
+</div>
 
 So here we're starting with some **JSON**
 on the left-hand side, and then over on the right-hand side
@@ -879,7 +939,9 @@ Now to send it the other way, going from Java **POJO** down to **JSON**,
 they'll actually call the getter methods.
 And remember, **Jackson**'s going to do all of this work for us behind the scenes.
 
-![image31](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image31.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image31.png?raw=true" alt="image31">
+</div>
 
 Now let's talk about our **Spring REST service**.
 So we're going to have our **REST** client, 
@@ -889,7 +951,9 @@ We'll pass back a list of student objects or our **POJO**'s,
 and then we'll actually have that converted over to **JSON**.
 And again, **Jackson**'s going to handle converting that data over to a **JSON** array.
 
-![image32](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image32.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image32.png?raw=true" alt="image32">
+</div>
 
 So here we have our **REST** client and our **REST** service.
 We make a request of `/api/students`.
@@ -914,7 +978,9 @@ Let's look at our development process.
 1. Create a Java **POJO** class for a **student** 
 2. Create a **Spring REST** service using that at `@RestController` annotation.
 
-![image33](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image33.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image33.png?raw=true" alt="image33">
+</div>
 
 Alright, so let's go ahead and take a look at step one.
 So step one of creating a Java **POJO** class for **Student**.
@@ -924,7 +990,9 @@ All we do is we define fields, we define constructors,
 and we define the getters and setters.
 So a very basic example here you've seen a lot of this coding before.
 
-![image34](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image34.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image34.png?raw=true" alt="image34">
+</div>
 
 Now moving ahead here with step two of creating that `@RestController`.
 So here's a little diagram up in the top right as far as our **REST** client, 
@@ -1190,7 +1258,9 @@ Alright, so it's up and running.
 So remember, we have to go into the URL here and do `/api/students` 
 to access that new endpoint that we just created.
 
-![image35](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image35.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image35.png?raw=true" alt="image35">
+</div>
 
 So this is some good **JSON**.
 So we have our three students, `Poornima`, `Mario`, and `Mary`.
@@ -1203,7 +1273,9 @@ and then we'll move over to **Postman** and test it there.
 And in the actual URL section here, paste in that URL that we copied previously.
 And then we just hit the blue `send` button and then: 
 
-![image36](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image36.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image36.png?raw=true" alt="image36">
+</div>
 
 So there we go.
 So let me kind of scroll down a bit over here.
@@ -1228,7 +1300,9 @@ such that when we actually access it via our **REST** client, we can include an 
 So we could say `/api/student/0`, that'll give us the student with id `0`, `1`, `2` and so on.
 So basically a way of parameterizing your path or the endpoint to actually accept data.
 
-![image37](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image37.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image37.png?raw=true" alt="image37">
+</div>
 
 Now let's kinda look at this as far as the big picture here.
 So we'll have our **REST** client, and then over on the far right, we'll have our **REST** service.
@@ -1241,7 +1315,9 @@ We'll add a new request mapping for this, and in our coding will actually create
 or we'll retrieve that given student, and then pass it back.
 And just as a reminder, **Jackson**'s gonna actually convert that student object to **JSON**.
 
-![image38](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image38.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image38.png?raw=true" alt="image38">
+</div>
 
 Alright, so let's kinda look and see how this works behind the scenes.
 So we have our **REST** client and our **REST** service.
@@ -1341,7 +1417,9 @@ thanks to the `@PostConstruct` annotation.
 I wanna just run this again just to make sure it still works,
 just to make sure I didn't break anything.
 
-![image35](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image35.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image35.png?raw=true" alt="image35">
+</div>
 
 And so here, we'll get all three users,
 or all three students, `Poornima`, `Mario`, and `Mary`.
@@ -1351,7 +1429,9 @@ just to make sure it works fine over there.
 So I'm in **Postman** right now.
 I keep the same URL, hit the blue `send` button:
 
-![image36](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image36.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image36.png?raw=true" alt="image36">
+</div>
 
 And there we go.
 All three students, `Poornima`, `Mario`, and `Mary`.
@@ -1446,23 +1526,31 @@ So I say `localhost:8080/api/students/0`, the first element in that list.
 And it should come back as `Poornima Patel`
 because that's the first student that we added.
 
-![image39](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image39.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image39.png?raw=true" alt="image39">
+</div>
 
 So _index_ is zero.
 If I do one, I'll get `Mario Rossi`.
 
-![image40](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image40.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image40.png?raw=true" alt="image40">
+</div>
 
 And then if I go through and enter two, I get `Mary Smith`.
 
-![image41](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image41.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image41.png?raw=true" alt="image41">
+</div>
 
 So this is working out as desired.
 And let me kind of copy this URL that we had before.
 So let's swing over to **Postman** and let's create a new tab here.
 And I'll just paste in that URL and I'll do `api/students/0`.
 
-![image42](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image42.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image42.png?raw=true" alt="image42">
+</div>
 
 And again, that gives us `Poornima Patel`, because she's the first student that was added.
 And then we have `Mario` for index one and then `Mary Smith` for index two.
@@ -1472,7 +1560,9 @@ So this is great, but now you're probably wondering what if I entered some bad d
 What will happen?
 We have this internal server error, the 500 error.
 
-![image43](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image43.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image43.png?raw=true" alt="image43">
+</div>
 
 Let's find out why this happened.
 So let's go ahead and switch back over into our IDE, and we see this ugly stack trace.
@@ -1531,7 +1621,9 @@ and then maybe a timestamp as far as when this given error occurred.
 And that's what we really want, and that's what we'll actually build out in this section.
 Alright, so let's look at the big picture here.
 
-![image44](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image44.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image44.png?raw=true" alt="image44">
+</div>
 
 So we have this **REST Client**, the **REST Service**, we make a call for `api/students/9999`.
 That's the bad data.
@@ -2013,7 +2105,9 @@ like we have here on the screen.
 Let's go ahead and test this thing out.
 And now just go ahead and break it with this `localhost:8080/api/student/9999`:
 
-![image45](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image45.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image45.png?raw=true" alt="image45">
+</div>
 
 Success.
 So that's the error response that we wanted.
@@ -2023,7 +2117,9 @@ and just see how it works out in **Postman** for us.
 I'll move up here, and I'll simply paste in that url that I just copied.
 And then I'll just kind of hit the blue `send` button.
 
-![image46](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image46.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image46.png?raw=true" alt="image46">
+</div>
 
 And, oh yeah, looking good.
 So down here at the bottom, we have this **JSON** response for the error.
@@ -2159,14 +2255,18 @@ We'll actually just use the `9999` to test that portion.
 So that part is still working, but again let's really break it by just
 entering some text values:
 
-![image47](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image47.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image47.png?raw=true" alt="image47">
+</div>
 
 And success.
 We're getting the air packet back as **JSON** data.
 And again, let's swing over to **Postman** and do a similar thing.
 Just enter some characters again and then we hit the blue button for `send`.
 
-![image48](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image48.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image48.png?raw=true" alt="image48">
+</div>
 
 Yeah, and good.
 Once more, we're getting this error response as **JSON**
@@ -2212,7 +2312,9 @@ we had the ideas like, before advice, and after advice, and so on.
 So here in **Spring**, they make use of an `@ControllerAdvice`.
 So this is `AOP` that you can use to, kind of, pre-process and post-process on controllers.
 
-![image49](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image49.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image49.png?raw=true" alt="image49">
+</div>
 
 So now, with this **Spring REST** exception handling, with this advice, 
 or the `@ControllerAdvice`, we have our **REST** client, our **REST** service, 
@@ -2398,7 +2500,9 @@ and also when we actually run our application.
 When we run our app, we'll make use of **Postman**,
 and we'll provide that employee data as **JSON** for handling the `POST` and the `PUT`.
 
-![image50](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image50.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image50.png?raw=true" alt="image50">
+</div>
 
 Now, let's talk about some `Anti-Patterns`.
 Don't do this, because these are **REST** anti-patterns, they're considered bad practice.
@@ -2421,7 +2525,9 @@ Just so you can see how they've designed their **API**s, and also just to see th
 between what we've created and also what other larger companies are creating.
 So we'll take a look at the **API**s for **PayPal**, **GitHub**, and also **SalesForce**.
 
-![image51](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image51.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image51.png?raw=true" alt="image51">
+</div>
 
 **PayPal** provides an invoicing **API** and you can get full details
 on this **API** at the link [here](https://developer.paypal.com/docs/api/invoicing).
@@ -2435,7 +2541,9 @@ and then we pass over the given invoice ID as a path variable.
 And that's basically it.
 So this follows what we've seen in some of our previous examples for our **CRM** application.
 
-![image52](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image52.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image52.png?raw=true" alt="image52">
+</div>
 
 Now, let's take a look at **GitHub**.
 They provide a **GitHub Repositories API**.
@@ -2450,7 +2558,9 @@ when you actually submit that request.
 Also, you can list repositories by simply doing a `GET` on `/user/repos`.
 And then finally, you can get a specific repository by doing a `GET` on `/repos/:owner/:repo`.
 
-![image53](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image53.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image53.png?raw=true" alt="image53">
+</div>
 
 And then finally, we can take a look at the **SalesForce REST API**.
 So SalesForce has a large number of **API**s, 
@@ -2514,7 +2624,9 @@ Now let's look at the development process for this project:
 
 And of course, we'll break this down step by step.
 
-![image54](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image54.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image54.png?raw=true" alt="image54">
+</div>
 
 Now let's take a quick look at our application architecture.
 So we'll start with an employee **REST** controller that'll communicate with an employee service,
@@ -2586,7 +2698,9 @@ And we should have just one table here called `employee`.
 And we can do a real quick query here,
 just to select the data to see what's out there.
 
-![image55](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image55.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image55.png?raw=true" alt="image55">
+</div>
 
 And there we go.
 So five employees that we'll start with for this project.
@@ -2708,7 +2822,9 @@ and actually running it from **Command** line.
 So that's a good start here.
 We'll start getting into more details here of setting up our **API**.
 
-![image56](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image56.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image56.png?raw=true" alt="image56">
+</div>
 
 Okay now looking at our application architecture, and we'll make use of the **JPA API**,
 the standard **JPA API**, and we'll focus on that.
@@ -3162,7 +3278,9 @@ So our app is now up and running.
 So let's go ahead and swing over to our browser 
 and let's visit the url, `localhost:8080/api/employees`.
 
-![image57](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image57.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image57.png?raw=true" alt="image57">
+</div>
 
 Success. 
 So we have data.
@@ -3173,7 +3291,9 @@ to make sure that really is the right data.
 All right, so let's go ahead and move over to our tables, our employee table,
 and just run a quick query here and verify the results.
 
-![image58](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image58.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image58.png?raw=true" alt="image58">
+</div>
 
 And yay, this works out as desired.
 So this is the real data coming from the database.
@@ -3185,13 +3305,17 @@ We're going to add a service layer.
 This service layer will actually sit between our **Employee** controller and our **employeeDAO**.
 Now, you may wonder, what's the purpose of the service layer?
 
-![image59](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image59.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image59.png?raw=true" alt="image59">
+</div>
 
 Well, it's actually an implementation of the **Service Facade** design pattern.
 It's an intermediate layer for your custom business logic,
 and you can also use it to integrate data from multiple sources.
 
-![image60](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image60.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image60.png?raw=true" alt="image60">
+</div>
 
 Now, here's an example of integrating data from multiple sources.
 For example, we have our employee service, 
@@ -3215,7 +3339,9 @@ you can easily expand and extend on it.
 And this is actually a best practice, and you'll see this in place
 on large-scale enterprise applications.
 
-![image61](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image61.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image61.png?raw=true" alt="image61">
+</div>
 
 Alright, so we've covered the architecture stuff.
 Now, **Spring** provides the `@Service` annotation.
@@ -3373,7 +3499,9 @@ Okay, so this is good.
 So let's go ahead and run our application just so we can view the output here.
 And we'll swing over to our web browser.
 
-![image62](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image62.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image62.png?raw=true" alt="image62">
+</div>
 
 It works out just fine.
 So we're getting the same data as before.
@@ -3606,14 +3734,18 @@ So we've already completed the first one here of `GET` to read a list of employe
 Now we'll focus on actually doing a `GET` for a given employee id for a single employee
 and also doing a `POST` to create a new employee.
 
-![image63](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image63.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image63.png?raw=true" alt="image63">
+</div>
 
 Now let's look at the application interaction 
 between our **REST** client and our **REST** controller.
 So with the **REST** client, we'll do a `GET` `/api/employees/{employeeId}`
 and it'll return that single employee in this case `David Adams`.
 
-![image64](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image64.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image64.png?raw=true" alt="image64">
+</div>
 
 Now let's look at creating a new employee.
 So to create a new employee, we use the `POST` method
@@ -3706,19 +3838,25 @@ Now I can actually run our application and test this out here.
 So I'll just run this as a Java application.
 Alright, so let's go ahead and swing over to our browser.
 
-![image65](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image65.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image65.png?raw=true" alt="image65">
+</div>
 
 And I see that I have `Leslie Andrews` with id of one, `Emma Baumgarten`, id of two.
 So let's just test this out here.
 So `/1` for `Leslie`, it should return `Leslie`:
 
-![image66](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image66.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image66.png?raw=true" alt="image66">
+</div>
 
 Success.
 This is exactly what we're looking for.
 And let's try it for ID of two.
 
-![image67](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image67.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image67.png?raw=true" alt="image67">
+</div>
 
 And that returns `Emma`.
 So this is working.
@@ -3730,7 +3868,9 @@ So I'll just do a little copy and paste from my browser over here,
 swing back into **Postman** and paste that.
 Alright, so that's the id of two right now, and if I send that, we should get `Emma` coming back.
 
-![image68](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image68.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image68.png?raw=true" alt="image68">
+</div>
 
 Great.
 So this is working just the same in **Postman** also so this is great.
@@ -3738,7 +3878,9 @@ And let's just go ahead and add a new tab here and let's just get all employees,
 so I could paste that same piece and just take off the id,
 and should give me everyone in the list.
 
-![image69](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image69.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image69.png?raw=true" alt="image69">
+</div>
 
 Okay, great, the same thing we saw in the browser.
 So `Leslie`, `Emma`, and so on.
@@ -3839,7 +3981,9 @@ So I give `firstName`, `lastName` and `email` for this given employee.
 Let's go ahead and send it.
 And then we scroll down to the bottom:
 
-![image70](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image70.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image70.png?raw=true" alt="image70">
+</div>
 
 And, success!
 We see this new employee ID.
@@ -3848,7 +3992,9 @@ Alright, now let's go ahead and confirm this.
 So back in **MySQL Workbench** let's go ahead and just execute that query again,
 and just see the results from our database:
 
-![image71](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image71.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image71.png?raw=true" alt="image71">
+</div>
 
 And oh yeah, success!
 So we have this new employee, `Hector Perez`, and he has the id of six.
@@ -3877,7 +4023,9 @@ And just as a checkpoint here, we've already covered the first three methods.
 Now we'll cover `PUT` for doing an `update`,
 and also `DELETE` for actually deleting an employee.
 
-![image72](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image72.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image72.png?raw=true" alt="image72">
+</div>
 
 Okay, to update an employee, we'll send over a `PUT` request
 for `/api/employees` and in the body we'll have **JSON**,
@@ -3887,7 +4035,9 @@ So then our controller will send back the actual response here,
 and this response is basically just the updated information,
 and we simply echo back to the **REST** client.
 
-![image73](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image73.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image73.png?raw=true" alt="image73">
+</div>
 
 And now look at the other scenario here of deleting an employee, 
 so we send over a `DELETE` request for `api/employees/{employeeId}`
@@ -3996,19 +4146,25 @@ Alright, so this looks good.
 Let's go ahead and send it.
 And let's just scroll down to the bottom for the response.
 
-![image74](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image74.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image74.png?raw=true" alt="image74">
+</div>
 
 Okay, so basically the response is just an echo of the data that we passed on.
 So that's good, but again, I always like to verify this in **MySQL Workbench**.
 So let's go in here.
 And so first, for our employee ID of one, this is our old data.
 
-![image71](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image71.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image71.png?raw=true" alt="image71">
+</div>
 
 The old data is `Leslie Andrews`.
 But if we run the query again, we should see the new data or the updated data.
 
-![image75](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image75.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image75.png?raw=true" alt="image75">
+</div>
 
 And success.
 So for employee ID of one, the name is now `Tim Patterson`.
@@ -4120,13 +4276,17 @@ And now I simply give the employee id that I want to delete.
 So here I'll say `delete employeeId = 1` with the link, `http://localhost:8080/api/employees/1`.
 Hit send.
 
-![image76](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image76.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image76.png?raw=true" alt="image76">
+</div>
 
 All right, success.
 So it says that `deleted employee ID of 1`.
 Alright, so let's swing over to **MySQL Workbench** and let's just do a refresh on this data.
 
-![image77](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image77.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image77.png?raw=true" alt="image77">
+</div>
 
 Okay, excellent.
 So the employee with the ID of 1 has been deleted, so that's successful.
@@ -4135,13 +4295,17 @@ Let's try one more example.
 Let's delete `id = 5`.
 So on our **Postman** we'll say `http://localhost:8080/api/employees/5`, we'll do a `send`:
 
-![image78](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image78.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image78.png?raw=true" alt="image78">
+</div>
 
 We get the response that it's been deleted successfully.
 Swing back over to **MySQL Workbench**, and just go through the drill again.
 So there's the old data, we do a refresh.
 
-![image79](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image79.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image79.png?raw=true" alt="image79">
+</div>
 
 Employee id of 5 has been deleted successfully.
 So we took care of the `update` portion, and we also took care of the `delete` portion.
@@ -4154,7 +4318,9 @@ In this section, we'll cover **Spring Data JPA** in **Spring Boot**.
 Now just reviewing our application architecture,
 so in previous sections we made use of the standard **JPA API**.
 
-![image80](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image80.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image80.png?raw=true" alt="image80">
+</div>
 
 And so now we'll kind of shift over and make use of **Spring Data JPA** for our backend **DAO**.
 So we saw how to create a **DAO** for `Employee`.
@@ -4293,7 +4459,9 @@ So we're calling a method on our repository.
 And this is one of those magic methods that are available via the repository 
 that we get for free like magic by simply extending off of that **JPARepository** interface.
 
-![image81](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image81.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image81.png?raw=true" alt="image81">
+</div>
 
 Now, the key thing here is that by using **Spring Data JPA**, we've minimized the boilerplate code.
 So now this is how we would write code before **Spring Data JPA**.
@@ -4533,7 +4701,9 @@ So I'll just go ahead and run our `CruddemoApplication` and get it up and runnin
 Alright, so we can go ahead and swing over to **Postman** and just test it out here.
 So we'll run our first test of get all employees.
 
-![image82](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image82.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image82.png?raw=true" alt="image82">
+</div>
 
 And that's successful,
 so we're getting all of our data, so we know that 
@@ -4541,7 +4711,9 @@ this `JPARepository` is working just fine for get all employees.
 And we can do a similar thing here to test to get a single employee by ID,
 so I'll get employee number two.
 
-![image83](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image83.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image83.png?raw=true" alt="image83">
+</div>
 
 Okay, great, that's for `Emma`.
 Excellent, success, success.
@@ -4560,7 +4732,9 @@ and we'll just add some new information for a new employee to add.
 
 And so we'll add this new employee, `Natalia Kublanov`, and then we'll simply do a `send`.
 
-![image84](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image84.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image84.png?raw=true" alt="image84">
+</div>
 
 So success, we have a new employee here with the ID of six.
 Swing over to our database, and just do a refresh here, and excellent.
@@ -4584,7 +4758,9 @@ So we'll update employee ID of number one, first name will be `Evan`,
 last name `Richards`, `evan@luv2code.com`.
 Go ahead and send this data across:
 
-![image85](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image85.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image85.png?raw=true" alt="image85">
+</div>
 
 And we'll see that response that was our code.
 So we have `Evan Richards`, `evan@luv2code.com`, ID of one.
@@ -4592,7 +4768,9 @@ Just go back to our database and just do a quick refresh here.
 Actually, just check the old data, `Leslie Andrews`, that's the old data.
 And now we do a refresh, and we should see `Evan Richards`.
 
-![image86](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image86.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image86.png?raw=true" alt="image86">
+</div>
 
 All right, good job.
 And so now we're at our final step here of deleting an employee,
@@ -4604,7 +4782,9 @@ We simply swing back to our database.
 This is our old data employee ID of number four, `Yuri`.
 And if we do a refresh, then we should have success here.
 
-![image87](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image87.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image87.png?raw=true" alt="image87">
+</div>
 
 Yes, that ID number four was deleted, so the `delete` functionality is working.
 So all the major **CRUD** features are working with our **Spring Data JPA**.
@@ -4786,7 +4966,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 We'd set up our `Service` interface, our `@Service` implementation,
 and then we also had our application architecture.
 
-![image88](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image88.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image88.png?raw=true" alt="image88">
+</div>
 
 We had our `RESTController`, our `Service`, our `Repository`.
 And that worked fine and all.
@@ -4879,7 +5061,9 @@ So the first two items, we already have those.
 The only new item here is number three, the **Maven** `pom` dependency, and then that's it.
 Now some changes to our application architecture here.
 
-![image89](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image89.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image89.png?raw=true" alt="image89">
+</div>
 
 So before we had: 
 
@@ -5132,7 +5316,9 @@ our `entity`, our `JpaRepository` and that **Maven** `pom` entry.
 And that's all we need to get those endpoints for free.
 Alright, so let's go ahead and run our application and let's test it out.
 
-![image90](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image90.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image90.png?raw=true" alt="image90">
+</div>
 
 I'll move over to a web browser, and I'll access `localhost:8080/employees`.
 It works for us.
@@ -5143,7 +5329,9 @@ So this is all coming back thanks to **Spring Data REST**,
 and also it's making use of this `HATEOAS` format
 as far as the actual data and the structure of the data as it's being passed back.
 
-![image91](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image91.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image91.png?raw=true" alt="image91">
+</div>
 
 And also we have the meta-data here at the bottom of this given page.
 The `size`, `totalElements`, `totalPages`, `number`, and so on.
@@ -5153,7 +5341,9 @@ And I can even make use of some links here, `http://localhost:8080/employees/1`
 to drill down for like employee one.
 I can select this link, and it'll take me to the details here for employee one.
 
-![image92](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image92.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image92.png?raw=true" alt="image92">
+</div>
 
 Okay, there we go.
 So **Spring Data REST** is up and running.
@@ -5162,7 +5352,9 @@ So what I'll do is I'll take this [URL](http://localhost:8080/employees),
 I'll copy it, and I'll move over to **Postman** and paste it in there.
 And check the results here in **Postman**: 
 
-![image93](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image93.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image93.png?raw=true" alt="image93">
+</div>
 
 And the same thing.
 So we're getting the data back as desired in **Postman** also.
@@ -5198,7 +5390,9 @@ So here I have to say `magic-api/employees`,
 and that's based on that information from that configuration file.
 So now when I hit `send`, 
 
-![image94](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image94.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image94.png?raw=true" alt="image94">
+</div>
 
 I'll actually get the data back as desired.
 So it's using our `magic-api`.
@@ -5223,7 +5417,9 @@ It added that new employee, `Natalia`, and she has the ID of six.
 So the employee ID will show up in the `HATEOAS` meta-data section.
 Just swinging over to my database real quick, and just doing a quick refresh here.
 
-![image95](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image95.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image95.png?raw=true" alt="image95">
+</div>
 
 And so we see that `Natalia` is the new entry here of ID six.
 So this looks pretty good.
@@ -5253,7 +5449,9 @@ It'll show us that update for ID four.
 And if we just swing over to our database, we can see our old data of ID four was `Yuri`.
 And I simply do a refresh here:
 
-![image96](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image96.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image96.png?raw=true" alt="image96">
+</div>
 
 And I'll see the first name of `Pappa`, last name `Ray`.
 That's the data that we just sent across,
@@ -5272,7 +5470,9 @@ So swinging back to our database, we see that ID equals four, `Pappa Ray`,
 that's our old data.
 Simply go through and do a refresh:
 
-![image97](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image97.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image97.png?raw=true" alt="image97">
+</div>
 
 And we'll see that given employee was deleted successfully.
 So `id = 4` was deleted.
@@ -5431,7 +5631,9 @@ So we really should make use of `magic-api/members`
 because that's what we set up in our annotation.
 And so now when I do a `send`:
 
-![image98](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image98.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image98.png?raw=true" alt="image98">
+</div>
 
 Then everything works out successfully for us.
 So that just shows you how you can change the actual endpoint for this given repository.
@@ -5444,7 +5646,9 @@ and I'll go back to my normal `magic-api/employees`.
 And cool, so this is working as desired before, so this is good.
 Now let me scroll down here a bit.
 
-![image99](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image99.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image99.png?raw=true" alt="image99">
+</div>
 
 And so down at the bottom, for this given collection, we'll see information about the page.
 So this is **Meta-data** about the page.
@@ -5469,7 +5673,9 @@ spring.data.rest.default-page-size = 3
 So I'll set up this property here, `spring.data.rest.default-page-size = 3`.
 That means, for every request, we'll only get a page size of three.
 
-![image100](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image100.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image100.png?raw=true" alt="image100">
+</div>
 
 So we know our database has five elements.
 So our page size right now is three.
@@ -5486,7 +5692,9 @@ So this will open up a new **Postman** tab for me, prepopulated.
 And I'll simply do a `send` here.
 And this will give me information on the next page.
 
-![image101](https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image101.png?raw=true)
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image101.png?raw=true" alt="image101">
+</div>
 
 So I'll have the remaining two elements here for `Juan Vega` and `Natalia Kublanov`.
 Because we have five elements, but the page size is three, so we get two pages.
