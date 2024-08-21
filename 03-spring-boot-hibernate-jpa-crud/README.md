@@ -2649,7 +2649,7 @@ TypedQuery<Student> theQuery = entityManager.createQuery(
 
 And then we saw some other examples where we made use of queries and so forth for like,
 you know, checking for a student that has an email or checking for a student with a given last name.
-This is how you would kind of revise or refactor those queries using strict JPQL with a select clause.
+This is how you would kind of revise or refactor those queries using strict JPQL with a `select` clause.
 Here in the first example, I have select `s FROM Student s WHERE s.email`.
 So again, `s` is a reference to the entity or the object,
 so we know it's a student, and we know that a student has a field called `email`, 
