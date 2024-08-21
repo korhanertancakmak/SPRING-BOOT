@@ -822,7 +822,7 @@ and then over on the right-hand side we have our **Java POJO** for a student.
 
 So basically, using **Jackson**, they'll actually call the setter methods on your **POJO**.
 So again, going from **JSON** to **Java POJO**, they're going to call the setter methods.
-So they'll call set `id`, set `firstName`, set `lastName`, set `active` 
+So they'll call `setId`, `setFirstName`, `setLastName`, `setActive` 
 based on whatever values that you have here in the **JSON**.
 And so **Jackson** will actually do all of this work for you 
 behind the scenes once we get everything set up.
