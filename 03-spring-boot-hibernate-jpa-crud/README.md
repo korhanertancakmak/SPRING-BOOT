@@ -2694,7 +2694,6 @@ public interface StudentDAO {
 I'll move in here, and I'll define this method, _findAll_, and it'll return a list of students.
 I'll go ahead and fix the imports here for a second.
 Make sure you import on `java.util.list`.
-
 And now in step 2: Add a new method to the DAO implementation.
 We'll allow the IDE to help us with creating the stub for that method, _findAll_.
 
@@ -2948,8 +2947,11 @@ Let's move back into our **studentDAOImpl**, and let's modify our query here,
 "`FROM student order by lastName`", and in this case,
 _lastName_ is the field of the **JPA** entity.
 So that's the field from your Java class, not the database column but the actual **JPA** entity.
-By default, when you say `order by`, it'll sort ascending, kind of `A to Z`.
-We could also modify this to say, `order by lastName` descending, `desc`, that's for descending.
+By default, when you say 
+
+* `order by lastName`, it'll sort ascending, kind of `A to Z`
+* `order by lastName` descending, `desc`, from `Z to A`
+
 Or we could be very explicit, and we could say `order by lastName`, `asc`, that's for ascending, 
 so up to you, but by default it's going to sort ascending.
 And I'll move in here, and I'll just be very explicit here.
