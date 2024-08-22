@@ -285,12 +285,32 @@ Let's look at now **REST HTTP** basics.
 So the most common use of **REST** is over **HTTP**.
 So we can actually leverage the _HTTP_ methods for **CRUD** operations.
 
-| HTTP Method | CRUD Operation                           |
-|-------------|------------------------------------------|
-| POST        | Create a new entity                      |
-| GET         | Read a list of entities or single entity |
-| PUT         | Update an existing entity                |
-| DELETE      | Delete an existing entity                |
+<table align="center">
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>CRUD Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>POST</td>
+      <td>Create a new entity</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>Read a list of entities or single entity</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>Update an existing entity</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>Delete an existing entity</td>
+    </tr>
+  </tbody>
+</table>
 
 So in this diagram here, or this table actually, whenever you send over a `POST` request,
 then this can translate to the **CRUD** operation to create a new entity.
@@ -348,13 +368,36 @@ So if you said, "_Hey, give me a list of all customers_"
 then that list of data will actually come back in the message body as either **XML** or **JSON**,
 depending on how the server's configured.
 
-| Code Range | Description   |
-|------------|---------------|
-| 100 - 199  | Informational |
-| 200 - 299  | Successful    |
-| 300 - 399  | Redirection   |
-| 400 - 499  | Client error  |
-| 500 - 599  | Server error  |
+<table align="center">
+  <thead>
+    <tr>
+      <th>Code Range</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>100 - 199</td>
+      <td>Informational</td>
+    </tr>
+    <tr>
+      <td>200 - 299</td>
+      <td>Successful</td>
+    </tr>
+    <tr>
+      <td>300 - 399</td>
+      <td>Redirection</td>
+    </tr>
+    <tr>
+      <td>400 - 499</td>
+      <td>Client error</td>
+    </tr>
+    <tr>
+      <td>500 - 599</td>
+      <td>Server error</td>
+    </tr>
+  </tbody>
+</table>
 
 Now for the **HTTP** response, you can send back a status code to give information about the status.
 So you have codes in different ranges.
@@ -2263,12 +2306,32 @@ Here we have `employees`.
 And for our endpoint we have `/api/employees`.
 Now, this is not a hard and fast rule, but this is the general convention used in **REST API design**.
 
-| HTTP Method  | CRUD Action                              |
-|--------------|------------------------------------------|
-| `POST`       | Create a new entity                      |
-| `GET`        | Read a list of entities or single entity |
-| `PUT`        | Update an existing entity                |
-| `DELETE`     | Delete an existing entity                |
+<table align="center">
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>CRUD Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>POST</code></td>
+      <td>Create a new entity</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>Read a list of entities or single entity</td>
+    </tr>
+    <tr>
+      <td><code>PUT</code></td>
+      <td>Update an existing entity</td>
+    </tr>
+    <tr>
+      <td><code>DELETE</code></td>
+      <td>Delete an existing entity</td>
+    </tr>
+  </tbody>
+</table>
 
 Moving ahead to step three, we need to use the **HTTP** methods to assign an action on a resource.
 Here, for our given `POST` method, we'll use that for creating a new entity.
@@ -2279,13 +2342,42 @@ Effectively, here we'll have full **CRUD** support
 by specifying the appropriate **HTTP** method in our operation.
 And this is the actual best practice that's used for real-time projects.
 
-| HTTP Method   | Endpoint                      | CRUD Action                 |
-|---------------|-------------------------------|-----------------------------|
-| `POST`        | `/api/employees`              | Create a new employee       |
-| `GET`         | `/api/employees/{employeeId}` | Read a list of employees    |
-| `GET`         | `/api/employees`              | Read a single employee      |
-| `PUT`         | `/api/employees`              | Update an existing employee |
-| `DELETE`      | `/api/employees/{employeeId}` | Delete an existing employee |
+<table align="center">
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>Endpoint</th>
+      <th>CRUD Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>POST</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Create a new employee</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/api/employees/{employeeId}</code></td>
+      <td>Read a list of employees</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Read a single employee</td>
+    </tr>
+    <tr>
+      <td><code>PUT</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Update an existing employee</td>
+    </tr>
+    <tr>
+      <td><code>DELETE</code></td>
+      <td><code>/api/employees/{employeeId}</code></td>
+      <td>Delete an existing employee</td>
+    </tr>
+  </tbody>
+</table>
 
 Okay, let's take a look at some **CRUD** endpoint examples for our application.
 We can use the `POST` method, and we'll send it to `/api/employees`
@@ -3523,13 +3615,42 @@ and also adding a new employee.
 This is primarily for the **REST** controller methods.
 We already did this work for the **services** and the **DAOs** already.
 
-| HTTP Method   | Endpoint                      | CRUD Action                 |
-|---------------|-------------------------------|-----------------------------|
-| `POST`        | `/api/employees`              | Create a new employee       |
-| `GET`         | `/api/employees/{employeeId}` | Read a list of employees    |
-| `GET`         | `/api/employees`              | Read a single employee      |
-| `PUT`         | `/api/employees`              | Update an existing employee |
-| `DELETE`      | `/api/employees/{employeeId}` | Delete an existing employee |
+<table align="center">
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>Endpoint</th>
+      <th>CRUD Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>POST</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Create a new employee</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/api/employees/{employeeId}</code></td>
+      <td>Read a list of employees</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Read a single employee</td>
+    </tr>
+    <tr>
+      <td><code>PUT</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Update an existing employee</td>
+    </tr>
+    <tr>
+      <td><code>DELETE</code></td>
+      <td><code>/api/employees/{employeeId}</code></td>
+      <td>Delete an existing employee</td>
+    </tr>
+  </tbody>
+</table>
 
 Okay, so now just doing a checkpoint here on our realtime project 
 as far as the list of **API** methods.
@@ -3814,13 +3935,42 @@ So step six and seven of updating an existing employee,
 and also `delete` an existing employee,
 and we'll add these as our **Rest Controller** methods.
 
-| HTTP Method   | Endpoint                      | CRUD Action                 |
-|---------------|-------------------------------|-----------------------------|
-| `POST`        | `/api/employees`              | Create a new employee       |
-| `GET`         | `/api/employees/{employeeId}` | Read a list of employees    |
-| `GET`         | `/api/employees`              | Read a single employee      |
-| `PUT`         | `/api/employees`              | Update an existing employee |
-| `DELETE`      | `/api/employees/{employeeId}` | Delete an existing employee |
+<table align="center">
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>Endpoint</th>
+      <th>CRUD Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>POST</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Create a new employee</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/api/employees/{employeeId}</code></td>
+      <td>Read a list of employees</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Read a single employee</td>
+    </tr>
+    <tr>
+      <td><code>PUT</code></td>
+      <td><code>/api/employees</code></td>
+      <td>Update an existing employee</td>
+    </tr>
+    <tr>
+      <td><code>DELETE</code></td>
+      <td><code>/api/employees/{employeeId}</code></td>
+      <td>Delete an existing employee</td>
+    </tr>
+  </tbody>
+</table>
 
 And just as a checkpoint here, we've already covered the first three methods.
 Now we'll cover `PUT` for doing an `update`,
@@ -4792,13 +4942,42 @@ a **REST CRUD Implementation** for free.
 And the nice thing here is that it helps to minimize boilerplate **REST** code.
 And in fact, there's no new coding required to get set up with this **Spring Data REST**.
 
-| HTTP Method | Endpoint                  | CRUD Action                  |
-|-------------|---------------------------|------------------------------|
-| `POST`      | `/employees`              | Create a new employee        |
-| `GET`       | `/employees`              | Read a list of employees     |
-| `GET`       | `/employees/{employeeId}` | Read a single employees      |
-| `PUT`       | `/employees/{employeeId}` | Update an existing employees |
-| `DELETE`    | `/employees/{employeeId}` | Delete an existing employees |
+<table align="center">
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>Endpoint</th>
+      <th>CRUD Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>POST</code></td>
+      <td><code>/employees</code></td>
+      <td>Create a new employee</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/employees/{employeeId}</code></td>
+      <td>Read a list of employees</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td><code>/employees</code></td>
+      <td>Read a single employee</td>
+    </tr>
+    <tr>
+      <td><code>PUT</code></td>
+      <td><code>/employees</code></td>
+      <td>Update an existing employee</td>
+    </tr>
+    <tr>
+      <td><code>DELETE</code></td>
+      <td><code>/employees/{employeeId}</code></td>
+      <td>Delete an existing employee</td>
+    </tr>
+  </tbody>
+</table>
 
 So **Spring Data REST** will expose these endpoints for free.
 So you'll have methods to `POST` to create a new employee.
@@ -5315,12 +5494,32 @@ Like I mentioned earlier, it simply adds an `s` to the entity.
 But the English language is very complex, 
 and **Spring Data REST** does not handle any of these special cases like:
 
-| Singular | Plural  |
-|----------|---------|
-| Goose    | Geese   |
-| Person   | People  |
-| Syllabus | Syllabi |
-| ...      | ...     |
+<table align="center">
+  <thead>
+    <tr>
+      <th>Singular</th>
+      <th>Plural</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Goose</td>
+      <td>Geese</td>
+    </tr>
+    <tr>
+      <td>Person</td>
+      <td>People</td>
+    </tr>
+    <tr>
+      <td>Syllabus</td>
+      <td>Syllabi</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+  </tbody>
+</table>
 
 In that part, **Spring Data REST** just falls apart.
 So this is a problem, **Spring Data REST** does not handle complex pluralized forms.
@@ -5360,13 +5559,32 @@ http://localhost:8080/employees?page=1
 So here I could say, "_give me `localhost/employees?page=0` or page 1_" and so on.
 And the pages are actually zero-based, so the first page starting at `page = 0`.
 
-| Name                                 | Description                                   |
-|--------------------------------------|-----------------------------------------------|
-| `spring.data.rest.base-path`         | Base path used to expose repository resources |
-| `spring.data.rest.default-page-size` | Default size of pages                         |
-| `spring.data.rest.max-page-size`     | Maximum size of pages                         |
-| ...                                  | ...                                           |
-
+<table align="center">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>spring.data.rest.base-path</code></td>
+      <td>Base path used to expose repository resources</td>
+    </tr>
+    <tr>
+      <td><code>spring.data.rest.default-page-size</code></td>
+      <td>Default size of pages</td>
+    </tr>
+    <tr>
+      <td><code>spring.data.rest.max-page-size</code></td>
+      <td>Maximum size of pages</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+  </tbody>
+</table>
 
 Now **Spring Data REST** has the following properties that we can set in `application.properties`.
 So one of them we've seen already, `spring.data.rest.base-path`,
