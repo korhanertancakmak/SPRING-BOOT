@@ -1462,10 +1462,7 @@ public class StudentRestController {
     // define @PostConstruct to laod the student data ... only once!
     @PostConstruct
     public void loadData() {
-
-        //List<Student> theStudents = new ArrayList<>();
         theStudents = new ArrayList<>();
-
         theStudents.add(new Student("Poornima", "Patel"));
         theStudents.add(new Student("Mario", "Rossi"));
         theStudents.add(new Student("Mary", "Smith"));
@@ -1474,11 +1471,6 @@ public class StudentRestController {
     // define endpoint for "/students" - return a list of students
     @GetMapping("/students")
     public List<Student> getStudent() {
-
-        // List<Student> theStudents = new ArrayList<>();
-        // theStudents.add(new Student("Poornima", "Patel"));
-        // theStudents.add(new Student("Mario", "Rossi"));
-        // theStudents.add(new Student("Mary", "Smith"));
         return theStudents;
     }
 
