@@ -2,26 +2,36 @@
 
 ## [Overview]()
 <div style="text-align:justify">
-In this section, we'll get an overview of Spring Boot REST API Security.
-In this section, we'll learn how to secure a Spring Boot REST API 
-or define users and roles and will also protect URLs based on a given role.
-We'll learn how to store users, passwords, and roles in a database using plain text 
+
+In this section, we'll get an overview of **Spring Boot REST API Security**.
+In this section, we'll learn how to 
+
+* secure a **Spring Boot REST API** 
+* define users and roles 
+* protect URLs based on a given role
+* store users, passwords, and roles in a database using plain text 
 and also an encrypted format.
-Now, we're looking for practical results here.
-We're going to cover the most common Spring Security tasks that you'll need on a daily basis.
+
+We're going to cover the most common **Spring Security** tasks that you'll need on a daily basis.
 Now, this is not an A to Z reference.
-For that, you can see the Spring Security Reference Manual.
-I have a link here to the `Luv2code` website.
-That'll simply redirect you to the official Spring Reference Manual.
-Let's look at the Spring Security model.
-Spring Security defines a framework for security.
+For that, you can see the **Spring Security Reference Manual**.
+I have a link [here](http://www.luv2code.com/spring-security-reference-manual).
+That'll simply redirect you to the official **Spring Reference Manual**.
+
+Let's look at the **Spring Security Model**.
+**Spring Security** defines a framework for security.
 It's implemented using servlet filters in the background.
 You can make use of declarative security or programmatic security.
-Spring Security using servlet filters.
+**Spring Security** using servlet filters.
 Basically, servlet filters are used to pre-process and post-process the web requests.
 These filters can route the web request based on security logic,
-and Spring provides a bulk of the security functionality with servlet filters.
+and **Spring** provides a bulk of the security functionality with servlet filters.
 Let's take a look at Spring Security with some diagrams.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image01.png?raw=true" alt="image01">
+</div>
+
 You have a web browser on the left, and then on the right,
 you have this protected web resource like my top-secret stuff.
 The browser's attempting to access your top-secret information and get the results.
@@ -116,9 +126,7 @@ and we'll cover that all in this section.
 Okay, so let's go ahead and let's test out some basic Spring Security.
 
 
-<div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image01.png?raw=true" alt="image01">
-</div>
+
 
 
 
