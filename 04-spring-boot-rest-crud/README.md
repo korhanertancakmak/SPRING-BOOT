@@ -5707,7 +5707,7 @@ So we have two pages.
 And then one thing that's important here the actual the page numbers are zero-based.
 So the first page is zero, the second page is one.
 So I'll go ahead and select the link 
-[here](http://localhost:8080/magic-api/employees?page=1&size=3)
+`http://localhost:8080/magic-api/employees?page=1&size=3`
 to go to the next page.
 So this will open up a new **Postman** tab for me, prepopulated.
 And I'll simply do a `send` here.
