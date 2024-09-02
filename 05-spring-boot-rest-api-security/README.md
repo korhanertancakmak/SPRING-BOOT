@@ -29,7 +29,7 @@ and **Spring** provides a bulk of the security functionality with servlet filter
 Let's take a look at Spring Security with some diagrams.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/04-spring-boot-rest-crud/images/image01.png?raw=true" alt="image01">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image01.png" alt="image01">
 </div>
 
 You have a web browser on the left, and then on the right,
