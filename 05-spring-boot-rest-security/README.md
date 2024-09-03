@@ -306,7 +306,7 @@ This generated password is for development use only. Your security configuration
 And one thing to notice here is that it even says,
 Hey `using generated security` and it gives us a password.
 So something's working a little bit differently, right?
-And also remember that the default username is called `User`.
+And also remember that the default username is called `user`.
 So we can use this information to log into our application.
 I'll go ahead and start up a web browser, and then I'll go to my application.
 So this is `localhost:8080/api/employees`.
@@ -316,66 +316,60 @@ So we're attempting to access this REST API.
     <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image05.png" alt="image05">
 </div>
 
-Now notice here, spring Boot will automagically
-secure all end points for the application.
-Since we're not logged in,
-They're gonna prompt us for a user ID and password,
-and the default username is user.
-And then for the password, we need to look
-at our application logs again, right?
-And just kind of do a little copy paste here
-of that information.
-And then we paste it here
-and do a sign in
-and Great! Success!
+Now notice here, spring Boot will automagically secure all end points for the application.
+Since we're not logged in, they're going to prompt us for a user ID and password,
+and the default username is `user`.
+And then for the password, we need to look at our application logs again, right?
+And make a copy-paste here of that information.
+And then do a sign in and Success!
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image06.png" alt="image06">
+</div>
+
 So we're able to actually log into the application.
-There's security in place, but we're able to
-use that user ID and password to log in.
+There's security in place, but we're able to use that user ID and password to log in.
 And again, this is just the basics.
-We'll get into more advanced stuff later
-but this is just the basics.
-Let's go ahead and copy this URL
-and let's open it up in a new private window
+We'll get into more advanced stuff later, but this is just the basics.
+Let's go ahead and copy this URL and let's open it up in a new private window
 a new incognito window and attempt to log in.
-So since we're using a new incognito window
-there's no session tracking in place.
-And so we have to log in again
-if we enter any bad information, it'll tell us,
-Hey, this is bad information.
-So we actually need to enter the correct user ID
-and password in order to access this given app.
-I'll simply move back over
-to the server console, copy that generated password
-move it up here, and then paste it.
-And again, we're back in our application.
-What I'd like to do is override
-the default username and password.
-And I can do that by making some modifications here
-in our application dot properties file.
+So since we're using a new incognito window, there's no session tracking in place.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image07.png" alt="image07">
+</div>
+
+And so we have to log in again if we enter any bad information, it'll tell us,
+`Hey, this is bad information.`
+So we actually need to enter the correct user ID and password to access this given app.
+What I'd like to do is override the default username and password.
+And I can do that by making some modifications here in our `application.properties` file.
 And I'll add these two new entries.
-I'll set up Spring Security username equals Scott
-Spring Security password equals test 1 23.
+
+````properties
+#
+# Simple Spring Security
+#
+spring.security.user.name=scott
+spring.security.user.password=test123
+````
+
+I'll set up Spring Security username equals `scott`
+Spring Security password equals `test123`.
 And now let's go ahead and run our application again.
-
-
-
 Swing over to our web browser.
-You may need to open up a new window
-or open up a new private window.
+You may need to open up a new window or open up a new private window.
 Access the URL.
-We try entering some bad information.
-It's gonna tell us bad credentials.
-And now let's go ahead and enter the correct information.
-So user of Scott, password of Test 1 23.
-And that's based on information that we put
-in our configuration file.
+And now let's go ahead and enter the information.
+So user of `scott`, password of `test123`.
+And that's based on information that we put in our configuration file.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image06.png" alt="image06">
+</div>
+
 And success!
-Excellent. So we're able to log
-in using those customizations that we set
-up in that config file.
-Good job!
-
-
+So we're able to log in using those customizations that we set up in that config file.
 </div>
 
 ## [Basic Configuration]()
