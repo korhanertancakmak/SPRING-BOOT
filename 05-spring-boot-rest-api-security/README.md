@@ -146,6 +146,82 @@ but in this class, we'll actually cover the in-memory authentication.
 And then, we'll also cover password storage in the database using JDBC.
 
 
+is actually refresh our database table
+'cause we added a lot of things,
+deleted, updated, and so on.
+So let's move over to MySQL Workbench
+and just log into our Spring Student Account.
+And basically we just wanna run that script
+
+
+
+that we used earlier as far as creating a table
+and inserting the sample data.
+So here it is, yeah, that's the one right there.
+Okay, this is great.
+So this is all of our fresh data here, so we're good to go.
+So we have a standard baseline to work from.
+That's good, cool.
+And now what I'd like to do is just download
+some starter code just to get us up and running.
+
+
+
+So we have this file here, this zip file,
+that you'll download.
+This file is attached to the resources section of the video
+and this is the REST API project
+that we created earlier in the course.
+So the same code you seen before,
+I simply added some supporting SQL scripts
+for us to do some database work
+but the majority of the file here in the code is the same.
+Okay, so again, in the resources section of this video,
+be sure to download that zip file.
+And now let's go ahead and swing over to our file system
+and let's take a look at that file.
+I'll just move over to this downloads folder here
+and I'll simply unzip this file,
+and it's just a basic Maven project.
+A lot of the code is what we created before.
+Let me just go ahead and open up a new window here
+just so I can kind of copy some files around
+and move some things around.
+Just gimme one second while I kind of line things up
+here on the screen.
+And what I'd like to do is move into this
+dev-spring-boot folder that we've been using already
+and I'll add a new folder here.
+And this folder is 05-spring-boot-rest-security.
+And I'll just move into this folder real quick
+and then I'll just go ahead
+and copy this folder that I downloaded earlier
+and I'll place it here.
+Okay, great, this looks pretty good so far.
+And now let's go ahead and import this project into our IDE.
+Okay, the project is open in our IDE.
+I'll go ahead and just do a rebuild all,
+and I'll also go through
+and just make the appropriate project settings
+for spring-boot-dev-tools.
+So remember the drill, right,
+under Build, Execution, Deployment, under Compiler,
+we check the box here to build project automatically.
+And then down in advanced settings,
+make sure that you have the option selected
+for allow auto-make to start,
+and then go ahead and hit OK.
+And then like I mentioned this is all code
+that we've created before, right?
+So let's just go ahead and take a look at it real quick.
+So this is our spring-boot-crud-demo
+that we created in previous videos.
+All of this code is the same,
+so we have our DAO, our entity, our rest,
+and also our service.
+And again, we've created all this code before,
+there's nothing new here as far as the Java coding.
+
 
 </div>
 
