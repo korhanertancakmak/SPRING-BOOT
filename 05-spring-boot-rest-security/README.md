@@ -29,7 +29,7 @@ and **Spring** provides a bulk of the security functionality with servlet filter
 Let's take a look at Spring Security with some diagrams.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image01.png" alt="image01">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image01.png" alt="image01">
 </div>
 
 You have a web browser on the left, and then on the right,
@@ -45,7 +45,7 @@ and also if they're authorized to access this web resource.
 And this all happens in the background, thanks to **Spring Security**.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image02.png" alt="image02">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image02.png" alt="image02">
 </div>
 
 Okay, **Spring Security** in action with a flow chart.
@@ -112,7 +112,7 @@ No additional coding is required at this point.
 However, we'll learn about customizing the configuration a little bit later.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image03.png" alt="image03">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image03.png" alt="image03">
 </div>
 
 And once we run our application, and we access our app, then our application is secured.
@@ -186,7 +186,7 @@ So here it is.
 So this is all of our fresh data here, so we're good to go.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image04.png" alt="image04">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image04.png" alt="image04">
 </div>
 
 So we have a standard baseline to work from.
@@ -313,7 +313,7 @@ So this is `localhost:8080/api/employees`.
 So we're attempting to access this REST API.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image05.png" alt="image05">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image05.png" alt="image05">
 </div>
 
 Now notice here, spring Boot will automagically secure all end points for the application.
@@ -324,7 +324,7 @@ And make a copy-paste here of that information.
 And then do a sign in and Success!
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image06.png" alt="image06">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image06.png" alt="image06">
 </div>
 
 So we're able to actually log into the application.
@@ -336,7 +336,7 @@ a new incognito window and attempt to log in.
 So since we're using a new incognito window, there's no session tracking in place.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image07.png" alt="image07">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image07.png" alt="image07">
 </div>
 
 And so we have to log in again if we enter any bad information, it'll tell us,
@@ -365,7 +365,7 @@ So user of `scott`, password of `test123`.
 And that's based on information that we put in our configuration file.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-api-security/images/image06.png" alt="image06">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image06.png" alt="image06">
 </div>
 
 And success!
