@@ -375,6 +375,134 @@ So we're able to log in using those customizations that we set up in that config
 ## [Basic Configuration]()
 <div style="text-align:justify">
 
+In this section, we'll configure basic security.
+We'll take a look at an example here for our sample users here.
+We'll have three users, `John`, `Mary` and `Susan`.
+
+<table align="center">
+    <thead>
+        <th>User ID</th>
+        <th>Password</th>
+        <th>Roles</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>john</td>
+            <td>test123</td>
+            <td>EMPLOYEE</td>
+        </tr>
+        <tr>
+            <td>mary</td>
+            <td>test123</td>
+            <td>EMPLOYEE, MANAGER</td>
+        </tr>
+        <tr>
+            <td>susan</td>
+            <td>test123</td>
+            <td>EMPLOYEE, MANAGER, ADMIN</td>
+        </tr>
+    </tbody>
+</table>
+
+We'll have their passwords and also their associated roles, `employee`, `manager`, `admin`.
+Now these role names, you can give any names for the roles.
+Now let's take a look at our development process.
+
+* Create a **Spring Security** configuration class (`@Configuration`)
+* Add the users, passwords and roles
+
+Now creating a Spring Security configuration, 
+it's simply a class, and we'll give the configuration annotation 
+and then inside this class, we'll set up our security configurations.
+
+````java
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class DemoSecurityConfig {
+    
+    // add our security configurations here ...
+    
+}
+````
+
+In **Spring Security**, passwords are stored using a specific format.
+
+````text
+{id}encodedPassword
+````
+
+In the curly braces, you give the actual `id`, then you have the `encodedPassword`.
+The idea here is that we have the encoding algorithm that's being used for this password.
+
+<table align="center">
+    <thead>
+        <th>ID</th>
+        <th>Description</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>noop</td>
+            <td>Plain text passwords</td>
+        </tr>
+        <tr>
+            <td>bcrypt</td>
+            <td>BCrypt password hashing</td>
+        </tr>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+    </tbody>
+</table>
+
+In this example, we have noop, means no operation.
+That's just for plain text passwords, meaning no encryption,
+no hashing, no nothing, just plain text
+and then you have bcrypt
+and that's for BCrypt password hashing.
+Basically, that's one-way hashing or one-way encryption.
+You take the password and you hash it
+using a given BCrypt algorithm
+and it's stored in that fashion.
+BCrypt is a very popular hashing algorithm that's used now
+and that's the one that we'll use in this video series.
+Let's take a look at a password example.
+Here, the password is test123
+and then we have the actual encoding algorithm id
+and that's in curly braces.
+In this example, it's noop.
+This tells Spring Security the passwords
+are stored as plain text, noop, meaning no operation.
+And we'll start with this just for the beginning,
+just to help us get started.
+Later on, we'll move to more advanced features using BCrypt.
+So don't worry, I got you covered.
+In step two, we'll add the users, passwords and roles.
+In this example here, we're gonna start off
+by defining our users InMemory.
+We create this UserDetailsManager method,
+returns an InMemoryUserDetailsManager.
+We create our three users for John, Mary, Susan.
+Here we have John equals User.builder.
+We give John's username, password, roles
+and then we say .build to actually build
+this given UserDetails.
+And then we simply repeat the process for Mary.
+Note here for Mary, we also give the additional roles here
+for employee and manager.
+And then for Susan, we do a similar thing.
+We also specify the roles for Susan,
+employee, manager, admin.
+And then finally, we return a new InMemoryUserDetailsManager
+and we pass in those three users, John, Mary and Susan.
+We'll add database support in later videos.
+We'll cover the idea of storing the passwords as plain text
+and also storing the passwords using encryption with BCrypt.
+Let's go ahead and move into the next video
+on the Let's Start Writing Some Code.
+
+
 </div>
 
 ## [Restrict URLs based on Roles]()
