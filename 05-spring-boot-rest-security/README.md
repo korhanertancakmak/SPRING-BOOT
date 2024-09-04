@@ -411,9 +411,10 @@ Now let's take a look at our development process.
 * Create a **Spring Security** configuration class (`@Configuration`)
 * Add the users, passwords and roles
 
-Now creating a Spring Security configuration, 
-it's simply a class, and we'll give the configuration annotation 
-and then inside this class, we'll set up our security configurations.
+First, we create a package for my security classes. 
+For the name of the package, I'll call it `security`.
+And I'll go ahead and create a new class.
+For the new class, I'll call it `DemoSecurityConfig`.
 
 ````java
 import org.springframework.context.annotation.Configuration;
@@ -426,6 +427,9 @@ public class DemoSecurityConfig {
 }
 ````
 
+And the first thing I'll do here is I'll annotate this class with the `@Configuration`,
+it's simply a class, and we'll give the configuration annotation
+and then inside this class, we'll set up our security configurations.
 In **Spring Security**, passwords are stored using a specific format.
 
 ````text
@@ -456,57 +460,653 @@ The idea here is that we have the encoding algorithm that's being used for this 
     </tbody>
 </table>
 
-In this example, we have noop, means no operation.
-That's just for plain text passwords, meaning no encryption,
-no hashing, no nothing, just plain text
-and then you have bcrypt
-and that's for BCrypt password hashing.
+In this example, we have `noop`, means `no operation`.
+That's just for `plain text passwords`, meaning no encryption, no hashing, no nothing, 
+just plain text. 
+Then you have `bcrypt` that's for `BCrypt password hashing`.
 Basically, that's one-way hashing or one-way encryption.
-You take the password and you hash it
-using a given BCrypt algorithm
+You take the password, and you hash it using a given **BCrypt** algorithm,
 and it's stored in that fashion.
-BCrypt is a very popular hashing algorithm that's used now
-and that's the one that we'll use in this video series.
+**BCrypt** is a very popular hashing algorithm that's used now
+and that's the one that we'll use in this section.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image08.png" alt="image08">
+</div>
+
 Let's take a look at a password example.
-Here, the password is test123
+Here, the password is `test123`, 
 and then we have the actual encoding algorithm id
 and that's in curly braces.
-In this example, it's noop.
-This tells Spring Security the passwords
-are stored as plain text, noop, meaning no operation.
-And we'll start with this just for the beginning,
-just to help us get started.
-Later on, we'll move to more advanced features using BCrypt.
-So don't worry, I got you covered.
+In this example, it's `noop`.
+This tells **Spring Security** the passwords are stored as plain text, `noop`, meaning no operation.
+And we'll start with this just for the beginning, just to help us get started.
+Later on, we'll move to more advanced features using `BCrypt`.
+
+````java
+package com.luv2code.springboot.cruddemo.security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+@Configuration
+public class DemoSecurityConfig {
+    
+    @Bean
+    public InMemoryUserDetailsManager userDetailsManager() {
+        
+        UserDetails john = User.builder()
+                .username("john")
+                .password("{noop}test123")
+                .roles("EMPLOYEE")
+                .build();
+
+        UserDetails mary = User.builder()
+                .username("mary")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER")
+                .build();
+        
+        UserDetails susan = User.builder()
+                .username("susan")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+        
+        return new InMemoryUserDetailsManager(john, mary, susan);
+    }
+}
+````
+
 In step two, we'll add the users, passwords and roles.
-In this example here, we're gonna start off
-by defining our users InMemory.
-We create this UserDetailsManager method,
-returns an InMemoryUserDetailsManager.
-We create our three users for John, Mary, Susan.
-Here we have John equals User.builder.
-We give John's username, password, roles
-and then we say .build to actually build
-this given UserDetails.
-And then we simply repeat the process for Mary.
-Note here for Mary, we also give the additional roles here
-for employee and manager.
-And then for Susan, we do a similar thing.
-We also specify the roles for Susan,
-employee, manager, admin.
-And then finally, we return a new InMemoryUserDetailsManager
-and we pass in those three users, John, Mary and Susan.
-We'll add database support in later videos.
-We'll cover the idea of storing the passwords as plain text
-and also storing the passwords using encryption with BCrypt.
-Let's go ahead and move into the next video
-on the Let's Start Writing Some Code.
+And, we're going to use that in memory authentication.
+We create this _UserDetailsManager_ method, returns an **InMemoryUserDetailsManager**.
+We create our three users for `John`, `Mary`, `Susan`.
+Here we have `John` equals `User.builder`.
+We give John's username, password, roles, then we say `.build` 
+to actually build this given **UserDetails**.
+And then we simply repeat the process for `Mary`.
+Note here for `Mary`, we also give the additional roles here for `employee` and `manager`.
+And then for `Susan`, we do a similar thing.
+We also specify the roles for `Susan`, `employee`, `manager`, `admin`.
+And then finally, we return an instance of `InMemoryUserDetailsManager`, 
+we pass on those three users, `John`, `Mary` and `Susan`.
+Note that, since we defined our users here, 
+**Spring Boot** will not use the user password from the `application.properties`.
+Instead, it'll use this user details manager
+that we just created in this configuration.
+And, we'll add database support later in sections with plain text and encrypted.
+Now, let's go ahead and test this out and run our application.
+Let's go ahead and test this out with the Postman.
+So we're going to use our rest api client for testing this.
+And let's attempt to access the API without providing a user ID and password. 
+So we'll go to `localhost:8080/api/employees` and we'll hit `Send`.
 
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image09.png" alt="image09">
+</div>
 
+And notice here at the bottom it says `401 unauthorized`.
+Basically, we're trying to access a secure resource.
+We haven't provided any user ID and passwords,
+so we're unauthorized, we're denied. 
+Because we tried to get in with no credentials. 
+So let's go ahead and change this. 
+So under authorization, we need to tell it what type of authorization we're using. 
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image10.png" alt="image10">
+</div>
+
+Here, we're making use of basic authentication. 
+And then we provide our user ID and password. 
+So `john`, and then password of `test123`.
+And now hit the `Send`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image11.png" alt="image11">
+</div>
+
+Then, success, status of 200. 
+So that means everything was okay and successful.
+And see the response of the actual data that just came back from that rest API.
+So we're able to access it.
+Let's do a similar thing here for `Mary`,
+another one of our users.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image12.png" alt="image12">
+</div>
+
+And again, we get the 200, okay, which is successful. 
+And then finally, our user `Susan`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image13.png" alt="image13">
+</div>
+
+And this is also successful.
+And if I tried to add some bad credentials here, 
+like just some unknown user, that we don't have:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image14.png" alt="image14">
+</div>
+
+And then as expected, right?
+401, unauthorized.
+So we have the basic security in place here. 
+Again, very basic, but at least we're getting started.
+We're defining our users, roles, and passwords.
 </div>
 
 ## [Restrict URLs based on Roles]()
 <div style="text-align:justify">
+
+In this section, we're going to restrict access based on roles.
+In our example, we have a number of REST APIs,
+or a number of REST endpoints, and I'd like to restrict those endpoints based on a given role.
+
+<table align="center">
+    <thead>
+        <th>HTTP Method</th>
+        <th>Endpoint</th>
+        <th>CRUD Action</th>
+        <th>Role</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>GET</td>
+            <td>/api/employees</td>
+            <td>Read all</td>
+            <td>EMPLOYEE</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/employees/{employeeId}</td>
+            <td>Read single</td>
+            <td>EMPLOYEE</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/employees</td>
+            <td>Create</td>
+            <td>MANAGER</td>
+        </tr>
+        <tr>
+            <td>PUT</td>
+            <td>/api/employees</td>
+            <td>Update</td>
+            <td>MANAGER</td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/employees/{employeeId}</td>
+            <td>Delete employee</td>
+            <td>ADMIN</td>
+        </tr>
+    </tbody>
+</table>
+
+Starting out here with the first two endpoints
+for `/employees`, `/employee/employeeId`,
+that's for reading all and reading a single employee.
+I want to make this only available to the role of employee.
+And then, if we want to modify the database,
+for example, using a `POST` to create a new employee,
+or a `PUT` to update an employee,
+I only want that to be available to the role of manager.
+And then finally, to actually `DELETE` an employee,
+I only want this operation available to the role of admin.
+As you can see here, we have different endpoints,
+and we have different roles based on those given operations for those endpoints.
+And so let's go ahead and implement this using **Spring Security**.
+
+````java
+requestMatchers(<< add path to match on >>)
+    .hasRole(<< authorized role >>)
+````
+
+Let's take a look at the general syntax here
+for restricting access, we can make use of this method called request matchers.
+We can give the path to match on, here I could say let's restrict access
+to a given path of `/api/employees`,
+and then we can specify for this given path,
+it's only available to people that have a certain role,
+or has role, and you give the name of a single role.
+For example, you could say the roll of admin.
+
+````java
+requestMatchers(<< add HTTP METHOD to match on >>, << add path to match on >>)
+    .hasRole(<< authorized roles >>)
+````
+
+Now one thing that you may have noticed is that for a given path, 
+well, it changes depending on what type of HTTP method we're using, right?
+So if we're doing a `PUT`, or a `POST`, or a `DELETE`,
+we need to kind of add that support here too.
+To make use of this request matchers,
+we have the path to match on, but then we also specify the actual HTTP method to match on,
+saying, hey, this is only available for `GET`,`POST`, `PUT`, `DELETE`, etc.
+And then we can also specify the role, a given single role.
+
+````java
+requestMatchers(<< add HTTP METHOD to match on >>, << add path to match on >>)
+    .hasAnyRole(<< list of authorized roles >>)
+````
+
+Now taking this a bit further, we've seen the path,
+we've seen the method, but we only saw a single role.
+Well, what about if something could match on multiple roles or any role?
+So we make use of this other method here, _hasAnyRole_, 
+and we simply give a comma-delimited list of roles that are authorized.
+
+````java
+requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE"))
+requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE"))
+````
+
+Okay, so let's kinda walk through this with some examples here.
+So if I want to authorize a request for the employee role,
+we set up this **requestMatchers**, and we have `method.GET` for `/api/employees`, 
+_hasRole_ of employee, so that's for reading all the users.
+We could also say `requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE"))`.
+This handles the case of reading a single employee.
+Now the `**` syntax means that it'll match on all sub paths, or kinda like a wildcard, right?
+So when they say `/api/employee/employeeId`, this will match on that given item.
+Now let's look at examples for authorizing requests for the manager role.
+
+<table align="center">
+    <thead>
+        <th>HTTP Method</th>
+        <th>Endpoint</th>
+        <th>CRUD Action</th>
+        <th>Role</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>GET</td>
+            <td>/api/employees</td>
+            <td>Read all</td>
+            <td>EMPLOYEE</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/employees/{employeeId}</td>
+            <td>Read single</td>
+            <td>EMPLOYEE</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/employees</td>
+            <td>Create</td>
+            <td>MANAGER</td>
+        </tr>
+        <tr>
+            <td>PUT</td>
+            <td>/api/employees</td>
+            <td>Update</td>
+            <td>MANAGER</td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/employees/{employeeId}</td>
+            <td>Delete employee</td>
+            <td>ADMIN</td>
+        </tr>
+    </tbody>
+</table>
+
+Now remember, for managers they can do a `POST` or a `PUT`,
+meaning create or update, only available for managers.
+
+````java
+requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER"))
+requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER"))
+````
+
+Here I have `requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER"))`.
+And a similar thing for `requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER"))`.
+Again, this is handling the endpoints here for `POST` input,
+meaning create an update for a given item,
+and those operations are only available for managers.
+
+````java
+requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN"))
+````
+
+And then finally, let's cover the case of authorizing requests for the admin role.
+Remember, for the admin role, that's the only role that can delete an employee.
+And remember, the `**` here is kind of the wildcard that'll match on all sub paths here.
+So this covers that case for the endpoint of `DELETE`, with the `/employee/employeeId`.
+This is all some really good information, let's pool it all together with the coding example,
+so we saw it in small bits, now let's pull it all together here.
+
+````java
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    
+    http.authorizeHttpRequests(configurer ->
+                    configurer
+                            .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                            .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                            .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                            .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                            .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN"));
+    
+    // use HTTP Basic authentication
+    http.httpBasic(Customizer.withDefaaults());
+    
+    return http.build();
+}
+````
+
+In our class here we create this bean our security filter **Bean**,
+it's going to pass in a HTTP security that we can make use of.
+Inside this method I have `http.authorizeHTTPRequests`,
+so again, we're authorizing based on roles.
+Here I have `configure.requestMatchers`,
+I give the `method.GET`, I give an endpoint`.hasRole("EMPLOYEE")`,
+and I just repeat the process for each one of the authorizations that I'm setting up.
+I have the authorizations here for those two employee endpoints,
+and then for the `POST` input, and then finally for `DELETE`.
+So that's how we kind of define the authorization roles here, 
+as far as who can access certain endpoints in our application.
+And remember, the `**` means, handle that's given wildcard section in all sub paths.
+And also I tell the app to use HTTP basic authentication,
+so since we're overriding providing our own security filter chain, 
+we have to be explicit in saying the type of authentication method that we're using.
+And finally, when this is all done, we return this `http.build()`,
+gives us an instance of the security filter chain that'll be used by **Spring Security**.
+And users can log in based on those user IDs and passwords that we created earlier, 
+and also those roles, and that'll all be applied accordingly
+when a user logs in trying accessing our system,
+we'll check the user ID and password,
+make sure that's correct, so they're authenticated,
+and then based on their role will authorize 
+if they can access a given endpoint based on their role.
+
+Now we have another topic to discuss here,
+and that's cross-site request forgery, or **CSRF**.
+**Spring Security** can protect against **CSRF** attacks.
+Basically, what they do in the background for like web applications that use forms,
+they'll embed additional authentication data, or tokens in all the **HTML** forms, 
+and on follow on requests, the web app will verify the token before processing.
+This is the primary use case in traditional web applications where you have web pages,
+**HTML** forms submitting data, and so on.
+So that's the main use of **CSRF**, is for making use of web apps with web forms.
+
+Now you may wonder when should I use **CSRF** protection?
+Well, the **Spring Security** team recommends using 
+**CSRF** protection for any normal browser-based web request.
+So think of your traditional web apps that have **HTML** forms,
+the user's clicking something, adding, modifying data, and so on,
+that's when you want to make use of **CSRF** protection.
+However, if you're building a REST API for non-browsers clients, 
+meaning non-web browsers, you may want to disable **CSRF**.
+In general, **CSRF** is not required for stateless REST APIs
+that use `POST`, `PUT`, `DELETE`, and/or `PATCH`,
+in most cases will disable the **CSRF** protection.
+However, don't be alarmed;
+this is a recommendation actually documented in the **Spring** reference manual.
+
+````java
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    
+    http.authorizeHttpRequests(configurer ->
+                    configurer
+                            .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                            .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                            .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                            .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                            .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN"));
+    
+    // use HTTP Basic authentication
+    http.httpBasic(Customizer.withDefaaults());
+    
+    // disable Cross Site Request Forgery (CSRF)
+    http.csrf(csrf -> csrf.disable());
+    
+    return http.build();
+}
+````
+
+Now pulling it all together here,
+there's one entry that I added here in this configuration.
+Disabled cross-site press forgery, **CSRF**,
+here we make use of the **http** `csrf.disable`.
+Again, like I mentioned earlier, in general, **CSRF** is not required for stateless REST APIs
+that use `POST`, `PUT`, `DELETE`, and/or `PATCH`.
+
+Let's restrict access based on roles by coding.
+Let's move in here and let's
+open up our `DemoSecurityConfig` class, 
+and we'll add this new section of code here for restricting access based on roles.
+
+````java
+package com.luv2code.springboot.cruddemo.security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+@Configuration
+public class DemoSecurityConfig {
+
+    @Bean
+    public InMemoryUserDetailsManager userDetailsManager() {
+
+        UserDetails john = User.builder()
+                .username("john")
+                .password("{noop}test123")
+                .roles("EMPLOYEE")
+                .build();
+
+        UserDetails mary = User.builder()
+                .username("mary")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER")
+                .build();
+
+        UserDetails susan = User.builder()
+                .username("susan")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(john, mary, susan);
+    }
+}
+
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    http.authorizeHttpRequests(configurer ->
+            configurer
+                    .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                    .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                    .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                    .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                    .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN"));
+
+    // use HTTP Basic authentication
+    http.httpBasic(Customizer.withDefaaults());
+
+    // disable Cross Site Request Forgery (CSRF)
+    // in general, not required for stateless REST APIs that use POST, PUT, DELETE and/or PATCH
+    http.csrf(csrf -> csrf.disable());
+
+    return http.build();
+}
+````
+
+We'll create this _filterChain_, we'll pass in the **HttpSecurity**,
+and then we'll go through, and we'll use _authorizeHttpRequests_.
+We'll set up this config, and based on the rules that we have from earlier,
+we'll go ahead and define our request matchers.
+Here, I'll define this request matcher, for `GET`.
+I'll give the path of `"/api/employees"` and `hasRole("EMPLOYEE")`.
+And now I simply just copy and paste this X number of times,
+and I'll simply update this based on the rules that I've set up.
+Just starting here with the second line, it's a `GET` request `"/api/employees/**"`
+for reading a single employee.
+So I do a `/**`, a wild card that'll match on all sub paths, 
+and that's for the role of employee.
+And now for the next item here,
+I'll have `POST`, and the path is `"/api/employees"`, has the role of manager.
+So that's for adding a new employee or creating a new employee.
+For the next item here, I set the method to `PUT` `"/api/employees"` and again,
+for manager, and that's for updating an existing employee.
+And then finally, for deleting an employee,
+it's only available for admin.
+Here I have the method of `.delete` `"/api/employees/**"` to match
+on the wildcard and all sub paths.
+And I update the role here for admin.
+All right, so at the moment, this looks pretty good here
+as far as setting up our authorization rules
+for the endpoints based on the given user roles.
+Now we're not done.
+There's still some additional coding that we need to do here,
+and let's dive in and get this wrapped up.
+I need to tell **Spring Security** that we're using basic authentication,
+and this is for basic auth.
+And also I need to disable **CSRF**.
+And again, remember **CSRF** is for web applications with **HTML** forms.
+In general, **CSRF** protection is not required for stateless APIs that use `post`, `put`, `delete` and so on.
+Here I can say it's `csrf.disabled()`.
+And then finally, I just make use of `http.build()` to return that given information.
+Right, so just kind of standing back here
+Let's go ahead and run an application and get it up and running.
+I'll open up Postman, and I'll go through a number of different test cases here.
+The first thing I'll do is I'll test the role of employee for our user, `John`, and a couple of things here.
+The first two tests should pass, so `John` can go through and `GET` all employees and also `GET` a single employee.
+However, the next three tests should fail.
+So trying to `ADD` an employee, that should fail, `UPDATE` and `DELETE` should fail
+because `John` doesn't have the roles for those given operations.
+He's not authorized.
+Let's go ahead and start with the first test of getting all employees.
+We have this local host API `/employees`.
+Make sure we have `Basic Authentication` selected and then the username of `John` password `test123`.
+So this test should pass:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image15.png" alt="image15">
+</div>
+
+And yes, it passes.
+So notice here, down here we get the `200` of okay, so that's successful.
+He's authorized to access this given endpoint.
+Now let's try the next endpoint here of getting a single employee.
+And again, this one should pass too.
+But let's go ahead and test it out.
+I'll move up here, and I'll simply duplicate this tab.
+And this is for getting a single employee.
+I'll just say `/employees/` and I give the employee id.
+You all start with maybe the number one and then check the authorization,
+the user's `John`, password, and then hit `Send`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image16.png" alt="image16">
+</div>
+
+And excellent.
+Success status code of `200`.
+That means that everything's okay,
+we're able to access that given data.
+Now, let's go ahead and try a failing case here.
+Let's try and add an employee.
+So we provide the credentials for `John`,
+but we're trying to add an employee.
+I'll move up here, and I'll duplicate this tab.
+And remember, to add an employee, we have to change the method here.
+So we're trying to do a `POST` and then update the endpoint, 
+so there's no ID here, just `/employees`.
+Have to specify the `Body`, right?
+So in the `Body` we choose `raw`.
+And then for the content type, we choose `JSON`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image17.png" alt="image17">
+</div>
+
+Now let's simply give our employee information that we want to add.
+`firstName` and `lastName`, `Matt Lee`.
+And then we give the email `matt@luv2code.com`.
+Let's check the authorization here.
+The user's `John`, the password `test123`.
+Now let's do a `Send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image18.png" alt="image18">
+</div>
+
+And this fails.
+403 Forbidden. 
+Basically no authorization.
+But this kind of works as desired, right?
+We wanted this test to fail because John's not authorized.
+John's an employee.
+John should not be able to add employees.
+Now, let's go ahead and try the other scenario here a fail updating an employee.
+So let's go ahead and duplicate this tab.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image19.png" alt="image19">
+</div>
+
+And to update an employee, we have to change the method.
+So instead of `POST`, it's going to be `PUT`
+and for `Body`, I'm just going to give a new first name and last name.
+You can choose any name that you want here.
+And then, since we're doing an update, we have to put the `ID` in the `JSON`.
+Here I add this new entry `ID` of `1`.
+So basically, I'm saying I'm going to update the employee ID of 1 
+with this new first name, last name, and email.
+And then we'll click on authorization.
+Notice here we have the user of `John`.
+We click `Send`: 
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image20.png" alt="image20">
+</div>
+
+And, we get a 403 Forbidden, unauthorized.
+And again, this works out just fine, right?
+Because we wanted this test to fail,
+because John is an employee, and he's not authorized to perform an update.
+Now our final test case here of doing a delete.
+Now remember, the only person that can do a delete is an admin.
+I'll just go ahead and duplicate this tab one more time.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image21.png" alt="image21">
+</div>
+
+I changed the method here to `DELETE`.
+And then for `DELETE`, we specify the employee ID that we want to delete.
+So /employees/4, let's just say,
+let's delete employee `ID` of number `4`.
+There's no `Body` that we need to send over, so I'll click on none.
+I check the authorization.
+So this is for user, `John`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image21.png" alt="image21">
+</div>
+
+And excellent. 
+So this fails as desired.
+`403` Forbidden.
+And this fails because the only people that can delete are admins,
+and `John` does not have the admin role.
+We kind of went through the basic test case of going through for the employee role and seeing what they can perform
+and what they can't perform.
 
 </div>
 
@@ -514,16 +1114,19 @@ on the Let's Start Writing Some Code.
 ## [JDBC Authentication]()
 <div style="text-align:justify">
 
+
 </div>
 
 
 ## [Bcrypt Encryption]()
 <div style="text-align:justify">
 
+
 </div>
 
 
 ## [Custom Tables]()
 <div style="text-align:justify">
+
 
 </div>
