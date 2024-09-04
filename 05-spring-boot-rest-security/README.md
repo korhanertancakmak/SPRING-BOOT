@@ -1097,7 +1097,7 @@ I check the authorization.
 So this is for user, `John`.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image21.png" alt="image21">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image22.png" alt="image22">
 </div>
 
 And excellent. 
