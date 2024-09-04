@@ -1108,6 +1108,89 @@ and `John` does not have the admin role.
 We kind of went through the basic test case of going through for the employee role and seeing what they can perform
 and what they can't perform.
 
+So we covered the role of employee.
+Now let's go ahead and cover the roles for manager and also admin.
+Now we have this role of manager.
+So `Mary`'s a manager.
+So based on this user, they'll be able to `GET` all employees and single, 
+`ADD`, `UPDATE`, but they won't be able to `DELETE` because that's only for admins.
+So let's start off with this first test here, `GET` all employees.
+So I'll go back to that first tab.
+I'll update the username to be `Mary` and then hit send.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image23.png" alt="image23">
+</div>
+
+And that's successful.
+`200`.
+Let's move to that next tab of getting a single employee.
+Update the user for `Mary`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image24.png" alt="image24">
+</div>
+
+And again, that's `200`.
+Okay, let's move over to `POST` and attempt to add an employee,
+and instead of the username of `John`, we'll use `Mary`.
+And then hit `SEND`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image25.png" alt="image25">
+</div>
+
+And an excellent 200.
+So the manager is allowed to add new employees.
+So this is great.
+And now let's test the case of updating an employee.
+I move over to this other tab here for `PUT`, that's for update.
+Previously, that was forbidden because `John` couldn't perform an update
+but now let's change the username to `Mary`,
+and hit `SEND`: 
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image26.png" alt="image26">
+</div>
+
+And excellent this was successful,
+and we could perform an update on a given employee because of our role.
+And now finally, let's test a case of deleting an employee.
+Now this should fail, right?
+Because `Mary` does not have the role of admin but let's test it out.
+I'll select the `DELETE` tab here.
+And previously it failed because `John` could not delete.
+Let's try it with `Mary` and let's hit `SEND`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image27.png" alt="image27">
+</div>
+
+And this is also forbidden.
+So this fails, but this fails as desired, right?
+Because `Mary` does not have the role of admin,
+so she can't perform any admin operations.
+Now let's switch gears here and let's take a look at the admin role,
+and we'll make use of `Susan`.
+So Susan has all of these roles, and it should work out for `Susan`.
+So we can just test the first four tabs here to `GET` all employees and single employee, `POST` to add new one,
+`PUT` to update one, and `DELETE` an employee.
+But let's cut the edges here,
+And choose that last tab here for deleting an employees.
+This should only be available to people with the admin role,
+but `Susan` has the admin role, so this should be okay.
+Previously, `Mary` failed because `Mary` didn't have that role.
+We update the username to `Susan` and we hit `SEND`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image28.png" alt="image28">
+</div>
+
+And an excellent success 200.
+So this works out as desired.
+So we're able to kind of restrict these endpoints here based on roles.
+And we went through the different use cases of employee role, manager role, and also admin role.
+So this works out exactly the way we planned it.
 </div>
 
 
