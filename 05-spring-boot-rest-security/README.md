@@ -1193,9 +1193,239 @@ And we went through the different use cases of employee role, manager role, and 
 So this works out exactly the way we planned it.
 </div>
 
-
 ## [JDBC Authentication]()
 <div style="text-align:justify">
+
+In this section, we'll learn how to use **Spring Security**
+with user accounts stored in the database.
+So far, our user accounts were hard coded in Java source code,
+and we did that just to kind of keep things simple.
+But now we want to add database access.
+This is an advanced feature of **Spring Security**,
+and we'll actually use it in this section.
+Now let's recall the user roles.
+
+<table align="center">
+    <thead>
+        <th>User ID</th>
+        <th>Password</th>
+        <th>Roles</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>john</td>
+            <td>test123</td>
+            <td>EMPLOYEE</td>
+        </tr>
+        <tr>
+            <td>mary</td>
+            <td>test123</td>
+            <td>EMPLOYEE, MANAGER</td>
+        </tr>
+        <tr>
+            <td>susan</td>
+            <td>test123</td>
+            <td>EMPLOYEE, MANAGER, ADMIN</td>
+        </tr>
+    </tbody>
+</table>
+
+We have three users, `John`, `Mary`, and `Susan`.
+We have our passwords, and we also have their roles,
+and we used these in some of the previous sections.
+Now we'll simply put this information in the database.
+Out of the box, **Spring Security** can read user information from the database.
+By default, you have to follow **Spring Security**'s predefined table schemas.
+But the nice thing about it is that by following their schemas,
+and then **Spring Security** includes all the JDBC code
+to actually read information from the database.
+There's very little Java code you have to write as far as JDBC code
+for reading information from the database.
+All you have to do is simply set up the configuration,
+create the appropriate tables,
+and **Spring Security** will do all the heavy lifting for you in the background.
+Now you also have the option of customizing the table schemas.
+This is very useful if you have custom tables specific to your given project.
+The only thing that you'll be responsible for
+is developing the code to access the data.
+In this scenario, you'll have to write the low-level **JDBC** code
+or **Hibernate** code to read the data from the appropriate tables.
+You'll have to read the account information and also read the user roles.
+What we'll do in this section is that we'll start off,
+and we'll use **Spring Security**'s predefined table schemas.
+That'll give us all the functionality
+and all the code for hooking into the actual database.
+And this is all given to us out of the box.
+Here's the development process.
+
+* Create an SQL script to set up the database tables
+* Add database support to our project using the **Maven** `pom` file.
+* Create the JDBC `properties` file
+* Update the **Spring Security** configuration to use JDBC for authentication and authorization
+
+All right, as I mentioned,
+**Spring Security** has a default database schema,
+so you need to provide two tables,
+one called `users` and another one called `authorities`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image29.png" alt="image29">
+</div>
+
+And you have to use these exact table names.
+And also the tables need to have these specific columns,
+`username`, `password`, and `enabled` for the `users` table.
+And then also `username` and `authority` for the `authorities` table.
+You need to have the exact same table names and columns as shown here.
+Also, when you see the word `authorities` here, authorities is the same,
+or loosely the same thing, as `roles`.
+So again, when you see `authorities`, just think `roles`.
+
+Moving to step one, that's creating the SQL script to set up the database tables.
+As you know, we need to have these two tables, `users` and `authorities`.
+I'll start off with `users` here.
+
+````sql
+CREATE TABLE `users` (
+    `username` varchar(50) NOT NULL,
+    `password` varchar(50) NOT NULL,
+    `enabled` tinyint NOT NULL,
+    
+    PRIMARY KEY (`username`) 
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+````
+
+I'll go ahead and create the table users,
+and then I'll create those columns, `username`, `password`, and `enabled`.
+And then we'll also set up the primary key based on the `username`.
+And that's basically it here for the table.
+Again, the exact same table name of `users` and the exact same column names,
+`username`, `password`, and `enabled`.
+
+````sql
+INSERT INTO `users`
+VALUES
+('john', '{noop}test123', 1),
+('mary', '{noop}test123', 1),
+('susan', '{noop}test123', 1);
+````
+
+Now let's go ahead and handle the password storage here and `INSERT` our users.
+And then we'll do an `INSERT INTO 'users'`.
+We'll get the values here for `john`, `mary`, `susan`,
+and we give the `username` comma the `password` comma the `enabled` status.
+And now what we have here is the actual `password`.
+So the password is `test123`.
+And remember, we have the actual encoding algorithm id and that's in curly braces.
+Here, it's `noop`.
+That basically says the password is stored as plain text.
+And we'll start with this just for the beginning.
+Later on, we'll move into more advanced features by using bcrypt encryption.
+
+````sql
+CREATE TABLE `authorities` (
+    `username` varchar(50) NOT NULL,
+    `authority` varchar(50) NOT NULL,
+    
+    UNIQUE KEY `authorities_idx_1` (`username`, `authority`),
+    
+    CONSTRAINT `authorities_ibfk_1`
+    FOREIGN KEY (`username`)
+    REFERENCES `users` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+````
+
+Now let's go ahead and move into the roles.
+And we have to create this table called `authorities`.
+Here we have two fields for `username` and `authority`,
+and then we go through it and set up the `unique key`
+based on the `username` and `authority`.
+We also set up our `constraints`.
+And here the `foreign key` references the `users` table for `username`.
+And that'll basically create the `authorities` table.
+And again, remember the `authorities` table, here's the same thing as roles.
+
+````sql
+INSERT INTO `authorities`
+VALUES
+('john', 'ROLE_EMPLOYEE'),
+('mary', 'ROLE_EMPLOYEE'),
+('mary', 'ROLE_MANAGER'),
+('susan', 'ROLE_EMPLOYEE'),
+('susan', 'ROLE_MANAGER'),
+('susan', 'ROLE_ADMIN');
+````
+
+All right, so now let's go ahead and insert some of our user roles into our database table.
+So we have our `users`, and then we simply do an insert into `authorities`.
+And again, `authorities` here, same as roles.
+And we'll go ahead and do an insert here for `John`.
+He's an employee.
+We do an insert here for `Mary`.
+She's an employee and manager.
+And we also do an insert for `Susan`.
+She's an employee, manager, and admin.
+And internally, **Spring Security** will use the `ROLE_` prefix for the actual role entries.
+
+```xml
+<!-- MySQL -->
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+Now moving ahead here to step two, we add the database support to our **Maven** `pom` file.
+Here we make sure to give a reference to our **JDBC** driver.
+In this example, we're using **MySQL**.
+So we give the appropriate entry here for the **MySQL** `groupId` and `artifactId`.
+
+```properties
+#
+# JDBC connection properties
+#
+spring.datasource.url=jdbc:mysql://localhost:3306/employee_directory
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+```
+
+Next, we have step three of creating our **JDBC** properties file.
+Basically, we can reuse our existing properties
+because we'll have this one database schema for our employee directory.
+And we'll place our security tables within that same database schema,
+so we can simply just reuse this same information.
+
+```java
+@Configuration
+public class DemoSecurityConfig {
+    
+    @Bean 
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        
+        return new JdbcUserDetailsManager(dataSource);
+    }
+    
+    // ...
+}
+```
+
+And now I can move into my **DemoSecurityConfig**.
+This is where I'm telling **Spring Security** to use **JDBC** authentication.
+And then I inject the data source.
+This is the one that's autoconfigured by **Spring Boot**.
+And then I tell **Spring Security** to use **JDBC** authentication with our data source.
+And the really nice thing here is that we're no longer hard-coding the `users`.
+We're actually reading the `users` and `roles` from the database.
+And now **Spring Security** will handle all the low-level work of reading the user password, roles, 
+and so on from our database because we're following their table schema,
+and we're using their actual table names and their actual column names.
+So **Spring Security** will do a lot of the heavy lifting for us in the background.
+So let's go ahead and get our database stuff configured, 
+and then we'll start writing some of this code, 
+and we'll actually hook **Spring Security** up to our database.
+
+
 
 
 </div>
