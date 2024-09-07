@@ -1425,8 +1425,148 @@ So let's go ahead and get our database stuff configured,
 and then we'll start writing some of this code, 
 and we'll actually hook **Spring Security** up to our database.
 
+We'll start off by running the **SQL** script to set up the database tables for security.
+And we already have the files available in this directory called `sql-scripts`.
+And this will make use of this `04-setup-spring-security.sql` file.
+And this will set everything up for our plain text database.
+Now let's go ahead and swing over to MySQL Workbench, and we'll open up this **SQL** script.
+And now I'm logged in here.
 
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image30.png" alt="image30">
+</div>
 
+Let's go ahead and do a file, open SQL script,
+and I'll move down to my project directory.
+So `05-spring-boot-rest-security`, and then we'll move
+into this `00-spring-boot-rest-security` folder.
+And then we'll move into **SQL** Scripts, and then we'll select the file
+`04-setup-spring-security-demo-database-plaintext.sql`.
+Alright, so we have this file open.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image31.png" alt="image31">
+</div>
+
+We'll go ahead and drop any of the previous tables that are there.
+And then I'll create this table for `users`.
+And I'll specify the columns for a `username`, `password` and `enabled`.
+And again, make sure the table names and columns are exactly the same, 
+because they'll follow spring security's predefined table schema.
+And now let's go ahead and insert some sample data for our `users`.
+So our three users, `John`, `Mary`, and `Susan`.
+And remember, `test123` is the password, and then
+we have the `noop` and curly brace.
+That's the encoding algorithm id.
+And remember for `noop`, it lets spring security
+know that the passwords are stored as plain text.
+And we'll get into all the encryption stuff in some of the later sections.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image32.png" alt="image32">
+</div>
+
+And then we move down here to this next section
+of creating a table for `authorities`, the `username`, and the `authority`.
+And remember, `authorities` is the same, or loosely the same as `roles`.
+And then we move down here, we insert the roles for a given user.
+So here we insert the roles for `John`.
+He's an employee.
+`Mary`'s an employee and a manager.
+`Susan`'s an employee, manager, and admin.
+And remember, spring security will prefix the `ROLE_` for each of those roll names.
+Let's go ahead and execute this SQL script.
+And then over on the left hand side, let's do a refresh all here,
+so we can get those new tables.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image33.png" alt="image33">
+</div>
+
+So we have these two new tables, `users` and `authorities`.
+Let's go ahead and do a quick query here on the `users` table.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image34.png" alt="image34">
+</div>
+
+And we see our three users here, `John`, `Mary`, and `Susan`.
+We can go ahead and check on the `authorities` of the roles here, by doing a query here.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image35.png" alt="image35">
+</div>
+
+And now, we can see the appropriate roles here, for `John`, `Mary`, and `Susan`.
+Now one thing I want to show you here, 
+is just a way of how to generate the **actual database diagram**,
+just so you can see the relationship between the different tables.
+So I'll go up here, `Database`, `reverse engineer`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image36.png" alt="image36">
+</div>
+
+I'll choose my connection.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image37.png" alt="image37">
+</div>
+
+I'll go ahead, and log in accordingly.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image38.png" alt="image38">
+</div>
+
+And I'll just, kind of, hit continue over here.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image39.png" alt="image39">
+</div>
+
+I select my database schema, employee directory,
+and continue, and continue again.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image40.png" alt="image40">
+</div>
+
+Make sure those items are checked there.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image41.png" alt="image41">
+</div>
+
+Go ahead, and hit execute.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image42.png" alt="image42">
+</div>
+
+And then one more item here.
+And then finally, we can hit close.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image43.png" alt="image43">
+</div>
+
+And now we have the schema.
+At the moment, there's three tables.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image44.png" alt="image44">
+</div>
+
+The employee table that we've been using earlier,
+and now these are the security tables, `users` and `authorities`.
+So we have a `user` table, and then `authorities`.
+So a user can have one-to-many roles,
+or one-to-many authority entries, or whatever.
+So that's the idea here, as far as the relationship.
+So we have our information in the database.
+Now let's go ahead, and let's start writing the code,
+and, pulling this all together.
 
 </div>
 
