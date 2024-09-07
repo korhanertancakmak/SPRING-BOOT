@@ -1802,12 +1802,398 @@ instead we're using data from the database.
 We went through the process of creating the **SQL** tables for security,
 and then also updating our code accordingly to
 make use of **Spring Security** for the database.
-</div>
 
+</div>
 
 ## [Bcrypt Encryption]()
 <div style="text-align:justify">
 
+In this section, we'll use **Spring Security** with password encryption.
+So far, our user passwords are stored in plain text.
+
+<table align="center">
+    <thead>
+        <th>username</th>
+        <th>password</th>
+        <th>enabled</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>john</td>
+            <td>{noop}test123</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>mary</td>
+            <td>{noop}test123</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>susan</td>
+            <td>{noop}test123</td>
+            <td>1</td>
+        </tr>
+    </tbody>
+</table>
+
+So this is okay for getting started,
+but it's not for production,
+not ready for real-time projects.
+So the best practice is to store the password in an encrypted format.
+
+<table align="center">
+    <thead>
+        <th>username</th>
+        <th>password</th>
+        <th>enabled</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>john</td>
+            <td>{bcrypt}$2a$10$qeSOHEh7urweMojsnwNAR.vcXJeXR1UMRZ2WcGQI9YeuspUdgF.q</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>mary</td>
+            <td>{bcrypt}$2a$10$qeSOHEh7urweMojsnwNAR.vcXJeXR1UMRZ2WcGQI9YeuspUdgF.q</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>susan</td>
+            <td>{bcrypt}$2a$10$qeSOHEh7urweMojsnwNAR.vcXJeXR1UMRZ2WcGQI9YeuspUdgF.q</td>
+            <td>1</td>
+        </tr>
+    </tbody>
+</table>
+
+So here's the users, `John`, `Mary` and `Susan`
+and their passwords and notice,
+it's an encrypted version of the password.
+So if our databases were hacked,
+the hackers wouldn't be able to figure out
+these passwords, wouldn't be able to figure out
+the plain text version of these passwords,
+because they're encrypted.
+
+The **Spring Security** team recommends
+using the popular **bcrypt** algorithm.
+So the **bcrypt** algorithm performs a one-way encrypted hashing.
+It adds a random salt to the password for additional protection,
+and it also includes supports to defeat brute force attacks.
+So this is the current recommendation from the **Spring** team,
+and it's a popular one-way password hashing algorithm
+that's used by other projects.
+
+Now if you'd like to get more background information
+or additional information on bcrypt,
+I have some links [here](https://www.luv2code.com/why-bcrypt) for you.
+So if you'd like to know why you should use bcrypt
+to hash passwords, go to the site.
+If you'd also like to get a detailed bcrypt algorithm analysis, 
+simply go [here](https://www.luv2code.com/bcrypt-wiki-page).
+And finally, if you'd like to learn best practices on password hashing, 
+simply go [here](https://www.luv2code.com/password-hashing-best-practices).
+Now these links will basically redirect you to other websites to provide
+all the detailed information for you.
+
+So now you may wonder how to get a bcrypt password.
+So you have a plain text password
+and you want to encrypt it using bcrypt.
+So you have one option is to use a website utility to perform the encryption.
+Another option is to write some Java code to perform the encryption.
+So we'll actually cover option one in this section
+and then for option two, we'll have information on that
+in some of the later videos later in the course.
+
+Alright, so getting a bcrypt password using a website.
+So you can simply go [here](https://www.luv2code.com/generate-bcrypt-password).
+It's going to redirect you to a website utility.
+You'll enter your plain text password
+and then that website's going to generate a bcrypt password for you.
+
+So let's go ahead and look at a quick demo of this.
+Move to your web browser and go ahead and access
+this website [here](https://www.luv2code.com/generate-bcrypt-password).
+As I mentioned, it's going to redirect you to this website.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image52.png" alt="image52">
+</div>
+
+And basically, the way it works here is they have some text fills.
+So you'll enter your plain text password,
+and you hit calculate, and it'll generate the encrypted password for you.
+So for the plain text password, I'm going to enter `test123`
+and then I'll move down here and hit the `calculate` button and right here at the bottom,
+that's the generated password.
+So this is an encrypted version of that plain text, `test123`.
+That's an encrypted version using **bcrypt**.
+Now one important thing to note is that multiple runs
+will generate a different password due to the random password salting.
+So you can start with the same plain text password,
+`test123`, but if you hit `calculate` multiple times,
+you'll actually get a different generated password
+and that's, again, due to random password salting.
+Effectively, salting is random bits of data
+they'll add to the password to make it unique.
+And you can find more details on password salting
+using those links I provided earlier in this section.
+So taking a look at this example here,
+we have a generated passwords and let's just keep an eye
+on the last couple of digits here.
+Let's go ahead and hit calculate
+one more time for this `test123`
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image53.png" alt="image53">
+</div>
+
+and then notice here that it changes.
+Basically, the whole thing changed,
+but I wanted you to, at least, focus on the last couple of characters,
+so you can get an idea of things that are being changed.
+So that's the idea of generating or calculating a **bcrypt** password.
+And what we can do with this is that we can use these encrypted passwords
+and add them to our user accounts in our database and effectively, 
+we can seed our user accounts with encrypted passwords out of the box.
+Alright, let's look at our development process.
+
+* Run the SQL script that contains the encrypted passwords
+* Modify the DDL for the password field because the length should be 68 characters
+
+There's no need to change any Java source code.
+So this is mainly just a configuration exercise but no need to modify any
+of the Java code that we've created before.
+Will all work the same out of the box. 
+
+<table align="center">
+    <thead>
+        <th>username</th>
+        <th>password</th>
+        <th>enabled</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>john</td>
+            <td>{bcrypt}$2a$10$qeSOHEh7urweMojsnwNAR.vcXJeXR1UMRZ2WcGQI9YeuspUdgF.q</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>mary</td>
+            <td>{bcrypt}$2a$10$qeSOHEh7urweMojsnwNAR.vcXJeXR1UMRZ2WcGQI9YeuspUdgF.q</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>susan</td>
+            <td>{bcrypt}$2a$10$qeSOHEh7urweMojsnwNAR.vcXJeXR1UMRZ2WcGQI9YeuspUdgF.q</td>
+            <td>1</td>
+        </tr>
+    </tbody>
+</table>
+
+So here we'll have Bcrypt.
+And so this kind of maps to the actual ID that we have in our database table for password.
+And then for the encoded password, that'll be the actual generated
+or hashed value that we retrieved from that website or that we created using Java code.
+Now, one thing that's really important here about this password column,
+it must be at least 68 characters wide 
+because for Bcrypt and curly braces, that's eight characters.
+And then the encoded password is 60 characters.
+When you use BCrypt, your encoded password or your encrypted password is always 60 characters in length.
+Regardless of the input of the plain text,
+it's always 60 characters in length.
+
+````sql
+CREATE TABLE `users` (
+    `username` varchar(50) NOT NULL,
+    `password`    char(68) NOT NULL,
+    `enabled` tinyint(1) NOT NULL,
+    
+    PRIMARY KEY (`username`)
+    
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+````
+
+Let's go ahead and modify the DDL for the password field.
+So here we have `'password' char(68)`
+because the password column must be least
+68 characters wide, like I mentioned earlier,
+Bcrypt and curly braces, eight characters the encoded or encrypted password, 60 characters.
+
+````sql
+INSERT INTO `users`
+VALUES
+('john', '{bcrypt}$2a$10$qeSOHEh7urweMojsnwNAR.vcXJeXR1UMRZ2WcGQI9YeuspUdgF.q', 1),
+('mary', '{bcrypt}$2a$04$eFytJDGtjbThXa80FyO0BuFdK2IwjyWefYkMpiBEF1pBwDH.5PMOK', 1),
+('susan', '{bcrypt}$2a$04$eFytJDGtjbThXa80FyO0BuFdK2IwjyWefYkMpiBEF1pBwDH.5PMOK', 1);
+````
+
+Now we need to actually insert some users here with encrypted passwords.
+So here's `John` and here's his encrypted password of plain text `fun123`.
+And remember, the Bcrypt is the encoding algorithm ID
+and that lets **Spring Security** know that the
+passwords are stored as encrypted passwords using `Bcrypt`.
+In previous examples, we made use of `noop` that was plain text, but here we're using `Bcrypt`.
+And now we just kind of repeat the process for `Mary` and `Susan`.
+We simply add in the encrypted passwords for those users.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image54.png" alt="image54">
+</div>
+
+Now, one thing I want to do is just kind of give you a quick
+behind the scenes tour about some of the spring security login process.
+So we have our login form here.
+We have our database that has encrypted passwords.
+We have these spring security filters in place.
+The user's going to enter their plain text password on the form and hit log.
+So then behind the scenes, the spring security will read this information 
+and perform some operations on it using JDBC authentication.
+
+And let's dig in here on this JDBC authentication source what happens behind the scenes.
+
+* Retrieve a password from the database for the user.
+* Read the encoding algorithm like Bcrypt
+* For the case of Bcrypt, it'll encrypt the plaintext password from the login form (using the salt from the database password)
+* Compare the encrypted password from the login form **WITH** the encrypted password from the database
+* If there's a match, then the login is successful
+* If no match, then the login is not successful, login fails.
+
+Now one thing that's really important here is
+that the password from the databases is never decrypted,
+because **Bcrypt** is a one-way encryption algorithm.
+So we never grab the password from the database
+and decrypt it and have it as plain text
+because that algorithm just doesn't support that.
+It's only a one-way algorithm.
+So again, the process is that you read that plain text password
+from the user form, you encrypt it,
+and then you compare those two encrypted values,
+the one from the form and then the one that you read from the database.
+
+Now, we'll start off by running the SQL script to set up the database tables for security,
+and we already have the files available in this directory called `sql-scripts`.
+Now let's go ahead and swing over to MySQL Workbench,
+and we'll open up this SQL script.
+Let's go ahead and do a `File`, `Open SQL Script`,
+and I'll move down to my project directory,
+we have everything in `dev-spring-boot`, `05-spring-boot-rest-security`,
+and then we'll move into this `00-spring-boot-rest-security` folder,
+and then we'll move into `sql-scripts`.
+Alright, so we have this file open.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image55.png" alt="image55">
+</div>
+
+We'll move in here, we'll go ahead,
+and drop any of the previous tables that are there.
+And then we'll have this `user`'s table,
+very similar to what we had before,
+except for we're simply going to make this password field longer, `char(68)`,
+and I gave the reasoning for it again for bcrypt and those encoded passwords.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image56.png" alt="image56">
+</div>
+
+Alright, so down where we insert the users,
+I'll add the encrypted password.
+So I had this plain text, `fun123`,
+the encrypted version is this big long string that we see here,
+and we also have the encoding algorithm ID of bcrypt
+and that lets **Spring Security** know
+that the passwords are stored as encrypted passwords using the bcrypt algorithm,
+and that's basically it.
+We covered for `John`, `Mary`, and `Susan`.
+Now, let's go ahead and click on the lightning bolt to execute this query.
+We'll simply do a refresh,
+and we'll go ahead and look at our tables here.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image57.png" alt="image57">
+</div>
+
+So we have our `authorities` and our `users`.
+I'll do a quick query here on the users table,
+and we have those encrypted passwords for those users.
+So this looks really good so far.
+First, let's go ahead and run our application.
+Now let's go ahead and swing into Postman and test this out.
+I'll select the `GET` request for `/api/employees`,
+and I'll hit the `Authorization` tab here,
+and I'll look at the `username` and `password`.
+Now we know that `John` has a password of `fun123`,
+that's the encrypted password in the database.
+Well, let's go ahead and try it with `abc123`,
+and let's go ahead and hit `Send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image58.png" alt="image58">
+</div>
+
+and on purpose, we're sending the wrong password, right?
+So this is going to fail, or it has failed,
+and we get the `401` Unauthorized and that's fine.
+Now instead of `abc123`,
+we'll give the correct password of `fun123`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image59.png" alt="image59">
+</div>
+
+and then that's successful, so that's awesome.
+Now we know the database has the encrypted passwords of `fun123`,
+and all the encryption and so forth is working behind the scenes
+using **Bcrypt** and **Spring Security**.
+
+Now, what I'd like to do here is actually change `John`'s password to something else,
+`update` the database, and just see if those changes are reflected in the database.
+I'll swing back over here to MySQL Workbench,
+and I'll look at that generation tool,
+or I'll go to that generation tool at [here](https://www.luv2code.com/generate-bcrypt-password).
+Let's just copy that URL, swing over to our browser and drop it in.
+So I can just simply enter our password here,
+and it'll perform the bcrypt work behind the scenes.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image60.png" alt="image60">
+</div>
+
+So I entered the password of `crazy123`,
+I have this hash result, so I can still click copy this,
+and it'll automatically copy it to your buffer,
+and then I can swing back over to MySQL workbench and I can update it.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image61.png" alt="image61">
+</div>
+
+So, be sure to keep the Bcrypt portion,
+as far as those words in the curly braces.
+Keep that piece, just drop in that new password, that Bcrypt hash,
+and then also remember hit the `Apply` button over here on the bottom right,
+it'll pop up a little window where you can review the SQL.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image62.png" alt="image62">
+</div>
+
+Now if we swing back over to Postman,
+first off, we'll send the bad password of `fun123`.
+That fails because now our database has the password of `crazy123`,
+or the bcrypt hash version of `crazy123`.
+Do a `Send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image63.png" alt="image63">
+</div>
+
+And now that's successful.
+So we know, again, it's handling all the Bcrypt workforce in the background,
+**Spring Security** is aware of that,
+and also we didn't have to restart our application, it all happens on the fly.
+So we have the bcrypt encryption working out just fine.
 
 </div>
 
