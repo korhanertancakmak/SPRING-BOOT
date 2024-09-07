@@ -1565,9 +1565,243 @@ So a user can have one-to-many roles,
 or one-to-many authority entries, or whatever.
 So that's the idea here, as far as the relationship.
 So we have our information in the database.
-Now let's go ahead, and let's start writing the code,
-and, pulling this all together.
+Now we're going to update our **Spring Security** configuration to use **JDBC**.
+I'll swing back into my IDE.
+I'll move into my code here, and I'll open up **DemoSecurityConfig**.
 
+````java
+@Configuration
+public class DemoSecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.authorizeHttpRequests(configurer ->
+                configurer
+                        .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN"));
+
+        // use HTTP Basic authentication
+        http.httpBasic(Customizer.withDefaults());
+
+        // disable Cross Site Request Forgery (CSRF)
+        // in general, not required for stateless REST APIs that use POST, PUT, DELETE and/or PATCH
+        http.csrf(csrf -> csrf.disable());
+
+        return http.build();
+    }
+
+/*    
+    @Bean
+    public InMemoryUserDetailsManager userDetailsManager() {
+
+        UserDetails john = User.builder()
+                .username("john")
+                .password("{noop}test123")
+                .roles("EMPLOYEE")
+                .build();
+
+        UserDetails mary = User.builder()
+                .username("mary")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER")
+                .build();
+
+        UserDetails susan = User.builder()
+                .username("susan")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(john, mary, susan);
+    }  
+*/
+}
+````
+
+And what I'd like to do is comment out the code where we hard-coded the users.
+We don't want to use this anymore, so I'm just going to comment it out,
+and I'll move it to the end of this file.
+All right, so now I can get down to work.
+I'll write a quick comment to myself.
+
+````java
+@Configuration
+public class DemoSecurityConfig {
+
+    // add support for JDBC ... no more hardcoded users
+    @Bean 
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        
+        return new JdbcUserDetailsManager(dataSource);
+    }
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.authorizeHttpRequests(configurer ->
+                configurer
+                        .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN"));
+
+        // use HTTP Basic authentication
+        http.httpBasic(Customizer.withDefaults());
+
+        // disable Cross Site Request Forgery (CSRF)
+        // in general, not required for stateless REST APIs that use POST, PUT, DELETE and/or PATCH
+        http.csrf(csrf -> csrf.disable());
+
+        return http.build();
+    }
+
+/*    
+    @Bean
+    public InMemoryUserDetailsManager userDetailsManager() {
+        // ...
+    }  
+*/
+}
+````
+
+Here, we'll add support for JDBC and no more hard-coded users.
+I'll create a bean that returns a **userDetailsManager**.
+To find the method _userDetailsManager_ that takes a **DataSource**.
+So basically, we're going to inject the **DataSource**,
+and this is the **DataSource** that's autoconfigured by **Spring Boot**.
+And now I'll create this new **JdbcUserDetailsManager**.
+And I pass in the **DataSource**.
+And again, this tells **Spring Security** to use **JDBC** authentication with our data source.
+And then **Spring Security** knows that it's using a predefined table schema.
+So **Spring Security** will look in a table called `Users`
+and another table called `Rows`.
+It knows the exact column names that it'll use.
+It's kind of just built-in out of the box.
+Allright, so let's run our application and test it out.
+Our app is up and running,
+let's go ahead and swing over into **Postman**.
+And I'll go ahead and create a new request.
+So this will be a new `GET` request.
+And I'll simply just do the GET on `/api/employees`.
+And I'll go through under `Authorization`.
+I'll choose `Basic Auth`, and then I will add the user information.
+So, username of `john`, password, `test123`.
+I show it just to kind of make sure I'm on track.
+Hit `Send`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image45.png" alt="image45">
+</div>
+
+And this is successful.
+But are we really using information from the database
+or is it still using some in-memory data source or whatever,
+like some hard-coded users?
+So, just for sanity's sake, let's go in MySQL Workbench,
+and actually change the password for the user, `John`.
+I want to see if it's really using the database.
+You can change it to anything you want.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image46.png" alt="image46">
+</div>
+
+To keep it simple here,
+I'll just change it to `abc123`,
+and once you change it here,
+be sure to click on the `apply` button in the bottom right,
+and then kind of review the SQL, so they'll update the `user`,
+set the password to `abc123` where username equals `John`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image47.png" alt="image47">
+</div>
+
+So, it's going to run this `update` here,
+so be sure you hit `apply` to actually make this take effect,
+because simply changing it over there is not enough.
+Hit `apply`. 
+Now we're good to go, and that's the new password, `abc123`.
+Now if I run this same example,
+and I'll try that old password, I'll try using
+`John` `test123` and hit `send`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image48.png" alt="image48">
+</div>
+
+Alright, `401`, it doesn't work
+because it checked against the database,
+and also the nice thing here is that, a couple of things.
+One, we know it's actually using our database because,
+hey, the `test123` didn't work because we changed it in the database,
+and then also two, there was no need to restart the application.
+**Spring Security** will query the database for each login.
+Allright, so that's a nice feature there.
+There's no need to stop and restart again.
+It simply hits the database, whatever is in the database
+that's what it'll process on at that given time.
+At this point, we're confident that it really is reading information from our database.
+All of our **Spring Security**, JDBC, **userDetailsManager**,
+all that stuff is set up, and working as desired,
+and we can also verify this by trying the new password here,
+`abc123` and hit `send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image49.png" alt="image49">
+</div>
+
+and then success, we get the `200` status code.
+Let's go ahead and test roles,
+and I'll move up here and duplicate this tab,
+and I'll change the method to a `delete`,
+and I'll say delete `/1`,
+and we know that `John` can't delete because of his role.
+He's only an employee.
+He does not have permissions to perform a `delete`.
+The only person that can do delete is a person who has the admin role.
+So, this little test here should fail, and then
+we'll do a `send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image50.png" alt="image50">
+</div>
+
+And we get the `403` forbidden.
+So the user and password was okay,
+so they were authenticated, but they were not authorized to perform 
+this given operation based on their role,
+and it's still a similar thing for `Mary`.
+This should fail also because `Mary`'s a manager.
+`Mary` does not have the admin role,
+and this is forbidden also as desired.
+Now remember, the only person that can `delete` here
+is a person who has the role of admin.
+So I'll move up here for `Susan`,
+and then we'll do a `send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image51.png" alt="image51">
+</div>
+
+and then success `200`.
+So that's a-okay, so we're in good shape here.
+Alright, so this all looks pretty good
+I'm going to set John's password back to `test123`,
+just so I don't forget what his password is.
+So, I'll just set it to `test123`.
+Be sure to do to `apply` again to make the changes take effect.
+Allright, we made some really good progress.
+We're no longer using hard-coded data,
+instead we're using data from the database.
+We went through the process of creating the **SQL** tables for security,
+and then also updating our code accordingly to
+make use of **Spring Security** for the database.
 </div>
 
 
