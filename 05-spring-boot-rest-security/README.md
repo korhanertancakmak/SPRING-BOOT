@@ -2197,9 +2197,294 @@ So we have the bcrypt encryption working out just fine.
 
 </div>
 
-
 ## [Custom Tables]()
 <div style="text-align:justify">
+
+In this section, we'll configure **Spring Security** to use custom tables.
+So far in the sections we have used the default **Spring Security Database Schema**.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image64.png" alt="image64">
+</div>
+
+And remember I said you had to use the exact same table names and the exact same column names.
+That works okay, but you may have thought internally that this is a bit restrictive.
+Also, you may have thought, what if we have our own custom tables, like our own names?
+For example, at your company you may already have existing security tables,
+and you want to configure **Spring Security** to use those tables.
+Or you may work for a large multinational company,
+a large enterprise company, and you have custom tables that are specific to your company.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image65.png" alt="image65">
+</div>
+
+For example, in the database diagram on the screen we have two tables, `members` and `roles`.
+This is an example of custom tables.
+Nothing matches with the default **Spring Security** table schema.
+You should be able to use any tables and any columns,
+and that's what we'll do here in this section.
+And don't worry, you can use your own custom tables with **Spring Security**.
+The only thing you need to do is tell **Spring Security** how to query your custom tables.
+You need to provide a query to find a user by name.
+And also you need to provide a query to find authorities or roles by the username.
+So again, you can use any tables design that you want,
+but you simply need to tell **Spring Security**,
+"_Hey, this is how you find the given user" and here's how you find the roles for that given user._"
+Here's the development process.
+
+* Create our custom tables with SQL
+* Update the **Spring Security** Configuration
+* Provide a query to find a user by username
+* Provide a query to find authorities/roles by username
+
+Alright, let's get started with step one of creating our custom tables with SQL.
+So here's the database diagram of our custom tables.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image66.png" alt="image66">
+</div>
+
+We'll have a table for `members`.
+This is where we'll store our users.
+And note here the column names of `user_id`, `pw` for password, and `active`.
+We'll also have another table called `roles`.
+And we'll have the column names of `user_id` and the `role`.
+In the coding, we'll run the appropriate SQL script to actually create the tables.
+But here I wanted to make sure you could see the diagram.
+Now, notice here that this is all custom.
+Nothing matches with a default **Spring Security** table schema.
+In fact, you can use any table name, any column names.
+You have total freedom here as far as the table names and the table columns.
+
+````java
+@Configuration
+public class DemoSecurityConfig {
+
+    @Bean
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+
+        JdbcUserDetailManager theUserDetailsManager = new JdbcUserDetailManager(dataSource);
+
+        theUserDetailsManager
+                .setUsersByUsernameQuery("select user_id, pw, active from members where user_id=?");
+
+        theUserDetailsManager
+                .setAuthoritiesByUsernameQuery("select user_id, role from roles where user_id=?");
+        
+        return theUserDetailsManager;
+    }
+
+    // ...
+}
+````
+
+Now in step two, we need to update our **Spring Security** configuration.
+We need to modify the code where we created that **JDBCUserDetailsManager**, 
+and we have to provide the query how to find users by giving username.
+We give the appropriate SQL query to access our custom `members`'table.
+And also we have to provide the query how to find roles by a given username.
+We have to provide the appropriate SQL query to access the roles table.
+Now the question mark here, that's basically a parameter placeholder.
+The actual parameter value will be the username that's supplied during login.
+As you can see, we can use any custom tables.
+We simply have to tell **Spring Security** how to find the `users` and `roles` accordingly.
+
+Let's start off by running the SQL script to set up the database tables for security.
+And we already have the files available in this directory called `sql-scripts`.
+Now let's go ahead and swing over to MySQL Workbench,
+and we'll open up this SQL script.
+And now, before we get started, I'd like to manually drop some of our previous tables.
+So we have our old tables for `authorities` and `users`.
+Let's go ahead and drop those now
+because we're going to make use of custom tables.
+We could actually keep them around,
+but I simply want to remove them just so there's
+no confusion as far as which tables we're using.
+I'll go ahead and select the `authorities` table, and I'll drop that table.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image67.png" alt="image67">
+</div>
+
+Select the option here drop now, and then we simply repeat the process for the `user`'s table.
+And we'll keep `employee` because that has our normal employee information.
+We'll keep that, that's fine.
+And now let's go ahead and go to the `file` menu, and `open SQL script`.
+And I'll move down to my project directory,
+then we'll select the file here
+`06-setup-spring-security-demo-database-bcrypt-custom-table-names.sql`.
+Alright, so we have this file open.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image68.png" alt="image68">
+</div>
+
+Now the first thing that we'll do is we'll set up the `drop` table for any previous tables
+for `roles` and `members`.
+And then we'll move down here, and we'll `create` this table `members`.
+This is where we actually store our users, but it's a custom table.
+Has a custom table name and columns.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image69.png" alt="image69">
+</div>
+
+And then we'll move down here, and we'll insert data into the `members` table,
+so we'll insert data for our three members, or users, `John`, `Mary`, `Susan`.
+The default password is `fun123`.
+We'll go ahead and create the roles here.
+Again, custom table name and custom columns.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image70.png" alt="image70">
+</div>
+
+Then finally here we do the `insert` on those roles for `John`, `Mary`, and `Susan`.
+Now let's go ahead and hit the gold lightning bolt to execute this SQL script.
+And then over on the left-hand side, let's go ahead and do a refresh.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image71.png" alt="image70">
+</div>
+
+And we have these two new tables here, `members` and `roles`.
+Go ahead and do a quick query here on members,
+so we have our three members, or our three users, `John`, `Mary`, `Susan`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image72.png" alt="image72">
+</div>
+
+And again, this is a custom table with custom column names.
+And then for `roles`, we do a query also.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image73.png" alt="image73">
+</div>
+
+And then we have the roles here for `John`, `Mary`, and `Susan`.
+Alright, so this looks pretty good.
+Let's swing into our IDE and let's write some code.
+So the main thing we want to do here is update our **Spring Security Configuration**
+and give it the appropriate queries for making use of our custom tables.
+I'll move in here into this **DemoSecurityConfig**.
+
+````java
+@Configuration
+public class DemoSecurityConfig {
+
+    @Bean
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+
+        JdbcUserDetailManager jdbcUserDetailsManager = new JdbcUserDetailManager(dataSource);
+
+        // define query to retrieve a user by username
+        jdbcUserDetailsManager
+                .setUsersByUsernameQuery("select user_id, pw, active from members where user_id=?");
+
+        // define query to retrieve the authorities/roles by username
+        jdbcUserDetailsManager
+                .setAuthoritiesByUsernameQuery("select user_id, role from roles where user_id=?");
+        
+        return theUserDetailsManager;
+        
+        // new JdbcUserDetailsManager(dataSource);
+    }
+
+    // ...
+}
+````
+
+And what I'd like to do is make some modifications here for this **JdbcUserDetailsManager**.
+The first thing I want to do is refactor this item, `JdbcUserDetailsManager(dataSource)`, 
+and set it up as a local variable.
+I'll choose `Refactor` and I'll say `Introduce Variable`,
+and I could give it any variable name, but I'll go ahead and take the one that they provide here,
+**jdbcUserDetailsManager**.
+Alright, so this coding here looks pretty good so far.
+Let me write some quick comments to myself to keep myself on track.
+So kinda standing back here, we want to define the query to retrieve a user by the username
+and also define the query to retrieve the authorities/roles by username.
+So, again, we have custom tables.
+So now we need to tell **Spring Security**,
+"_Hey, this is how you find my custom tables. This is the query that you should use,
+and, also, these are the column names that you should use._"
+And I'll go through here, and I'll say `jdbcUserDetailsManager.setUsersByUsernameQuery`.
+And this is where we tell **Spring Security**,
+"_This is how you can find a given user in our system based on a given username._"
+What I'm providing here is just regular SQL,
+`select user_id, pw, active from members where user_ID=?`.
+And remember, that'll actually be passed in from the login form for our application.
+And this takes care of it for this piece of it, 
+the actual SQL matches with the actual database design that we have here, and, again,
+telling **Spring Security** how to access our custom table.
+Now let's do a similar thing here for `jdbcUserDetailsManager.setAuthoritiesByUsernameQuery`.
+And, here, we're telling **Spring Security**, 
+"_This is how to retrieve the authorities/roles for a given username._"
+We provide the SQL, `select user_id, roles from roles where user_id=?`.
+And, again, that user id is passed in by the login form.
+Alright, so standing back here,
+this is the updated code here for our **userDetailsManager**.
+We added those comments there.
+We provided the queries to retrieve the user 
+and also retrieve the roles, using our custom tables.
+Let's go ahead and test this out.
+Alright, our app is up and running.
+Let's go ahead and swing over to Postman.
+I'll move over to the `GET` tab for getting all the employees.
+I select the `Authorization` tab here, for the user `john`, I'll give a bad password.
+I'll hit `Send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image74.png" alt="image74">
+</div>
+
+And here, authentication failed because we gave a bad password, and that was expected
+because `John`'s real password is `fun123`.
+Let's go ahead and enter that real password,
+or correct password, and hit `Send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image75.png" alt="image75">
+</div>
+
+And yes, success.
+We have the `200` status code.
+So that's successful.
+Now let's swing back over to Postman and let's go to this `delete` tab.
+And what we want to do now is test the roles.
+So making sure it can really make use of the roles and apply those accordingly.
+We have authentication working but now what about the roles?
+Now we know that `John` can't delete because of his role of employee,
+so we'll do a delete on `employee/2`.
+We'll hit authorization, username of John, password of `fun123`.
+So be sure to change that to `fun123`.
+And then hit `send`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image76.png" alt="image76">
+</div>
+
+And we get the `403` forbidden, which is good.
+That's expected because you know, based on the roles,
+`John` can't perform that operation or the employee
+can't perform that operation of deleting.
+But we know that `Susan` can delete because she has the role of admin.
+So if I change the username to `Susan`,
+password of `fun123` and then do a `send`:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/05-spring-boot-rest-security/images/image77.png" alt="image77">
+</div>
+
+And then we get the status of `200`, successful.
+The nice thing about this is that now we know that
+we have a **Spring security** setup using our own custom tables.
+These are our custom table names and custom column names.
+We simply configured **Spring Security** on how to find a user by the username 
+and also the query on how to find the authorities slash roles based on a given name.
+So again, we gave it some customs SQL on how to access our custom tables.
 
 
 </div>

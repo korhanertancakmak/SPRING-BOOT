@@ -5,15 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="420e762b-15e5-4b52-8828-a3eee2e8f96d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../images/image52.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../images/image53.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../images/image54.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../images/image55.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../images/image56.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../images/image57.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../images/image58.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../images/image59.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image64.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image65.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image66.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image67.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image68.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image69.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image70.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image71.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image72.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image73.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image74.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image75.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image76.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../images/image77.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/luv2code/springboot/cruddemo/security/DemoSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/luv2code/springboot/cruddemo/security/DemoSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/luv2code/springboot/cruddemo/security/DemoSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/luv2code/springboot/cruddemo/security/DemoSecurityConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
