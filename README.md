@@ -53,3 +53,11 @@
 ### [n.Spring Boot REST: Spring Data JPA](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/04-spring-boot-rest-crud/README.md#spring-boot-rest-spring-data-jpa)
 ### [n.Spring Boot REST: Spring Data REST](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/04-spring-boot-rest-crud/README.md#spring-boot-rest-spring-data-rest)
 ### [n.Spring Boot REST: Spring Data REST Configs and Sorting](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/04-spring-boot-rest-crud/README.md#spring-boot-rest-spring-data-rest-configs-and-sorting)
+
+## [Section-5: REST API Security](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/05-spring-boot-rest-security/README.md#rest-api-security)
+### [a.Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/05-spring-boot-rest-security/README.md#Overview)
+### [b.Basic Configuration](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/05-spring-boot-rest-security/README.md#basic-configuration)
+### [c.Restrict URLs based on Roles](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/05-spring-boot-rest-security/README.md#restrict-urls-based-on-roles)
+### [d.JDBC Authentication](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/05-spring-boot-rest-security/README.md#jdbc-authentication)
+### [e.Bcrypt Encryption](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/05-spring-boot-rest-security/README.md#bcrypt-encryption)
+### [f.Custom Tables](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/05-spring-boot-rest-security/README.md#custom-tables)
