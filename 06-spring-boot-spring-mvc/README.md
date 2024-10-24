@@ -1710,7 +1710,7 @@ and they'll give you the appropriate steps and details on how to move through
 and view the different developer tools and the **HTTP** request data.
 </div>
 
-### [Spring MVC Form Data Binding]()
+## [Spring MVC Form Data Binding]()
 ### [Text Fields]()
 <div style="text-align:justify">
 
