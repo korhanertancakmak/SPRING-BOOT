@@ -1405,7 +1405,7 @@ So I'll move into my template `list-employees.html`.
                     <!-- Add "delete" button/link -->
                     <a th:href="@{/employees/delete(employeeId=${tempEmployee.id})}"
                        class="btn btn-danger btn-sm"
-                       onclick="if (!(confirm('Are you sure you want to delete this employee?)))">
+                       onclick="if (!(confirm('Are you sure you want to delete this employee?')))">
                         Delete
                     </a>
                 </td>
