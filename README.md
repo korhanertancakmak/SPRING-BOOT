@@ -85,8 +85,8 @@
 #### [7.Custom Validation](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/06-spring-boot-spring-mvc/README.md#custom-validation)
 
 ## [Section-7: Spring MVC CRUD](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#spring-mvc-crud)
-### [a.CRUD Database Project - Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project-overview)
-### [b.CRUD Database Project - Get Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project-get-employees)
-### [c.CRUD Database Project - Add Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project-add-employees)
-### [d.CRUD Database Project - Update Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project-update-employees)
-### [e.CRUD Database Project - Delete Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project-delete-employees)
+### [a.CRUD Database Project - Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project---overview)
+### [b.CRUD Database Project - Get Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project---get-employees)
+### [c.CRUD Database Project - Add Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project---add-employees)
+### [d.CRUD Database Project - Update Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project---update-employees)
+### [e.CRUD Database Project - Delete Employees](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/07-spring-boot-spring-mvc-crud/README.md#crud-database-project---delete-employees)
