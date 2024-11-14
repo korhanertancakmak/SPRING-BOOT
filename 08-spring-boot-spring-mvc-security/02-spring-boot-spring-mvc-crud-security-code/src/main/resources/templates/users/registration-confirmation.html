@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Registration Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}">Registration</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{/}">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>User registered successfully!</h2>
+        <!-- display first name, last name and email -->
+        <ul>
+            <li th:text="'User name: ' + ${User.userName}"></li>
+            <li th:text="'First name: ' + ${User.firstName}"></li>
+            <li th:text="'Last name: ' + ${User.lastName}"></li>
+            <li th:text="'Email name: ' + ${User.email}"></li>
+            <li th:text="'Roles: ' + ${#strings.substring(role.name, 5)}"></li>
+        </ul>
+        <hr>
+        <a th:href="@{/login}">Login with new user name</a>
+    </div>
+
+</body>
+</html>

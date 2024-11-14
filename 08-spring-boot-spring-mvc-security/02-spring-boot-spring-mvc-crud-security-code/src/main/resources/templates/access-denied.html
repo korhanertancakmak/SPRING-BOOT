@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Access Denied</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        .navbar-nav.navbar-right button {
+            border: none;
+            background: transparent;
+            padding: 16px 8px;
+            color: white;
+        }
+        .navbar-nav.navbar-right button:hover {
+            background: rgba(255, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{/}">Employee Application</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a th:href="@{/}">Home</a></li>
+            <li sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/employees/list}">Employees</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" style="display: flex; align-items: center;">
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/signup}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <li sec:authorize="isAuthenticated()">
+                <form action="@{/login}" th:action="@{/logout}" method="POST">
+                    <button type="submit" class="btn btn-danger">
+                        <span class="glyphicon glyphicon-log-out"></span> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+    <h2 class="text-center">Access Denied - You are not authorized to access this resource.</h2>
+</body>
+</html>

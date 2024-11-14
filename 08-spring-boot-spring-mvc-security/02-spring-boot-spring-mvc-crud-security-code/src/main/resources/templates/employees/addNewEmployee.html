@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Add New Employee</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        .navbar-nav.navbar-right button {
+            border: none;
+            background: transparent;
+            padding: 16px 8px;
+            color: white;
+        }
+        .navbar-nav.navbar-right button:hover {
+            background: rgba(255, 0, 0, 0.8);
+        }
+        .container form input {
+            margin: 10px 0;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .control-label {
+            margin-bottom: 0;
+            width: 20%;
+        }
+        .col-sm-10 {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{/}">Employee Application</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a th:href="@{/}">Home</a></li>
+            <li sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/employees/list}">Employees</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" style="display: flex; align-items: center;">
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/signup}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <li sec:authorize="isAuthenticated()">
+                <form action="@{/login}" th:action="@{/logout}" method="POST">
+                    <button type="submit" class="btn btn-danger">
+                        <span class="glyphicon glyphicon-log-out"></span> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+    <div class="container">
+        <h3>Add New Employee</h3>
+        <hr>
+        <form action="#" th:action="@{/employees/save}" th:object="${employee}" method="POST"
+              style="margin: 0 auto; width: 50%; background-color: #6c757d; padding: 20px; border-radius: 8px;">
+            <p class="h4 mb-4">Employee Details</p>
+
+            <div class="form-group d-flex align-items-center">
+                <label class="control-label col-sm-2">First name:</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{firstName}" placeholder="First name" class="form-control mb-4 w-25">
+                </div>
+            </div>
+
+            <div class="form-group d-flex align-items-center">
+                <label class="control-label col-sm-2">Last name:</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{lastName}" placeholder="Last name" class="form-control mb-4 w-25">
+                </div>
+            </div>
+
+            <div class="form-group d-flex align-items-center">
+                <label class="control-label col-sm-2">Email:</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{email}" placeholder="Email" class="form-control mb-4 w-25">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-info col-2" style="color: black; border: none;">Save</button>
+        </form>
+        <hr>
+        <a th:href="@{/employees/list}">Back to Employee List</a>
+    </div>
+
+</body>
+</html>

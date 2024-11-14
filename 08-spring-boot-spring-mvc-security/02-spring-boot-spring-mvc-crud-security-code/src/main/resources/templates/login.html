@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Login Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}">Employee Application</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{/}">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a th:href="@{/signup}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div style="margin-top:20px;" class="col-md-5 col-md-offset-3 well">
+            <div class="card border-info">
+                <div class="card-body">
+                    <div class="card-text">
+
+                        <!-- Login Form -->
+                        <form action="#" th:action="@{/authenticateTheUser}" method="POST" class="form-horizontal">
+
+                            <!-- Place for messages: error, alert etc ... -->
+                            <div class="form-group">
+                                <div class="col-xs-15">
+                                    <div>
+                                        <!-- Check for login error -->
+                                        <div th:if="${param.error}">
+
+                                            <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                                Invalid username and password.
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Check for logout -->
+                                        <div th:if="${param.logout}">
+
+                                            <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                                                You have been logged out.
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- User name -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" name="username" placeholder="username" class="form-control" />
+                            </div>
+
+                            <!-- Password -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                            </div>
+
+                            <!-- Login/Submit Button -->
+                            <div style="margin-top: 10px;" class="form-group">
+                                <div class="col-sm-6 controls">
+                                    <button type="submit" class="btn btn-success">Login</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

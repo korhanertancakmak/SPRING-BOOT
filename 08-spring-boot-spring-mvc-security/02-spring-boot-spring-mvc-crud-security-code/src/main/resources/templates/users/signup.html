@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Registration Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}">Registration</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{/}">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div style="margin-top:20px;" class="col-md-5 col-md-offset-3 well">
+            <div class="card border-info">
+                <div class="card-body">
+                    <div class="card-text">
+
+                        <!-- Registration Form -->
+                        <form action="#" th:action="@{/register}" th:object="${User}" method="POST" class="form-horizontal">
+
+                            <!-- User name -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" th:field="*{userName}" placeholder="Username" class="form-control" />
+                            </div>
+
+                            <!-- Password -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" th:field="*{password}" placeholder="Password" class="form-control" />
+                            </div>
+
+                            <!-- First name -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" th:field="*{firstName}" placeholder="First name" class="form-control" />
+                            </div>
+
+                            <!-- Last name -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" th:field="*{lastName}" placeholder="Last name" class="form-control" />
+                            </div>
+
+                            <!-- Email -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                <input type="text" th:field="*{email}" placeholder="Email" class="form-control" />
+                            </div>
+
+                            <!-- Roles -->
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                <div style="width: 100%; display: flex; justify-content: space-between;">
+                                    <div th:each="role : ${roles}">
+                                        <!-- <label th:for="${role.id}" th:text="${role.name}"></label> -->
+                                        <label th:for="${role.id}" th:text="${#strings.substring(role.name, 5)}"></label>
+                                        <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Registration Button -->
+                            <div style="margin-top: 10px;" class="form-group">
+                                <div class="col-sm-6 controls">
+                                    <button type="submit" class="btn btn-primary">Register</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
