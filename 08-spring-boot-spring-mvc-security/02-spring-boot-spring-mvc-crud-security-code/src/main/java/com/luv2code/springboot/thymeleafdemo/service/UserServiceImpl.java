@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUserName(String userName) {
-        // check the database if the user already exists
         return userRepository.findByUserNameAndEnabledTrue(userName);
     }
 

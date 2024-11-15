@@ -3942,7 +3942,7 @@ providing users with essential tools for managing employee data while ensuring r
 Let's run the application now, and test it out:
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image81.png" alt="image81">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image81.png" alt="image81">
 </div>
 
 And yes, this is our home page.
@@ -3951,14 +3951,14 @@ When I open "`Employee Application`" and "`Home`" links, we get redirected to ho
 Let's try "`login`" page, because we know "`signup`" page will be done later.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image82.png" alt="image82">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image82.png" alt="image82">
 </div>
 
 Here, our login page.
 Let's try to log in with the user details, `john`, `fun123`.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image83.png" alt="image83">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image83.png" alt="image83">
 </div>
 
 And, succeed.
@@ -3967,7 +3967,7 @@ Also, "`signup`" and "`login`" links are disappeared.
 Let's go try to log out first.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image84.png" alt="image84">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image84.png" alt="image84">
 </div>
 
 That's good.
@@ -3975,7 +3975,7 @@ We got the log-out message and redirected again to the login page.
 Let's try the same user to log in to see the Employee page now.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image85.png" alt="image85">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image85.png" alt="image85">
 </div>
 
 Yes, succeed.
@@ -3985,7 +3985,7 @@ So we log out, and log in with `mary` and `fun123` again.
 And we open the employee list:
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image86.png" alt="image86">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image86.png" alt="image86">
 </div>
 
 And, yes.
@@ -3996,7 +3996,7 @@ Because she is the "`ADMIN`".
 Let's try her account.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image87.png" alt="image87">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image87.png" alt="image87">
 </div>
 
 That's it.
@@ -4129,7 +4129,7 @@ Alright, now let's try to open "`Add Employee`", "`Update`" and "`delete`" links
 Firstly we try "`Add Employee`":
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image88.png" alt="image88">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image88.png" alt="image88">
 </div>
 
 Here, it is.
@@ -4140,14 +4140,14 @@ I'll add myself, `Korhan`, `Cakmak` and `korhancakmak@luv2code.com`.
 After I save it:
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image89.png" alt="image89">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image89.png" alt="image89">
 </div>
 
 And, that's we added a new employee.
 Let's click on the update button now.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image90.png" alt="image90">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image90.png" alt="image90">
 </div>
 
 That's the record of the employee we just added.
@@ -4155,7 +4155,7 @@ We can change the details and save it.
 Let's add my second name to the name field and email:
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image91.png" alt="image91">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image91.png" alt="image91">
 </div>
 
 That's it.
@@ -4164,7 +4164,7 @@ It did update the existing one.
 So let's try to delete it.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image92.png" alt="image92">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image92.png" alt="image92">
 </div>
 
 We know this onClick javascript inline code does this,
@@ -4172,7 +4172,7 @@ a confirmation for the user.
 Let's say yes:
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image93.png" alt="image93">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image93.png" alt="image93">
 </div>
 
 And yes, succeed.
@@ -4858,7 +4858,7 @@ This approach simplifies the code and reduces boilerplate.
 So our development process:
 
 * Create UserRepository class
-* Create UserService and its implementation class by using `@Service` annotation
+* Update UserService interface and its implementation class using the CRUD methods
 * 
 
 So we create set up `UserRepository` interface:
@@ -4928,7 +4928,6 @@ public class UserServiceImpl implements UserService {
   
     @Override
     public User findByUserName(String userName) {
-        // check the database if the user already exists
         //return userDao.findByUserName(userName);
         return userRepository.findByUserNameAndEnabledTrue(userName);
     }
