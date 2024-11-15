@@ -4254,7 +4254,7 @@ But before doing that, we need to have a more complex user table in the database
 and validations for the fields in User entity class to make the application much complexer.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image94.png" alt="image94">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image94.png" alt="image94">
 </div>
 
 So this is what we have so far. 
@@ -4314,7 +4314,7 @@ These details must be able to be retrieved by any forms or by any controller/con
 So first we run the sql scripts.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image95.png" alt="image95">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image95.png" alt="image95">
 </div>
 
 Here only our user table has been changed.
@@ -4795,7 +4795,7 @@ Let's now run and test our application.
 Click on the "`/signup`" end point and see what we get:
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image96.png" alt="image96">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image96.png" alt="image96">
 </div>
 
 That's our register form to create a new user.
@@ -4808,14 +4808,14 @@ Let's input the details for our new user.
 And register:
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image97.png" alt="image97">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image97.png" alt="image97">
 </div>
 
 Here we got our user registered.
 Let's try to log in with his user information.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image98.png" alt="image98">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image98.png" alt="image98">
 </div>
 
 That's it.
@@ -4837,7 +4837,7 @@ Here, it is.
 Since the user for now got no roles, our **Spring Security** allows us to access to the list.
 
 <div align="center">
-    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/07-spring-boot-spring-mvc-crud/images/image99.png" alt="image99">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image99.png" alt="image99">
 </div>
 
 However, **Spring Security** allows other CRUD functions than reading(or listing) 
