@@ -13,10 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
 @Controller
@@ -41,11 +38,13 @@ public class UserController {
     @GetMapping("/users")
     public String listUsers(Model theModel) {
 
-        // Get the users from the database
+        // Get the users and roles from the database
         List<User> users = userService.findAll();
+        List<Role> allRoles = roleRepository.findAll();
 
         // Add to the Spring model
         theModel.addAttribute("users", users);
+        theModel.addAttribute("roles", allRoles);
 
         return "/users/list";
     }
@@ -63,7 +62,8 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("User") User theUser,
-                           BindingResult theBindingResult, HttpSession session, Model theModel) {
+                           BindingResult theBindingResult,
+                           HttpSession session, Model theModel) {
 
         String userName = theUser.getUserName();
         logger.info("Processing registration form for: " + userName);
@@ -95,8 +95,12 @@ public class UserController {
         // Get the user from the service
         User user = userService.findById(userId);
 
-        // Set user in the model to pre-populate the form
+        // Fetch all roles to populate the dropdown or checkboxes
+        List<Role> allRoles = roleRepository.findAll();
+
+        // Set user and roles in the model to pre-populate the form
         theModel.addAttribute("User", user);
+        theModel.addAttribute("roles", allRoles);
 
         // Send over to our form
         return "/users/updateUser";
@@ -104,12 +108,23 @@ public class UserController {
 
     @PostMapping("/updateUser")
     public String update(@Valid @ModelAttribute("User") User theUser,
-                         BindingResult theBindingResult, Model theModel) {
+                         BindingResult theBindingResult,
+                         @RequestParam(value = "roles", required = false) List<Integer> roleIds,
+                         Model theModel) {
 
         // Check for validation errors
         if (theBindingResult.hasErrors()) {
             logger.warning("Binding errors: " + theBindingResult.getAllErrors());
+            // Re-fetch roles to repopulate the form
+            List<Role> allRoles = roleRepository.findAll();
+            theModel.addAttribute("roles", allRoles);
             return "/users/updateUser";
+        }
+
+        // Fetch selected roles and assign to the user
+        if (roleIds != null && !roleIds.isEmpty()) {
+            List<Role> updatedRoles = roleRepository.findAllById(roleIds);
+            theUser.setRoles(updatedRoles);
         }
 
         // Save the updated user (the ID will ensure it's an update)
@@ -117,6 +132,48 @@ public class UserController {
 
         // Redirect to the list of users
         return "redirect:/users";
+    }
+
+    @GetMapping("/profile")
+    public String viewProfile(Model theModel, HttpSession session) {
+        // Get the logged-in user from the session or authentication context
+        User loggedInUser = (User) session.getAttribute("user");
+
+        if (loggedInUser == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
+        // Fetch roles for the dropdown/checkboxes (if necessary)
+        List<Role> allRoles = roleRepository.findAll();
+
+        // Set user and roles in the model
+        theModel.addAttribute("User", loggedInUser);
+        theModel.addAttribute("roles", allRoles);
+
+        return "/users/profile"; // New profile-specific Thymeleaf template
+    }
+
+    @PostMapping("/profile")
+    public String updateProfile(@Valid @ModelAttribute("User") User theUser,
+                                BindingResult theBindingResult,
+                                HttpSession session, Model theModel) {
+
+        if (theBindingResult.hasErrors()) {
+            logger.warning("Validation errors while updating profile: " + theBindingResult.getAllErrors());
+
+            // Re-fetch roles to repopulate the form
+            List<Role> allRoles = roleRepository.findAll();
+            theModel.addAttribute("roles", allRoles);
+            return "/users/profile"; // Reload the profile page on errors
+        }
+
+        // Update only the logged-in user's data
+        userService.save(theUser);
+
+        // Update the session with the modified user object
+        session.setAttribute("user", theUser);
+
+        return "redirect:/profile?success"; // Redirect with a success message
     }
 
     // Mapping for "/delete"

@@ -33,6 +33,7 @@
             <ul class="nav navbar-nav navbar-right" style="display: flex; align-items: center;">
                 <li sec:authorize="!isAuthenticated()"><a th:href="@{/signup}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
                 <li sec:authorize="isAuthenticated()">
                     <form action="@{/login}" th:action="@{/logout}" method="POST">
                         <button type="submit" class="btn btn-danger">

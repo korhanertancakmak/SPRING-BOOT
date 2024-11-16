@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
-    <title>Update User</title>
+    <title>Update Profile</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
@@ -63,11 +63,11 @@
     </nav>
 
     <div class="container">
-        <h3>Update The User</h3>
+        <h3>Update The Profile</h3>
         <hr>
-        <form action="#" th:action="@{/updateUser}" th:object="${User}" method="POST"
+        <form action="#" th:action="@{/profile}" th:object="${User}" method="POST"
               style="margin: 0 auto; width: 50%; background-color: #6c757d; padding: 20px; border-radius: 8px;">
-            <p class="h4 mb-4">User Details</p>
+            <p class="h4 mb-4">Profile Details</p>
 
             <!-- Add hidden from field to handle the update -->
             <div class="form-group d-flex align-items-center">

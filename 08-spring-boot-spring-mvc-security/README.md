@@ -4527,12 +4527,11 @@ Within this method, `authentication.getName()` retrieves the `username` of the c
 It then uses `userService.findByUserName(userName)` to fetch the full user details, 
 which are then stored in the session under the attribute "`user`". 
 This allows you to access the `User` object throughout the application via the session.
-Finally, `response.sendRedirect(request.getContextPath() + "/")` sends the user 
-to the application’s home page upon successful login.
+Finally, `response.sendRedirect()` sends the user to the application’s home page upon successful login.
 This setup integrates a custom success handler into **Spring Security**, enabling specific actions, 
 like loading user details into the session, whenever a user successfully logs in.
 
-Now let's update our `/signup` get request in the **MainController** file now:
+Now we can update our `/signup` get request in the **MainController** file now:
 
 ````java
 @Controller
@@ -4654,11 +4653,11 @@ where they can enter their information.
 ````java
 @PostMapping("/register")
 public String register(
-        @Valid @ModelAttribute("webUser") WebUser theWebUser,
+        @Valid @ModelAttribute("User") User theUser,
         BindingResult theBindingResult,
         HttpSession session, Model theModel) {
 
-    String userName = theWebUser.getUserName();
+    String userName = theUser.getUserName();
     logger.info("Processing registration form for: " + userName);
 
     if (theBindingResult.hasErrors()) {
@@ -4667,15 +4666,15 @@ public String register(
 
     User existing = userService.findByUserName(userName);
     if (existing != null) {
-        theModel.addAttribute("webUser", new WebUser());
+        theModel.addAttribute("User", new User());
         theModel.addAttribute("registrationError", "User name already exists.");
         logger.warning("User name already exists.");
         return "signup";
     }
 
-    userService.save(theWebUser);
+    userService.save(theUser);
     logger.info("Successfully created user: " + userName);
-    session.setAttribute("user", theWebUser);
+    session.setAttribute("user", theUser);
     return "signup";
 }
 ````
@@ -4842,24 +4841,30 @@ Since the user for now got no roles, our **Spring Security** allows us to access
 
 However, **Spring Security** allows other CRUD functions than reading(or listing) 
 to only the users that has role of "`MANAGER`" or "`ADMIN`".
-That's why, `kcakmak` cannot make any adding, updating or deleting in the list.
+That's why, `kcakmak` cannot make any adding, updating or deleting in the **Employee** list.
 In next section, we'll handle that.
 
 </div>
 
-### [Spring MVC Security - Using Spring Data JPA]()
+### [Spring MVC Security - Adding Users List Using Spring Data JPA]()
 <div style="text-align:justify">
 
-We'll use **Spring Data JPA** instead of **DAO** classes for `User` and `Role` entities.
+In this section, we'll implement **Spring Data JPA** 
+removing the **DAO** classes of `User` entity.
 Because we can eliminate the need for a custom implementation like `UserDaoImpl`. 
 **JpaRepository** provides all the basic CRUD operations, 
 and **Spring Data JPA** will automatically generate the necessary implementation at runtime. 
 This approach simplifies the code and reduces boilerplate.
 So our development process:
 
-* Create UserRepository class
+* Create UserRepository and RoleRepository classes
 * Update UserService interface and its implementation class using the CRUD methods
-* 
+* Create `UserController` for mapping registration
+* Add roles input-group into the registration form "`signup.html`"
+* Add all other CRUD methods than reading into the controller
+* Add `viewProfile` and `updateProfile` methods for the logged-in user 
+* Update the forms so that they all can include "**Users**" and "**Profile**" links in the navigation bar only valid for admins and managers
+* Add the new end points into our **Spring Security** to allow the access to the users that have role of `MANAGER` or `ADMIN`.
 
 So we create set up `UserRepository` interface:
 
@@ -4890,8 +4895,17 @@ SELECT u FROM User u WHERE u.userName = :userName AND u.enabled = true
 ````
 
 So we can remove `UserDao` and `UserDaaImpl` java files from the `dao` package.
-`UserService` interface does not need any changes. 
+Next we create `RoleRepository` to fetch roles by their name.
+
+````java
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+    Role findByName(String name);
+}
+````
+
+We can now take care of `UserService` interface that actually does not need any changes.
 It’s fine as it is since it defines the required methods (`findByUserName` and `save`).
+But I want to add other CRUD methods just like `Employee` entity.
 
 ````java
 public interface UserService extends UserDetailsService {
@@ -4904,10 +4918,10 @@ public interface UserService extends UserDetailsService {
 }
 ````
 
-But I want to add other CRUD methods just like `Employee` entity.
-So here, we add listing them, finding by id and deleting by id additionally.
+So here, we add listing, finding by id and deleting by id methods.
 These methods will be implemented by `UserServiceImpl`.
-With `UserRepository` in place, we can now update `UserServiceImpl` to inject `UserRepository` instead of `UserDao`. 
+With `UserRepository` in place, we can now update `UserServiceImpl` to inject `UserRepository` 
+and `RoleRepository` instead of `UserDao`. 
 Let’s make the necessary changes.
 
 ````java
@@ -4938,8 +4952,6 @@ public class UserServiceImpl implements UserService {
 
 We replace any `userDao` references with `userRepository`.
 We also inject `roleRepository` here to add roles with the registering a user.
-But we have not got a `roleRepository` class.
-We'll create that class right after the methods here.
 
 ````java
 @Override
@@ -5042,78 +5054,13 @@ So, we check in this method If the `User` object has any roles assigned.
 If `user.getRoles()` is null or empty, it retrieves a default role from the `roleRepository` (like `ROLE_EMPLOYEE`). 
 If `ROLE_EMPLOYEE` exists in the database, it assigns this role to the `user`.
 Then we save the `user` along with the assigned role(s) in the database.
-So this code assumes we have a `RoleRepository` to fetch roles by their name. 
-
-````java
-public interface RoleRepository extends JpaRepository<Role, Integer> {
-    Role findByName(String name);
-}
-````
-
-We would need to add this interface since it was not exist.
-Also, we need to inject `RoleRepository` in `UserServiceImpl`.
-
-````java
-@Service
-public class UserServiceImpl implements UserService {
-
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserServiceImpl(UserRepository theUserRepository, PasswordEncoder passwordEncoder, RoleRepository theRoleRepository) {
-        this.userRepository = theUserRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = theRoleRepository;
-    }
-}
-````
-
-This approach ensures that every user created has at least one role, 
+This approach ensures that every user created has at least one role,
 thus meeting the requirement of having an initial role associated with every new user.
-Let's update our `signup.html` view's "`<form>`" tag to include the role checkboxes.
-
-````html
-<!-- Registration Form -->
-<form action="#" th:action="@{/register}" th:object="${User}" method="POST" class="form-horizontal">
-
-    <!-- User name -->
-
-    <!-- Password -->
-
-    <!-- First name -->
-
-    <!-- Last name -->
-
-    <!-- Email -->
-
-    <!-- Roles -->
-    <div class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
-        <div style="width: 100%; display: flex; justify-content: space-between;">
-            <div th:each="role : ${roles}">
-                <!-- <label th:for="${role.id}" th:text="${role.name}"></label> -->
-                <label th:for="${role.id}" th:text="${#strings.substring(role.name, 5)}"></label>
-                <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
-            </div>
-        </div>
-    </div>
-
-  <!-- Registration Button -->
-
-</form>
-````
-
-So we add checkboxes for roles and align them within a single input-group like the other fields. 
-Each checkbox will represent a different role, and they will be displayed inline within the same input-group.
-The `checked` attribute on `ROLE_EMPLOYEE` ensures that 
-the "**Employee**" role is pre-selected for every user by default.
-
-
-
-So just like `EmployeeController`, now i need to create a `UserController` for these CRUD functions.
-This controller would manage users by mapping requests to endpoints for listing, adding, updating, 
+So next, just like `EmployeeController`, now we need to create a `UserController` for these CRUD functions.
+We already have a `MainController` that handling login, logout and signup requests for registering or adding a user. 
+So we can remove the signup or register function to add this into the `UserController`. 
+This will keep all user-related actions in a single controller.
+This controller would manage users by mapping requests to endpoints for listing, adding, updating,
 and deleting users, similar to how `EmployeeController` handles employees.
 
 ````java
@@ -5121,15 +5068,110 @@ and deleting users, similar to how `EmployeeController` handles employees.
 public class UserController {
 
     private final UserService userService;
-
-    public UserController(UserService theUserService) {
+    private final RoleRepository roleRepository;  // Add this field
+    private final Logger logger = Logger.getLogger(getClass().getName());
+  
+    public UserController(UserService theUserService, RoleRepository theRoleRepository) {
         userService = theUserService;
+        roleRepository = theRoleRepository;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
+  
+    @GetMapping("/signup")
+    public String signup(Model theModel) {
+        theModel.addAttribute("User", new User());
+        return "/users/signup";
     }
 }
 ````
 
-So we begin with injection our service layer to the controller.
-And we'll generate our constructor that initializes the `userService`.
+So we begin with injection `UserService` and `RoleRepository` to the controller.
+And we'll generate our constructor that initializes the fields.
+`@InitBinder` and mapping for registering form comes from `MainController` to here.
+Next, we will update our `signup.html` view's "`<form>`" tag to include the role checkboxes.
+
+````html
+<!-- Registration Form -->
+<form action="#" th:action="@{/register}" th:object="${User}" method="POST" class="form-horizontal">
+
+    <!-- User name -->
+    <!-- Password -->
+    <!-- First name -->
+    <!-- Last name -->
+    <!-- Email -->
+    <!-- Roles -->
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+        <div style="width: 100%; display: flex; justify-content: space-between;">
+            <div th:each="role : ${roles}">
+                <label th:for="${role.id}" th:text="${role.name}"></label>
+                <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
+            </div>
+        </div>
+    </div>
+  <!-- Registration Button -->
+</form>
+````
+
+So we add checkboxes for roles and align them within a single input-group like the other fields.
+Each checkbox will represent a different role, and they will be displayed inline within the same input-group.
+The `checked` attribute on `ROLE_EMPLOYEE` ensures that
+the "**Employee**" role is pre-selected for every user by default.
+Let's run our app, and test this out for a second.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image100.png" alt="image100">
+</div>
+
+Here it is.
+So here we can remove the "`ROLE_`" parts by using **Thymeleaf** methods for strings.
+
+````html
+<div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+    <div style="width: 100%; display: flex; justify-content: space-between;">
+        <div th:each="role : ${roles}">
+            <!-- <label th:for="${role.id}" th:text="${role.name}"></label> -->
+            <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
+        </div>
+    </div>
+</div>
+````
+
+When we refresh the page:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image101.png" alt="image101">
+</div>
+
+However, we have not yet got the post request in the `UserController` to add a user.
+First, we will create all the CRUD functions that are just like `EmployeeController`.
+But of course, we cannot have the same logic here. 
+Because we will stick with the following rules that has to be applied for the CRUD functions for users:
+
+* Only admins can delete a user
+* Only admins or managers can list and update all the users(including their passwords)
+* All users can update their own profile
+
+So that's why we need these functions.
+The important part is the security. 
+Because in the perspective of authentication, high-level user will be able to change "**all**"
+low-level user's information including their passwords.
+This can look like weird to you but this is a choice. 
+Since this is a demo, we can create just one scenario.
+If we would like to cancel the second rule above, so we can say that,
+we let admins and managers can do the updates for all the users but except their passwords,
+then we need to create another entity class, like `WebUser.java` that has no `password` field in it, 
+or we can bind the form directly to the `User` entity
+and then manually ensure the password field remains unchanged in the controller.
+So we choose this, we allow admins and managers can do whatever they want.
+Alright let's move on and creating our CRUD methods.
+First, we begin with listing, the reading part.
 
 ````java
 // Mapping for "/users"
@@ -5137,17 +5179,52 @@ And we'll generate our constructor that initializes the `userService`.
 public String listUsers(Model theModel) {
 
     // Get the users from the database
-  List<User> users = userService.findAll();
+    List<User> users = userService.findAll();
+    List<Role> allRoles = roleRepository.findAll();
 
-  // Add to the Spring model
-  theModel.addAttribute("users", users);
-
-  return "users/list";
+    // Add to the Spring model
+    theModel.addAttribute("users", users);
+    theModel.addAttribute("roles", allRoles);
+  
+    return "users/list";
 }
 ````
 
-It retrieves a list of all users from the database via the `UserService` and adds it to the model, 
+It retrieves a list of all users from the database via the `UserService` and adds it to the model,
 making it available in the "`users/list`" view for display.
+So next we create `/register` post mapping to save the new user.
+
+````java
+@PostMapping("/register")
+public String register(@Valid @ModelAttribute("User") User theUser, 
+                       BindingResult theBindingResult, 
+                       HttpSession session, Model theModel) {
+  
+    String userName = theUser.getUserName();
+    logger.info("Processing registration form for: " + userName);
+    
+    if (theBindingResult.hasErrors()) {
+        logger.warning("Form validation errors: " + theBindingResult.getAllErrors());
+        return "/users/signup";
+    }
+    
+    User existing = userService.findByUserName(userName);
+    if (existing != null) {
+        theModel.addAttribute("User", new User());
+        theModel.addAttribute("registrationError", "User name already exists.");
+        logger.warning("User name already exists.");
+        return "/users/signup";
+    }
+    
+    userService.save(theUser);
+    logger.info("Successfully created user: " + userName);
+    session.setAttribute("user", theUser);
+    
+    return "/users/registration-confirmation";
+} 
+````
+
+This is exactly the same method taken from the `MainController` to the `UserController`.
 And next, we create `updateUser` method:
 
 ````java
@@ -5158,8 +5235,12 @@ public String updateUser(@RequestParam("userId") Long userId, Model theModel) {
     // Get the user from the service
     User user = userService.findById(userId);
 
-    // Set user in the model to pre-populate the form
-    theModel.addAttribute("user", user);
+    // Fetch all roles to populate the dropdown or checkboxes
+    List<Role> allRoles = roleRepository.findAll();
+
+    // Set user and roles in the model to pre-populate the form
+    theModel.addAttribute("User", user);
+    theModel.addAttribute("roles", allRoles);
 
     // Send over to our form
     return "/users/updateUser";
@@ -5167,11 +5248,23 @@ public String updateUser(@RequestParam("userId") Long userId, Model theModel) {
 
 @PostMapping("/updateUser")
 public String update(@Valid @ModelAttribute("user") User theUser,
-                     BindingResult theBindingResult, Model theModel) {
+                     BindingResult theBindingResult,
+                     @RequestParam(value = "roles", required = false) List<Integer> roleIds,
+                     Model theModel) {
 
     // Check for validation errors
     if (theBindingResult.hasErrors()) {
-      return "/users/updateUser";
+        logger.warning("Binding errors: " + theBindingResult.getAllErrors());
+        // Re-fetch roles to repopulate the form
+        List<Role> allRoles = roleRepository.findAll();
+        theModel.addAttribute("roles", allRoles);
+        return "/users/updateUser";
+    }
+
+    // Fetch selected roles and assign to the user
+    if (roleIds != null && !roleIds.isEmpty()) {
+        List<Role> updatedRoles = roleRepository.findAllById(roleIds);
+        theUser.setRoles(updatedRoles);
     }
   
     // Save the updated user (the ID will ensure it's an update)
@@ -5182,13 +5275,15 @@ public String update(@Valid @ModelAttribute("user") User theUser,
 }
 ````
 
-It retrieves the `user` by ID from the database 
-and adds it to the model to populate the form with the current user details. 
+It retrieves the `user` by ID from the database
+and adds it to the model to populate the form with the current user details.
+It also captures the roles from the database and adds it to the model
+to populate the form with the current user's roles.
 The view "`/users/updateUser`" displays this form for editing.
 And we create its post request for updating the database.
-The `update` method checks for validation errors first, 
-and then saves the user using `userService.save(theUser)`. 
-Since the `User` entity includes the user ID, 
+The `update` method checks for validation errors first,
+and then saves the user and his roles using `userService.save(theUser)`.
+Since the `User` entity includes the user ID,
 **Spring Data JPA** will recognize this as an update rather than a new save.
 So finally, we create `deleteUser` method:
 
@@ -5205,72 +5300,77 @@ public String deleteUser(@RequestParam("userId") Long userId) {
 }
 ````
 
-It deletes a `user` by ID, provided via the request parameter, 
+It deletes a `user` by ID, provided via the request parameter,
 and then redirects to `/users/list` to refresh the list.
-We already have a `MainController` that handling get and post requests for registering or adding a user.
-So we can move all those functions to the `UserController` to keep all user-related actions in a single controller.
+So next, we should create a new method in the controller 
+for handling the profile display and update functionality for the logged-in user.
+This is necessary while we have an `updateUser` get and post methods,
+because the existing `updateUser` method is designed for administrators 
+or authorized users to update any user's profile, identified by the `userId` parameter.
+A profile update for the logged-in user should operate 
+without requiring the user ID as a parameter, 
+as the user’s identity can be determined from the authenticated session.
 
 ````java
-@Controller
-public class UserController {
+@GetMapping("/profile")
+public String viewProfile(Model theModel, HttpSession session) {
+    // Get the logged-in user from the session or authentication context
+    User loggedInUser = (User) session.getAttribute("user");
 
-    private Logger logger = Logger.getLogger(getClass().getName());
-
-    @InitBinder
-    public void initBinder(WebDataBinder dataBinder) {
-        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    if (loggedInUser == null) {
+        return "redirect:/login"; // Redirect to login if not authenticated
     }
 
-    @GetMapping("/signup")
-    public String signup(Model theModel) {
-        theModel.addAttribute("User", new User());
-        return "/users/signup";
+    // Fetch roles for the dropdown/checkboxes (if necessary)
+    List<Role> allRoles = roleRepository.findAll();
+
+    // Set user and roles in the model
+    theModel.addAttribute("User", loggedInUser);
+    theModel.addAttribute("roles", allRoles);
+
+    return "/users/profile"; // New profile-specific Thymeleaf template
+}
+
+@PostMapping("/profile")
+public String updateProfile(@Valid @ModelAttribute("User") User theUser,
+                            BindingResult theBindingResult,
+                            HttpSession session, Model theModel) {
+
+    if (theBindingResult.hasErrors()) {
+        logger.warning("Validation errors while updating profile: " + theBindingResult.getAllErrors());
+
+        // Re-fetch roles to repopulate the form
+        List<Role> allRoles = roleRepository.findAll();
+        theModel.addAttribute("roles", allRoles);
+        return "/users/profile"; // Reload the profile page on errors
     }
-  
-    @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("User") User theUser,
-                           BindingResult theBindingResult, HttpSession session, Model theModel) {
-  
-        String userName = theUser.getUserName();
-        logger.info("Processing registration form for: " + userName);
-    
-        if (theBindingResult.hasErrors()) {
-          logger.warning("Form validation errors: " + theBindingResult.getAllErrors());
-          return "/users/signup";
-        }
-    
-        User existing = userService.findByUserName(userName);
-        if (existing != null) {
-          theModel.addAttribute("User", new User());
-          theModel.addAttribute("registrationError", "User name already exists.");
-          logger.warning("User name already exists.");
-          return "/users/signup";
-        }
-    
-        userService.save(theUser);
-        logger.info("Successfully created user: " + userName);
-        session.setAttribute("user", theUser);
-    
-        return "/users/registration-confirmation";
-    }
-    
-    // ...
+
+    // Update only the logged-in user's data
+    userService.save(theUser);
+
+    // Update the session with the modified user object
+    session.setAttribute("user", theUser);
+
+    return "redirect:/profile?success"; // Redirect with a success message
 }
 ````
 
-So we begin with importing `java.util.logging.Logger` class.
-And then we move the `signup` and `register` mappings into `UserController`.
-Now, we should update our present form pages especially for user list link in the nav bar.
+So here, first we retrieve the logged-in **User** object from the session. 
+We check if the user is not login, because someone can directly try `/profile` end point.
+And then, we send the logged-in User object as a parameter to the model with its all roles.
+In the post mapping, we check for binding errors, if something's wrong, we print it in the logger,
+and redirecting the user back to the profile with its all roles.
+But if everything is okay, then we save the user, which is actually an update for the logged-in user.
+And we update the session for the updated user, and redirect to back the profile page again.
+So now, we should update all the forms that we have, 
+so that they all can display "**Users**", which is only valid for admins and managers, 
+and "**Profile**" links in the navigation.
 Our first form we have `login.html`.
 But, we don't need any user-related links on this form.
 Next, we have `registration-confirmation.html`.
 We need to move this form into the `/users` folder.
 But on this form, we don't need any updates neither.
 Just like this one, we don't need to change `signup.html` but its location must be inside `/users` folder.
-Also, we need to add these end points into our **Spring Security** 
-to allow the access to the users that have role of `MANAGER` or `ADMIN`.
-But we'll handle this part at the end.
 So we open `home.html` form first:
 
 ````html
@@ -5282,11 +5382,12 @@ So we open `home.html` form first:
         <ul class="nav navbar-nav">
             <li><a th:href="@{/}">Home</a></li>
             <li sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/employees/list}">Employees</a></li>
-            <li sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')"><a class="nav-link" th:href="@{/users/list}">Users</a></li>
+            <li sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')"><a class="nav-link" th:href="@{/users}">Users</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" style="display: flex; align-items: center;">
             <li sec:authorize="!isAuthenticated()"><a th:href="@{/signup}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
             <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
             <li sec:authorize="isAuthenticated()">
                 <form action="@{/login}" th:action="@{/logout}" method="POST">
                     <button type="submit" class="btn btn-danger">
@@ -5302,6 +5403,7 @@ So we open `home.html` form first:
 In the "`<head>`" tag, we don't need to change anything. 
 But in the navigation bar, we add `Users` link next to the `Employees`,
 that will be displayed only by `MANAGER`s and `ADMIN`s.
+And then we add `Profile` link in the right navbar.
 When we look at the below of the navigation part, we have:
 
 ````html
@@ -5325,7 +5427,7 @@ So we choose to leave this as it is.
 Now, we need to create the following **Thymeleaf** templates; `list.html`, and `updateUser.html`
 under `src/main/resources/templates/users/`.
 First we open `list.html` after copying and pasting the **Employee** `list.html` file in the `/users` folder.
-We add the new nav bar link for users here as well. 
+We add the new users and profile navbar links into this form as well. 
 
 ````html
 <div class="container">
@@ -5336,12 +5438,6 @@ We add the new nav bar link for users here as well.
             Welcome, <span sec:authentication="name"></span>!
         </div>
     </div>
-    <!-- UserAdd button only available for MANAGER and ADMIN roles-->
-    <div sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')">
-        <a th:href="@{/users/addNewUser}" class="btn btn-primary btn-sm mb-3">
-            Add User
-        </a>
-    </div>
 
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
@@ -5350,6 +5446,7 @@ We add the new nav bar link for users here as well.
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
+                <th>Roles</th>
                 <th sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')">Action</th>
             </tr>
         </thead>
@@ -5359,6 +5456,9 @@ We add the new nav bar link for users here as well.
                 <td th:text="${tempUser.firstName}" />
                 <td th:text="${tempUser.lastName}" />
                 <td th:text="${tempUser.email}" />
+                <td th:each="role, i : ${tempUser.roles}"
+                    th:if="${i.last}"
+                    th:text="${#strings.substring(role.name, 5)}"></td>
                 <!-- Add update button link -->
                 <td sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')">
                     <a th:href="@{/users/updateUser(userId=${tempUser.id})}"
@@ -5379,9 +5479,11 @@ We add the new nav bar link for users here as well.
 </div>
 ````
 
-First we change the heading, from "Employee Directory" to "User Directory".
+First we change the heading, from "**Employee Directory**" to "**User Directory**".
 And then, we need to change `href`s of the **Thymeleaf** expressions.
 In the table, we update each cell by using for each loop for the users rather than employees.
+And we add 1 extra column for roles, here.
+That has a for each loop to display the last role element by removing the "`ROLE_`" part.
 That's basically it.
 Let's look at `updateUser.html` form now.
 We create it and open the form:
@@ -5436,38 +5538,10 @@ and meta tags for character encoding and viewport settings are included to ensur
 **Bootstrap CSS** is included from external CDNs to enable responsive styling. 
 Additional CSS in the "`<style>`" tag customizes specific elements, 
 like aligning navbar buttons and styling form elements.
-
-````html
-<nav class="navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" th:href="@{/}">Employee Application</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a th:href="@{/}">Home</a></li>
-            <li sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/employees/list}">Employees</a></li>
-            <li sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')"><a class="nav-link" th:href="@{/users}">Users</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right" style="display: flex; align-items: center;">
-            <li sec:authorize="!isAuthenticated()"><a th:href="@{/signup}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            <li sec:authorize="isAuthenticated()">
-                <form action="@{/login}" th:action="@{/logout}" method="POST">
-                    <button type="submit" class="btn btn-danger">
-                        <span class="glyphicon glyphicon-log-out"></span> Logout
-                    </button>
-                </form>
-            </li>
-        </ul>
-    </div>
-</nav>
-````
-
 The navigation bar is styled with **Bootstrap**’s `navbar-inverse` class for a dark theme 
 and contains links to different sections of the application. 
 The `navbar-header` contains a brand link to the home page, labeled "`Employee Application`". 
-The left-aligned links include "`Home`," "`Employees`," and "`Users`" 
-(the latter two being conditionally rendered based on user authentication or authorization roles). 
+The left-aligned links include "`Home`," "`Employees`," and "`Users`". 
 On the right side, users who are not authenticated see links to "`Sign Up`" and "`Login`". 
 Authenticated users see a logout button styled as a form submission with a red hover effect, 
 ensuring easy access for user management functions.
@@ -5547,6 +5621,7 @@ The ID field is displayed as static text,
 while all other fields are editable, except for the password, 
 which is hidden but submitted in the form. 
 Upon submitting, the form sends data to the `/updateUser` endpoint via a **POST** request.
+
 
 
 </div>

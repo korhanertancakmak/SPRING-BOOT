@@ -30,11 +30,12 @@
             <ul class="nav navbar-nav">
                 <li><a th:href="@{/}">Home</a></li>
                 <li sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/employees/list}">Employees</a></li>
-                <li sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')"><a class="nav-link" th:href="@{/users/list}">Users</a></li>
+                <li sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')"><a class="nav-link" th:href="@{/users}">Users</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right" style="display: flex; align-items: center;">
                 <li sec:authorize="!isAuthenticated()"><a th:href="@{/signup}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
                 <li sec:authorize="isAuthenticated()">
                     <form action="@{/login}" th:action="@{/logout}" method="POST">
                         <button type="submit" class="btn btn-danger">
@@ -54,12 +55,6 @@
                 Welcome, <span sec:authentication="name"></span>!
             </div>
         </div>
-        <!-- UserAdd button only available for MANAGER and ADMIN roles-->
-        <div sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')">
-            <a th:href="@{/signup}" class="btn btn-primary btn-sm mb-3">
-                Add User
-            </a>
-        </div>
 
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
@@ -68,6 +63,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
+                <th>Roles</th>
                 <th sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')">Action</th>
             </tr>
             </thead>
@@ -77,6 +73,9 @@
                 <td th:text="${tempUser.firstName}"></td>
                 <td th:text="${tempUser.lastName}"></td>
                 <td th:text="${tempUser.email}"></td>
+                <td th:each="role, i : ${tempUser.roles}"
+                    th:if="${i.last}"
+                    th:text="${#strings.substring(role.name, 5)}"></td>
                 <!-- Add update button link -->
                 <td sec:authorize="hasRole('ADMIN') or hasRole('MANAGER')">
                     <a th:href="@{/updateUser(userId=${tempUser.id})}"
