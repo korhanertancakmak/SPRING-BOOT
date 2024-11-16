@@ -21,6 +21,7 @@ public class SecurityConfig {
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/registration-confirmation").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/users/profile").permitAll()
                         .requestMatchers("/employees/list").authenticated()
                         .requestMatchers("/employees/AddNewEmployee", "/employees/updateEmployee", "/employees/save").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers("/users/**").hasAnyRole("MANAGER", "ADMIN")

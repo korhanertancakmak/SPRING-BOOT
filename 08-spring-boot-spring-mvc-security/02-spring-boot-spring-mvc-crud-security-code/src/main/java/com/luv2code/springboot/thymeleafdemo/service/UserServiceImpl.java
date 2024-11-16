@@ -72,8 +72,12 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        // Encode the password and enable the user
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Check if the password is already encoded
+        if (!user.getPassword().startsWith("$2a$") || user.getPassword().length() != 60) {
+            // If not encoded, encode the password and enable the user
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         user.setEnabled(true);
 
         return userRepository.save(user);

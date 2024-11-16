@@ -31,7 +31,12 @@
             <li th:text="'First name: ' + ${User.firstName}"></li>
             <li th:text="'Last name: ' + ${User.lastName}"></li>
             <li th:text="'Email name: ' + ${User.email}"></li>
-            <li th:text="'Roles: ' + ${#strings.substring(role.name, 5)}"></li>
+            <li>Roles:
+                <span th:each="role, i : ${User.roles}"
+                      th:text="${i.index != 0 ?
+                      ', ' + #strings.substring(role.name, 5)
+                      : #strings.substring(role.name, 5)}"></span>
+            </li>
         </ul>
         <hr>
         <a th:href="@{/login}">Login with new user name</a>

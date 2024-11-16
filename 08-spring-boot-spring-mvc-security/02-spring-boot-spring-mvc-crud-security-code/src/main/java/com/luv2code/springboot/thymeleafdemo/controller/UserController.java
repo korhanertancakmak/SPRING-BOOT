@@ -7,6 +7,9 @@ import com.luv2code.springboot.thymeleafdemo.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -121,6 +124,17 @@ public class UserController {
             return "/users/updateUser";
         }
 
+        // Retrieve existing user from the database
+        User existingUser = userService.findById(theUser.getId());
+        if (existingUser == null) {
+            throw new RuntimeException("User not found for ID: " + theUser.getId());
+        }
+
+        // Preserve existing password if not provided
+        if (theUser.getPassword() == null || theUser.getPassword().isEmpty()) {
+            theUser.setPassword(existingUser.getPassword());
+        }
+
         // Fetch selected roles and assign to the user
         if (roleIds != null && !roleIds.isEmpty()) {
             List<Role> updatedRoles = roleRepository.findAllById(roleIds);
@@ -136,8 +150,11 @@ public class UserController {
 
     @GetMapping("/profile")
     public String viewProfile(Model theModel, HttpSession session) {
+
         // Get the logged-in user from the session or authentication context
-        User loggedInUser = (User) session.getAttribute("user");
+        User existingUser = (User) session.getAttribute("user");
+        // And fetch the user from the database to ensure roles are loaded
+        User loggedInUser = userService.findById(existingUser.getId());
 
         if (loggedInUser == null) {
             return "redirect:/login"; // Redirect to login if not authenticated
@@ -167,21 +184,50 @@ public class UserController {
             return "/users/profile"; // Reload the profile page on errors
         }
 
+        // Retrieve existing user from the database
+        User existingUser = userService.findById(theUser.getId());
+        if (existingUser == null) {
+            throw new RuntimeException("User not found for ID: " + theUser.getId());
+        }
+
+        // Preserve existing password if not provided
+        if (theUser.getPassword() == null || theUser.getPassword().isEmpty()) {
+            theUser.setPassword(existingUser.getPassword());
+        }
+
         // Update only the logged-in user's data
         userService.save(theUser);
+
+        // Re-authenticate the user to reflect new roles
+        UserDetails userDetails = userService.loadUserByUsername(theUser.getUserName());
+        UsernamePasswordAuthenticationToken newAuth =
+                new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         // Update the session with the modified user object
         session.setAttribute("user", theUser);
 
-        return "redirect:/profile?success"; // Redirect with a success message
+        return "redirect:/users";
     }
 
     // Mapping for "/delete"
     @GetMapping("/delete")
-    public String deleteUser(@RequestParam("userId") Long userId) {
+    public String deleteUser(@RequestParam("userId") Long userId, HttpSession session) {
 
         // Delete the user
         userService.deleteById(userId);
+
+        // Get the logged-in user from the session or authentication context
+        User existingUser = (User) session.getAttribute("user");
+
+        // Re-authenticate the user to reflect new roles
+        UserDetails userDetails = userService.loadUserByUsername(existingUser.getUserName());
+        UsernamePasswordAuthenticationToken newAuth =
+                new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        // Update the session with the modified user object
+        session.setAttribute("user", existingUser);
 
         // Redirect to the /users/list
         return "redirect:/users";

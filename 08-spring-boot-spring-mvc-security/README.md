@@ -5261,6 +5261,17 @@ public String update(@Valid @ModelAttribute("user") User theUser,
         return "/users/updateUser";
     }
 
+    // Retrieve existing user from the database
+    User existingUser = userService.findById(theUser.getId());
+    if (existingUser == null) {
+        throw new RuntimeException("User not found for ID: " + theUser.getId());
+    }
+  
+    // Preserve existing password if not provided
+    if (theUser.getPassword() == null || theUser.getPassword().isEmpty()) {
+        theUser.setPassword(existingUser.getPassword());
+    }
+
     // Fetch selected roles and assign to the user
     if (roleIds != null && !roleIds.isEmpty()) {
         List<Role> updatedRoles = roleRepository.findAllById(roleIds);
@@ -5282,9 +5293,76 @@ to populate the form with the current user's roles.
 The view "`/users/updateUser`" displays this form for editing.
 And we create its post request for updating the database.
 The `update` method checks for validation errors first,
-and then saves the user and his roles using `userService.save(theUser)`.
-Since the `User` entity includes the user ID,
-**Spring Data JPA** will recognize this as an update rather than a new save.
+and then checks its password is null or empty.
+If it's empty then we retrieve the existing encoded password and set it to preserve the current password.
+However, in our service layer, the `save()` method has a call for `passwordEncode()` method:
+
+````java
+@Service
+public class UserServiceImpl implements UserService {
+    
+    // ...
+  
+    @Override
+    public User save(User user) {
+        // Ensure the user has at least one role
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            // Assuming 'ROLE_EMPLOYEE' is a default role that you want to assign
+            Role defaultRole = roleRepository.findByName("ROLE_EMPLOYEE");
+            if (defaultRole != null) {
+                user.setRoles(Collections.singletonList(defaultRole));
+            } else {
+                throw new RuntimeException("Default role not found in the database.");
+            }
+        }
+
+        // Encode the password and enable the user
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
+
+        return userRepository.save(user);
+    }
+    
+    // ...
+}
+````
+
+When we call `user.setPassword()` on an already-hashed password, 
+the result is a double-hashed password, rendering it unusable during authentication.
+So we must modify our `save()` method in the `UserService` layer 
+to check whether the password is already encoded. 
+If it's encoded, skip the encoding step.
+
+````java
+@Override
+public User save(User user) {
+    // Ensure the user has at least one role
+    if (user.getRoles() == null || user.getRoles().isEmpty()) {
+        // Assuming 'ROLE_EMPLOYEE' is a default role that you want to assign
+        Role defaultRole = roleRepository.findByName("ROLE_EMPLOYEE");
+        if (defaultRole != null) {
+            user.setRoles(Collections.singletonList(defaultRole));
+        } else {
+            throw new RuntimeException("Default role not found in the database.");
+        }
+    }
+
+    // Check if the password is already encoded
+    if (!user.getPassword().startsWith("$2a$") || user.getPassword().length() != 60) {
+        // If not encoded, encode it
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
+    user.setEnabled(true);
+
+    return userRepository.save(user);
+}
+````
+
+Bcrypt hashes follow a specific format, starting with `$2a$` (or `$2b$`, depending on the version).
+By checking the format and length, we can determine if the password is already hashed.
+If the password is already hashed, skip the encoding step.
+This remains unchanged, as it's unrelated to the password issue.
+With the revised `save()` method, this will preserve the existing hashed password without double-hashing it.
 So finally, we create `deleteUser` method:
 
 ````java
@@ -5316,6 +5394,8 @@ as the user’s identity can be determined from the authenticated session.
 public String viewProfile(Model theModel, HttpSession session) {
     // Get the logged-in user from the session or authentication context
     User loggedInUser = (User) session.getAttribute("user");
+    // And fetch the user from the database to ensure roles are loaded
+    User loggedInUser = userService.findById(existingUser.getId());
 
     if (loggedInUser == null) {
         return "redirect:/login"; // Redirect to login if not authenticated
@@ -5345,13 +5425,24 @@ public String updateProfile(@Valid @ModelAttribute("User") User theUser,
         return "/users/profile"; // Reload the profile page on errors
     }
 
+    // Retrieve existing user from the database
+    User existingUser = userService.findById(theUser.getId());
+    if (existingUser == null) {
+        throw new RuntimeException("User not found for ID: " + theUser.getId());
+    }
+  
+    // Preserve existing password if not provided
+    if (theUser.getPassword() == null || theUser.getPassword().isEmpty()) {
+        theUser.setPassword(existingUser.getPassword());
+    }
+
     // Update only the logged-in user's data
     userService.save(theUser);
 
     // Update the session with the modified user object
     session.setAttribute("user", theUser);
 
-    return "redirect:/profile?success"; // Redirect with a success message
+    return "redirect:/users"; 
 }
 ````
 
@@ -5621,7 +5712,185 @@ The ID field is displayed as static text,
 while all other fields are editable, except for the password, 
 which is hidden but submitted in the form. 
 Upon submitting, the form sends data to the `/updateUser` endpoint via a **POST** request.
+The `profile.html` will be very similar to the `updateUser.html`.
+We create a new html file by copying and pasting `updateUser.html` with the name `profile.html`.
 
+````html
+<div class="form-group d-flex align-items-center">
+  <label class="control-label col-sm-2">Password:</label>
+  <div class="col-sm-10">
+    <input type="password" th:field="*{password}" class="form-control mb-4 w-25">
+  </div>
+</div>
+````
 
+The only difference between these 2 forms are headings and password form group fields.
+We want to let the user change their own passwords here. 
+Alright let's run and test the application now.
+I click on `/signup` :
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image102.png" alt="image102">
+</div>
+
+I write the user details one by one just like above,
+we don't add high-level roles to the user for now,
+and I click on `register` button.
+We have this confirmation message here:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image103.png" alt="image103">
+</div>
+
+and I log my user details in,
+that is `kcakmak` for username and `test123` for password.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image104.png" alt="image104">
+</div>
+
+That's it.
+We have the user logged-in.
+We have the only **Employee** and **Profile** links at the navbar.
+Let's click on the **Profile** now:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image105.png" alt="image105">
+</div>
+
+Here, we have the user's own profile.
+He can change his own username, password, first or last name, email or even his own role for the application.
+Let's make him here manager and admin now.
+And click on save:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image106.png" alt="image106">
+</div>
+
+And, we have a problem here.
+Since our `updateProfile` method in our UserController sends the updated user to the "`/users`",
+and "`/users`" are only valid for managers and admins,
+**Spring Security** denies the user to access this end point.
+That's good and bad at the same time.
+To solve the issue of updating the session 
+after the user's roles are updated, 
+we need to ensure that **Spring Security**'s Authentication object is also refreshed to reflect the new roles. 
+In `updateProfile`, we use this line:
+
+````java
+// Update the session with the modified user object
+session.setAttribute("user", theUser);
+````
+
+But simply updating the session with the new user data is not sufficient 
+because **Spring Security** relies on the **SecurityContext** to determine user roles and permissions.
+That's why let's open the `UserController` again:
+
+````java
+@PostMapping("/profile")
+public String updateProfile(@Valid @ModelAttribute("User") User theUser,
+                            BindingResult theBindingResult,
+                            HttpSession session, Model theModel) {
+
+    // Binding error if-block
+    // Retrieve existing user from the database
+    // Preserve existing password if not provided
+    // Update only the logged-in user's data
+    userService.save(theUser);
+
+    // Re-authenticate the user to reflect new roles
+    UserDetails userDetails = userService.loadUserByUsername(theUser.getUsername());
+    UsernamePasswordAuthenticationToken newAuth =
+            new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+    SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+    // Update the session with the modified user object
+    session.setAttribute("user", theUser);
+
+    return "redirect:/users";
+}
+````
+
+After updating the user in the database,
+the **UserDetails** object is reloaded using the username, 
+and a new `UsernamePasswordAuthenticationToken` is created. 
+This token is then set in the **SecurityContext**.
+By updating the `SecurityContextHolder`, 
+**Spring Security**'s internal mechanisms now recognize the user's new roles.
+The session is updated to ensure the front-end also has the latest user data.
+Now, let's test the application by logging in with the same user, `kcakmak`, and its password `test123`.
+And change its roles from the Profile link just like we did before.
+He's just an **Employee** now, but he will be a **Manager** and an **Admin**.
+Let's click on the `save` button:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image107.png" alt="image107">
+</div>
+
+And now, we got directed to the `Users` list, which is only valid for managers and admins.
+Next, we try to update `susan` account while we are logged in by `kcakmak`.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image108.png" alt="image108">
+</div>
+
+Let's make her just a manager:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image109.png" alt="image109">
+</div>
+
+Here, it is. 
+We got susan now as just a manager.
+Well, let's try to delete for `kcakmak`,
+but be careful, this is the user that we logged in.
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image110.png" alt="image110">
+</div>
+
+So the user removed himself, but he got still logged in?
+So we need to do the same logic for deleting function as well.
+So we open again `UserController`, and we directly update our `delete` method:
+
+````java
+// Mapping for "/delete"
+@GetMapping("/delete")
+public String deleteUser(@RequestParam("userId") Long userId, HttpSession session) {
+
+    // Delete the user
+    userService.deleteById(userId);
+
+    // Get the logged-in user from the session or authentication context
+    User existingUser = (User) session.getAttribute("user");
+
+    // Re-authenticate the user to reflect new roles
+    UserDetails userDetails = userService.loadUserByUsername(existingUser.getUserName());
+    UsernamePasswordAuthenticationToken newAuth =
+            new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+    SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+    // Update the session with the modified user object
+    session.setAttribute("user", existingUser);
+    
+    // Redirect to the /users/list
+    return "redirect:/users";
+}
+````
+
+First, we need the session parameter here, so we inject it.
+And then we retrieve the user from the session, 
+then we apply the similar code by creating a new `UsernamePasswordAuthenticationToken`.
+Let's resign the `kcakmak` with the same user details.
+One difference will be, I'll add all the roles to him.
+And I'll remove his account from the `Users` list:
+
+<div align="center">
+    <img src="https://github.com/korhanertancakmak/SPRING-BOOT/blob/master/08-spring-boot-spring-mvc-security/images/image111.png" alt="image111">
+</div>
+
+This time, it redirects me to the login page.
+And when I try to log in with the same user details, I simply cannot.
+So this is good.
 
 </div>
