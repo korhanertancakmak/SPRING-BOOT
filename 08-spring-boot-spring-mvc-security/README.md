@@ -5134,8 +5134,8 @@ So here we can remove the "`ROLE_`" parts by using **Thymeleaf** methods for str
 ````html
 <div class="input-group">
     <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
-    <div style="width: 100%; display: flex; justify-content: space-between;">
-        <div th:each="role : ${roles}">
+    <div style="width: 100%; display: flex; justify-content: center;">
+        <div th:each="role : ${roles}" style="margin: 0 10px;">
             <!-- <label th:for="${role.id}" th:text="${role.name}"></label> -->
             <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
         </div>
