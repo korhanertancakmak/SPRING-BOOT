@@ -110,3 +110,22 @@
 ### [e.Spring MVC Security by using JPA/Hibernate](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/08-spring-boot-spring-mvc-security/README.md#spring-mvc-security-by-using-jpahibernate)
 #### [1.Spring MVC Security - Registration User](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/08-spring-boot-spring-mvc-security/README.md#spring-mvc-security---registration-user)
 #### [2.Spring MVC Security - Adding Users List Using Spring Data JPA](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/08-spring-boot-spring-mvc-security/README.md#spring-mvc-security---adding-users-list-using-spring-data-jpa)
+
+## [Section-9: Spring MVC Security](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#jpahibernate-advanced-mappings)
+### [a.Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#overview)
+### [b.@OneToOne Mapping - Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetoone-mapping---overview)
+#### [1.@OneToOne Mapping - Database Setup](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetoone-mapping---database-setup)
+#### [2.@OneToOne Mapping - Project Setup](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetoone-mapping---project-setup)
+### [c.@OneToMany Mapping - Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---overview)
+#### [1.@OneToMany Mapping - Database Setup](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---database-setup)
+#### [2.@OneToMany Mapping - Project Setup](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---project-setup)
+### [d.@OneToMany Mapping - Fetch Types: Eager vs Lazy](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---overview)
+#### [1.@OneToMany Mapping - Lazy Find](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---lazy-find)
+#### [2.@OneToMany Mapping - Join Fetch](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---join-fetch)
+#### [3.@OneToMany Mapping - Update / Delete](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---update--delete)
+#### [4.@OneToMany Mapping - Uni-Directional](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetomany-mapping---uni-directional)
+### [e.@ManyToMany Mapping - Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#manytomany-mapping---overview)
+#### [1.@ManyToMany Mapping - Database Setup](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#manytomany-mapping---database-setup)
+#### [2.@ManyToMany Mapping - Project Setup](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#manytomany-mapping---project-setup)
+
+
