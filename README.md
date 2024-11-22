@@ -111,7 +111,7 @@
 #### [1.Spring MVC Security - Registration User](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/08-spring-boot-spring-mvc-security/README.md#spring-mvc-security---registration-user)
 #### [2.Spring MVC Security - Adding Users List Using Spring Data JPA](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/08-spring-boot-spring-mvc-security/README.md#spring-mvc-security---adding-users-list-using-spring-data-jpa)
 
-## [Section-9: Spring MVC Security](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#jpahibernate-advanced-mappings)
+## [Section-9: JPA / Hibernate Advanced Mappings](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#jpahibernate-advanced-mappings)
 ### [a.Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#overview)
 ### [b.@OneToOne Mapping - Overview](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetoone-mapping---overview)
 #### [1.@OneToOne Mapping - Database Setup](https://github.com/korhanertancakmak/SPRING-BOOT/tree/master/09-spring-boot-spring-jpa-hibernate-advanced-mappings/README.md#onetoone-mapping---database-setup)
